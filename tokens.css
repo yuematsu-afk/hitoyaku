@@ -1,0 +1,135 @@
+/* ヒトヤク — Design System Tokens
+   ベース: 余白広めのライフスタイル系メディア基調 + 信頼感寄り
+   フォント: Noto Sans JP (400/500/700) + Noto Serif JP (見出しアクセント)
+*/
+
+:root {
+  /* ───────── Color: Surfaces ───────── */
+  --bg-base:        #FAFAF7;   /* warm white — page bg                 */
+  --bg-soft:        #F5F2EC;   /* ivory — section alt                  */
+  --bg-tint:        #EFEAE0;   /* warm tint — emphasis section         */
+  --bg-card:        #FFFFFF;   /* card surface                         */
+  --bg-overlay:     rgba(31,42,36,0.04);
+
+  /* ───────── Color: Ink ───────── */
+  --ink-1:          #1F2A24;   /* primary text                         */
+  --ink-2:          #4A5A52;   /* secondary text                       */
+  --ink-3:          #7A857F;   /* muted, captions                      */
+  --ink-4:          #B0B6B2;   /* placeholder, disabled                */
+
+  /* ───────── Color: Lines ───────── */
+  --line-soft:      #ECE7DD;
+  --line-mid:       #DCD5C7;
+  --line-strong:    #C9C2B4;
+
+  /* ───────── Color: Brand (デフォルト=セージグリーン) ─────────
+     Tweaks で 4 種類に切替: green / mint / blue / beige
+  */
+  --brand-deep:     #355E45;   /* hero, header                          */
+  --brand:          #4A7A5C;   /* primary actions, link                 */
+  --brand-mid:      #84AB94;
+  --brand-soft:     #C9DDD3;
+  --brand-wash:     #E6EFE8;   /* large tint blocks                     */
+
+  /* ───────── Color: Accents ───────── */
+  --accent-warm:    #D89A6A;   /* terracotta, 法人セクションアクセント   */
+  --accent-warm-soft:#F4DFCA;
+  --accent-butter:  #F0E2CF;
+  --accent-sky:     #BFD3DE;
+
+  /* ───────── Color: Semantic ───────── */
+  --status-online:  #5BA787;
+  --status-busy:    #D89A6A;
+  --status-off:     #B0B6B2;
+  --danger:         #B85946;
+  --info:           #5B7FA8;
+  --notice-bg:      #FBF7EC;
+  --notice-border:  #E8D9B3;
+  --notice-ink:     #6E5A2E;
+
+  /* ───────── Type ───────── */
+  --font-sans: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", sans-serif;
+  --font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* type scale (px equivalents) */
+  --t-12: 12px; --t-13: 13px; --t-14: 14px; --t-15: 15px; --t-16: 16px;
+  --t-18: 18px; --t-20: 20px; --t-22: 22px; --t-24: 24px; --t-28: 28px;
+  --t-32: 32px; --t-36: 36px; --t-40: 40px; --t-48: 48px; --t-56: 56px;
+  --t-64: 64px; --t-72: 72px;
+
+  /* ───────── Spacing (4px scale) ───────── */
+  --s-2: 2px;  --s-4: 4px;  --s-6: 6px;  --s-8: 8px;  --s-12: 12px;
+  --s-16: 16px; --s-20: 20px; --s-24: 24px; --s-32: 32px; --s-40: 40px;
+  --s-48: 48px; --s-64: 64px; --s-80: 80px; --s-96: 96px; --s-128: 128px;
+
+  /* ───────── Radius ───────── */
+  --r-4: 4px; --r-8: 8px; --r-12: 12px; --r-16: 16px; --r-20: 20px;
+  --r-24: 24px; --r-pill: 999px;
+
+  /* ───────── Shadow ───────── */
+  --shadow-1: 0 1px 2px rgba(31,42,36,.04), 0 1px 1px rgba(31,42,36,.03);
+  --shadow-2: 0 4px 16px rgba(31,42,36,.06), 0 1px 3px rgba(31,42,36,.04);
+  --shadow-3: 0 16px 40px rgba(31,42,36,.10), 0 4px 12px rgba(31,42,36,.05);
+  --shadow-focus: 0 0 0 3px rgba(74,122,92,.22);
+
+  /* ───────── Layout ───────── */
+  --container: 1200px;
+  --container-narrow: 880px;
+  --container-wide: 1320px;
+  --nav-h: 72px;
+}
+
+/* ─── Brand palette swatching via Tweaks ─── */
+[data-palette="mint"] {
+  --brand-deep:#2F6F66; --brand:#3F9088; --brand-mid:#7FBAB3;
+  --brand-soft:#CCE5E1; --brand-wash:#E8F2F0;
+}
+[data-palette="blue"] {
+  --brand-deep:#2C4F75; --brand:#4775A1; --brand-mid:#86A6C6;
+  --brand-soft:#D2DEEC; --brand-wash:#E8EEF6;
+}
+[data-palette="beige"] {
+  --brand-deep:#6E4F2C; --brand:#9C7647; --brand-mid:#C2A37F;
+  --brand-soft:#E8D9C0; --brand-wash:#F4ECDD;
+}
+
+/* ─── Base ─── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  color: var(--ink-1);
+  background: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "palt";
+  line-height: 1.7;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+img { display: block; max-width: 100%; }
+
+/* ─── Utility ─── */
+.container { max-width: var(--container); margin: 0 auto; padding: 0 var(--s-24); }
+.container-narrow { max-width: var(--container-narrow); margin: 0 auto; padding: 0 var(--s-24); }
+.container-wide { max-width: var(--container-wide); margin: 0 auto; padding: 0 var(--s-24); }
+
+.serif { font-family: var(--font-serif); font-feature-settings: "palt"; }
+.kerning-tight { letter-spacing: -0.01em; }
+
+/* card hover lift */
+.lift { transition: transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s; }
+.lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+
+/* fade-in */
+@keyframes hy-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: hy-fade-up .5s cubic-bezier(.2,.7,.3,1) both; }
+
+/* Scrollbar polish inside the design canvas viewport */
+.hy-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.hy-scroll::-webkit-scrollbar-thumb { background: var(--line-mid); border-radius: 3px; }
