@@ -125,16 +125,13 @@ function HeroVisual({ decorative }) {
   const { PHARMACISTS } = window.HY_DATA;
   return (
     <div style={{position:'relative', aspectRatio: '1/1.1', maxHeight: 640}}>
-      {/* primary photo slot — image-slot wrapped */}
-      <image-slot id="hero-primary" shape="rounded" radius="32"
-                  placeholder="ヒーロー写真をドロップ"
-                  style={{
-                    position:'absolute', inset: '6% 12% 18% 0',
-                    background:`linear-gradient(160deg, #DBE7DD 0%, #C9DDD3 60%, #B9D2C5 100%)`,
-                    boxShadow:'var(--shadow-3)', borderRadius:32, display:'block', overflow:'hidden',
-                  }}>
-        <DecorPortrait/>
-      </image-slot>
+      <div style={{
+        position:'absolute', inset: '6% 12% 18% 0',
+        borderRadius:32, overflow:'hidden', boxShadow:'var(--shadow-3)',
+      }}>
+        <img src="photos/hero.jpg" alt="薬剤師とのご相談"
+          style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', display:'block'}}/>
+      </div>
 
       {/* floating cards */}
       {!decorative && (
