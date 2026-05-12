@@ -42,8 +42,11 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
       const data = await res.json();
       if (data.success) {
         setStep(3);
+        // デバッグ: Web3Formsの応答を確認
+        window._w3fMsg = data.message;
+        alert('Web3Forms応答: ' + data.message);
       } else {
-        setSubmitError(data.message || '送信に失敗しました。しばらく経ってから再度お試しください。');
+        setSubmitError('Web3Formsエラー: ' + (data.message || '不明'));
       }
     } catch {
       setSubmitError('通信エラーが発生しました。インターネット接続をご確認ください。');
