@@ -1,5 +1,5 @@
 // ヒトヤク — Consultation Form Page
-const FORMSPREE_URL = 'https://formspree.io/f/mwvyylpe';
+const WEB3FORMS_KEY = '6f940260-0fae-4c1b-bbf0-412140515fec';
 
 function PageConsult({ pharmacistId, mode: initialMode }) {
   const { PHARMACISTS, CONSULT_CATEGORIES } = window.HY_DATA;
@@ -34,16 +34,16 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
         '相談内容': form.body,
         '同意確認': `医師代替ではない: ${form.consent1}、規約同意: ${form.consent2}`,
       };
-      const res = await fetch(FORMSPREE_URL, {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ access_key: WEB3FORMS_KEY, subject: 'ヒトヤク 新しいご相談', ...payload }),
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (data.success) {
         setStep(3);
       } else {
-        const data = await res.json().catch(()=>({}));
-        setSubmitError(data?.errors?.[0]?.message || '送信に失敗しました。しばらく経ってから再度お試しください。');
+        setSubmitError(data.message || '送信に失敗しました。しばらく経ってから再度お試しください。');
       }
     } catch {
       setSubmitError('通信エラーが発生しました。インターネット接続をご確認ください。');
