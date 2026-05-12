@@ -128,46 +128,44 @@ function Hero() {
 function HeroVisual({ decorative }) {
   const { PHARMACISTS } = window.HY_DATA;
   return (
-    <div style={{position:'relative', aspectRatio: '1/1.1', maxHeight: 640}}>
-      <div style={{
-        position:'absolute', inset: '6% 12% 18% 0',
-        borderRadius:32, overflow:'hidden', boxShadow:'var(--shadow-3)',
-      }}>
-        <img src="photos/hero.jpg" alt="薬剤師とのご相談"
-          style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', display:'block'}}/>
-      </div>
+    <div style={{
+      position:'relative', borderRadius:32, overflow:'hidden',
+      aspectRatio:'4/5', maxHeight:560, boxShadow:'var(--shadow-3)',
+    }}>
+      <img src="photos/hero.jpg" alt="薬剤師とのご相談"
+        style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', display:'block'}}/>
 
-      {/* floating cards */}
+      {/* floating cards — inside container so they never overflow into the copy */}
       {!decorative && (
         <>
           <div className="lift" style={{
-            position:'absolute', left:'-2%', bottom:'12%',
-            background:'#fff', boxShadow:'var(--shadow-2)',
-            borderRadius:'var(--r-16)', padding:'14px 16px',
-            display:'flex', alignItems:'center', gap:12, width: 260,
+            position:'absolute', left:16, bottom:24,
+            background:'rgba(255,255,255,.97)', backdropFilter:'blur(8px)',
+            boxShadow:'var(--shadow-2)', borderRadius:'var(--r-16)',
+            padding:'12px 14px', display:'flex', alignItems:'center', gap:12, maxWidth:230,
           }}>
-            <PharmacistPhoto p={PHARMACISTS[0]} size={48}/>
+            <PharmacistPhoto p={PHARMACISTS[0]} size={44}/>
             <div style={{minWidth:0, flex:1}}>
               <div style={{fontSize:13,fontWeight:600,color:'var(--ink-1)'}}>{PHARMACISTS[0].name}</div>
-              <div style={{fontSize:11, color:'var(--ink-3)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}}>
+              <div style={{fontSize:11,color:'var(--ink-3)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
                 漢方 / 女性の健康
               </div>
               <div style={{marginTop:4}}><StatusDot status="online"/></div>
             </div>
           </div>
           <div style={{
-            position:'absolute', right:'-2%', top:'12%',
-            background:'#fff', boxShadow:'var(--shadow-2)',
-            borderRadius:'var(--r-16)', padding:'14px 16px',
-            display:'flex', alignItems:'center', gap:10,
+            position:'absolute', right:16, top:24,
+            background:'rgba(255,255,255,.97)', backdropFilter:'blur(8px)',
+            boxShadow:'var(--shadow-2)', borderRadius:'var(--r-16)',
+            padding:'12px 14px', display:'flex', alignItems:'center', gap:10,
           }}>
             <div style={{
-              width:36, height:36, borderRadius:10, background:'var(--accent-warm-soft)',
+              width:32, height:32, borderRadius:8, background:'var(--accent-warm-soft)',
               color:'#8B5A2B', display:'flex', alignItems:'center', justifyContent:'center',
             }}>{Ico.chat}</div>
             <div>
-              <div style={{fontSize:12, color:'var(--ink-3)'}}>今日の相談</div>
-              <div style={{fontSize:13, fontWeight:600, color:'var(--ink-1)'}}>サプリと薬の飲み合わせ</div>
+              <div style={{fontSize:11,color:'var(--ink-3)'}}>今日の相談</div>
+              <div style={{fontSize:12,fontWeight:600,color:'var(--ink-1)'}}>サプリと薬の飲み合わせ</div>
             </div>
           </div>
         </>
