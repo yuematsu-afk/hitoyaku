@@ -1,4 +1,6 @@
 // ヒトヤク — Consultation Form Page
+const FORMSPREE_URL = 'https://formspree.io/f/mwvyylpe';
+
 function PageConsult({ pharmacistId, mode: initialMode }) {
   const { PHARMACISTS, CONSULT_CATEGORIES } = window.HY_DATA;
   const [mode, setMode] = React.useState(initialMode || (pharmacistId ? 'direct' : 'ops'));
@@ -9,11 +11,46 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
     category:'', body:'', medications:'no',
     methodPref:[], consent1:false, consent2:false,
   });
+  const [submitting, setSubmitting] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState('');
   const upd = (k,v) => setForm(f=>({...f,[k]:v}));
   const toggleMethod = (m) => upd('methodPref', form.methodPref.includes(m) ? form.methodPref.filter(x=>x!==m) : [...form.methodPref, m]);
 
   const selectedP = PHARMACISTS.find(x=>x.id===form.pharmacist);
   const canSubmit = form.name && form.contact && form.body && form.consent1;
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    setSubmitError('');
+    try {
+      const payload = {
+        '相談先': mode === 'direct' ? `薬剤師に直接（${selectedP?.name || form.pharmacist}）` : 'ヒトヤク運営',
+        'お名前': form.name,
+        '連絡方法': form.contactType === 'line' ? 'LINE' : 'メール',
+        '連絡先': form.contact,
+        '相談カテゴリ': CONSULT_CATEGORIES.find(c=>c.id===form.category)?.label || form.category,
+        '服用中の薬': form.medications === 'yes' ? 'あり' : form.medications === 'no' ? 'なし' : '不明',
+        '希望連絡方法': form.methodPref.join(', ') || '未選択',
+        '相談内容': form.body,
+        '同意確認': `医師代替ではない: ${form.consent1}、規約同意: ${form.consent2}`,
+      };
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setStep(3);
+      } else {
+        const data = await res.json().catch(()=>({}));
+        setSubmitError(data?.errors?.[0]?.message || '送信に失敗しました。しばらく経ってから再度お試しください。');
+      }
+    } catch {
+      setSubmitError('通信エラーが発生しました。インターネット接続をご確認ください。');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div style={{background:'var(--bg-base)'}}>
@@ -143,12 +180,20 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
                   </Checkbox>
                 </div>
 
+                {submitError && (
+                  <div style={{
+                    background:'#FFF0F0', border:'1px solid #FFCDD2',
+                    borderRadius:'var(--r-12)', padding:'14px 18px',
+                    fontSize:13, color:'#C62828', lineHeight:1.6,
+                  }}>{submitError}</div>
+                )}
+
                 <div style={{marginTop:16, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                   <button onClick={()=>setStep(1)} style={{background:'none',border:0,color:'var(--ink-2)',fontSize:13,cursor:'pointer'}}>← 戻る</button>
-                  <Button size="lg" variant="deep" disabled={!canSubmit}
-                    onClick={()=>setStep(3)} iconRight={Ico.arrow}
-                    style={{opacity: canSubmit?1:.5, cursor: canSubmit?'pointer':'not-allowed'}}>
-                    送信内容を確認する
+                  <Button size="lg" variant="deep" disabled={!canSubmit || submitting}
+                    onClick={handleSubmit} iconRight={submitting ? null : Ico.arrow}
+                    style={{opacity: (canSubmit && !submitting)?1:.5, cursor: (canSubmit && !submitting)?'pointer':'not-allowed'}}>
+                    {submitting ? '送信中...' : 'この内容で送信する'}
                   </Button>
                 </div>
               </div>
