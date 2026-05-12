@@ -1,28 +1,17 @@
 // ヒトヤク — Interactive Prototype Router
-// externalNav=true: registers _HY_NAV_INTERNAL for outer App to wrap; outer App owns HY_NAV + scroll.
-// externalNav=false (default): registers HY_NAV directly (design canvas mode).
+// Mounts in a fixed 1440-wide artboard. Pages: top, list, detail, consult, corp, pharma
 
-function HitoyakuPrototype({ initial, externalNav }) {
+function HitoyakuPrototype({ initial }) {
   const [route, setRoute] = React.useState(initial || { page: 'top' });
   const scrollerRef = React.useRef(null);
 
   React.useEffect(() => {
-    const nav = (page, params={}) => {
+    window.HY_NAV = (page, params={}) => {
       setRoute({ page, ...params });
       if (scrollerRef.current) scrollerRef.current.scrollTop = 0;
     };
-    if (externalNav) {
-      window._HY_NAV_INTERNAL = nav;
-      // also set HY_NAV so page components work before outer App wires up
-      if (!window.HY_NAV) window.HY_NAV = nav;
-    } else {
-      window.HY_NAV = nav;
-    }
-    return () => {
-      delete window._HY_NAV_INTERNAL;
-      if (!externalNav) delete window.HY_NAV;
-    };
-  }, [externalNav]);
+    return () => { if (window.HY_NAV) delete window.HY_NAV; };
+  }, []);
 
   let view;
   switch (route.page) {
@@ -34,15 +23,6 @@ function HitoyakuPrototype({ initial, externalNav }) {
     case 'faq':     view = <PageFaqStub/>; break;
     case 'top':
     default:        view = <PageTop/>;
-  }
-
-  // In externalNav mode the outer .hy-app-scroll div owns scrolling; just flow naturally.
-  if (externalNav) {
-    return (
-      <div style={{ width: '100%', background: 'var(--bg-base)' }}>
-        {view}
-      </div>
-    );
   }
 
   return (
@@ -107,10 +87,7 @@ function FaqGroup({title, items}) {
   );
 }
 
-// Mobile fixed bottom CTA — only visible at narrow widths (we toggle via container queries in TweakPanel for design canvas).
-// In a real responsive site this would use a media query. Here we approximate.
 function MobileBottomCTA() {
-  // Hide unless route signals mobile preview
   if (!window.HY_MOBILE) return null;
   return (
     <div style={{
