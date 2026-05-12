@@ -89,16 +89,18 @@ function PageDetail({ id }) {
               <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', gap: isMobile ? 20 : 28}}>
                 <div>
                   <SubTitle>経歴</SubTitle>
-                  <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:10}}>
-                    {p.career.map((c,i)=>{
-                      const [year, ...rest] = c.split(' ');
-                      return (
-                        <li key={i} style={{display:'flex', gap:14, fontSize:13, color:'var(--ink-2)', lineHeight:1.7}}>
-                          <span style={{flex:'0 0 48px', fontFamily:'var(--font-serif)', color:'var(--brand-deep)', fontWeight:600}}>{year}</span>
-                          <span>{rest.join(' ')}</span>
-                        </li>
-                      );
-                    })}
+                  <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:12}}>
+                    {p.career.map((c,i)=>(
+                      <li key={i} style={{display:'flex', gap:12, fontSize:13, color:'var(--ink-2)', lineHeight:1.8}}>
+                        <span style={{
+                          flex:'0 0 22px', width:22, height:22, borderRadius:'50%',
+                          background:'var(--brand-wash)', color:'var(--brand-deep)',
+                          display:'inline-flex', alignItems:'center', justifyContent:'center',
+                          fontSize:10, fontWeight:700, marginTop:2, flexShrink:0,
+                        }}>{i+1}</span>
+                        <span>{c}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
                 <div>
