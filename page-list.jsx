@@ -137,14 +137,27 @@ function PageList() {
 
 function Breadcrumb({ items }) {
   return (
-    <div className="container" style={{padding:'18px 24px', fontSize:12, color:'var(--ink-3)'}}>
-      {items.map((it,i)=>(
-        <React.Fragment key={i}>
-          {i>0 && <span style={{margin:'0 8px'}}>›</span>}
-          {it.go ? <a href="#" onClick={(e)=>{e.preventDefault(); window.HY_NAV?.(it.go);}}
-            style={{color:'var(--ink-2)'}}>{it.label}</a> : <span style={{color:'var(--ink-1)'}}>{it.label}</span>}
-        </React.Fragment>
-      ))}
+    <div className="container" style={{padding:'12px 24px', fontSize:12, color:'var(--ink-3)', display:'flex', alignItems:'center', gap:12}}>
+      <button onClick={() => window.HY_BACK ? window.HY_BACK() : window.HY_NAV?.('top')} style={{
+        display:'inline-flex', alignItems:'center', gap:5,
+        background:'none', border:'1px solid var(--line-mid)', borderRadius:'var(--r-pill)',
+        padding:'5px 12px', fontSize:12, color:'var(--ink-2)', cursor:'pointer', flexShrink:0,
+        fontFamily:'inherit',
+      }}>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        戻る
+      </button>
+      <div>
+        {items.map((it,i)=>(
+          <React.Fragment key={i}>
+            {i>0 && <span style={{margin:'0 8px'}}>›</span>}
+            {it.go ? <a href="#" onClick={(e)=>{e.preventDefault(); window.HY_NAV?.(it.go);}}
+              style={{color:'var(--ink-2)'}}>{it.label}</a> : <span style={{color:'var(--ink-1)'}}>{it.label}</span>}
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 }

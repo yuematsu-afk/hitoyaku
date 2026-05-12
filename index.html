@@ -44,7 +44,7 @@
 <div id="root"></div>
 
 <script type="text/babel">
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 const TWEAK_DEFAULTS = {
   "palette": "green",
@@ -79,6 +79,8 @@ function App() {
   const [route, setRoute] = useState({ page: 'top' });
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [panelOpen, setPanelOpen] = useState(false);
+  const routeRef = useRef({ page: 'top' });
+  const historyStack = useRef([]);
 
   useEffect(() => {
     window.HY_TWEAKS = t;
@@ -86,8 +88,23 @@ function App() {
   }, [t]);
 
   useEffect(() => {
+    routeRef.current = route;
+  }, [route]);
+
+  useEffect(() => {
     window.HY_NAV = (page, params = {}) => {
-      setRoute({ page, ...params });
+      historyStack.current = [...historyStack.current, routeRef.current];
+      const next = { page, ...params };
+      routeRef.current = next;
+      setRoute(next);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+    window.HY_BACK = () => {
+      if (historyStack.current.length === 0) return;
+      const prev = historyStack.current[historyStack.current.length - 1];
+      historyStack.current = historyStack.current.slice(0, -1);
+      routeRef.current = prev;
+      setRoute(prev);
       window.scrollTo({ top: 0, behavior: 'instant' });
     };
   }, []);

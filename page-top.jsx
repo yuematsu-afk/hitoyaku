@@ -474,16 +474,24 @@ function PharmacistCard({ p, variant='medium', onClick }) {
 
   // medium / large
   const big = style === 'large';
+  const hue = p.photoHue ?? 140;
   return (
     <article onClick={handleClick} className="lift" style={{
       background:'#fff', border:'1px solid var(--line-soft)',
       borderRadius:'var(--r-20)', overflow:'hidden', cursor:'pointer',
       display:'flex', flexDirection:'column',
     }}>
-      <div style={{position:'relative', aspectRatio: big ? '4/5' : '5/5'}}>
-        <div style={{position:'absolute', inset:0}}>
-          <PharmacistPhoto p={p} size={big?280:200} rounded={0}/>
-        </div>
+      <div style={{position:'relative', aspectRatio: big ? '4/5' : '1/1', overflow:'hidden'}}>
+        {p.photo
+          ? <img src={p.photo} alt={p.name} style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', display:'block'}}/>
+          : <div style={{
+              width:'100%', height:'100%',
+              background:`linear-gradient(140deg, hsl(${hue} 32% 86%) 0%, hsl(${hue} 28% 74%) 100%)`,
+              display:'flex', alignItems:'center', justifyContent:'center',
+              fontFamily:'var(--font-serif)', fontSize:42, fontWeight:600,
+              color:`hsl(${hue} 40% 28%)`,
+            }}>{p.name?.[0] || 'P'}</div>
+        }
         <div style={{position:'absolute', top:12, left:12}}>
           <Tag tone={p.status==='online'?'online':p.status==='busy'?'busy':'off'} size="sm">
             <span style={{
