@@ -24,8 +24,11 @@ function PageDetail({ id }) {
               background:'#fff', borderRadius:'var(--r-24)', overflow:'hidden',
               border:'1px solid var(--line-soft)', boxShadow:'var(--shadow-2)',
             }}>
-              <div style={{aspectRatio:'4/5', position:'relative'}}>
-                <PharmacistPhoto p={p} size={380} rounded={0} slotId={`pharm-${p.id}`}/>
+              <div style={{aspectRatio:'4/5', position:'relative', overflow:'hidden'}}>
+                {p.photo
+                  ? <img src={p.photo} alt={p.name} style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
+                  : <PharmacistPhoto p={p} size={380} rounded={0}/>
+                }
                 <div style={{position:'absolute', bottom:14, left:14}}>
                   <Tag tone={p.status==='online'?'online':p.status==='busy'?'busy':'off'} size="md">
                     <span style={{width:6,height:6,borderRadius:'50%',background:'currentColor',display:'inline-block',marginRight:6}}/>
@@ -83,7 +86,7 @@ function PageDetail({ id }) {
             {/* Profile */}
             <Block title="プロフィール" eyebrow="PROFILE">
               <p style={{fontSize:15, lineHeight:2, color:'var(--ink-1)', margin:'0 0 28px'}}>{p.profile}</p>
-              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 20 : 28}}>
+              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', gap: isMobile ? 20 : 28}}>
                 <div>
                   <SubTitle>経歴</SubTitle>
                   <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:10}}>
@@ -109,7 +112,7 @@ function PageDetail({ id }) {
 
             {/* Consultation categories */}
             <Block title="相談できる内容" eyebrow="CATEGORIES">
-              <div style={{display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:14}}>
+              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap:14}}>
                 {CONSULT_CATEGORIES.filter(c=>c.id!=='other').slice(0,8).map(c=>(
                   <div key={c.id} style={{
                     background:'#fff', border:'1px solid var(--line-soft)',
@@ -132,7 +135,7 @@ function PageDetail({ id }) {
 
             {/* Consultation methods */}
             <Block title="相談方法" eyebrow="HOW TO CONSULT">
-              <div style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:14}}>
+              <div style={{display:'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap:14}}>
                 {['LINE','オンライン面談','店舗相談','メール'].map(m=>{
                   const enabled = p.availableMethods.includes(m);
                   return (
@@ -160,18 +163,18 @@ function PageDetail({ id }) {
             {/* Personal message — warm callout */}
             <div style={{
               background:'var(--accent-warm-soft)', borderRadius:'var(--r-24)',
-              padding:'48px 56px', position:'relative',
+              padding: isMobile ? '32px 24px' : '48px 56px', position:'relative',
             }}>
-              <div style={{
+              {!isMobile && <div style={{
                 fontFamily:'var(--font-serif)', fontSize:80, lineHeight:1, color:'var(--accent-warm)',
                 position:'absolute', top:24, left:36,
-              }}>“</div>
-              <div style={{paddingLeft:60}}>
+              }}>”</div>}
+              <div style={{paddingLeft: isMobile ? 0 : 60}}>
                 <div style={{fontSize:12, letterSpacing:'.2em', color:'#8B5A2B', fontWeight:600, marginBottom:14}}>
                   — はじめての方へ
                 </div>
                 <p style={{
-                  fontFamily:'var(--font-serif)', fontSize:22, lineHeight:1.85,
+                  fontFamily:'var(--font-serif)', fontSize: isMobile ? 17 : 22, lineHeight:1.85,
                   color:'var(--ink-1)', margin:0, fontWeight:500,
                 }}>
                   どんな小さな疑問でも大丈夫です。{p.name.split(' ')[1] || p.name}と申します。<br/>
@@ -191,7 +194,7 @@ function PageDetail({ id }) {
 
             {/* Related */}
             <Block title="同じ分野に強い薬剤師" eyebrow="RELATED">
-              <div style={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:16}}>
+              <div style={{display:'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)', gap:16}}>
                 {related.map(rp=> <PharmacistCard key={rp.id} p={rp}/>)}
               </div>
             </Block>
@@ -199,19 +202,21 @@ function PageDetail({ id }) {
             {/* Final CTA */}
             <div style={{
               background:'var(--brand-deep)', color:'#fff',
-              borderRadius:'var(--r-24)', padding:'48px 56px',
-              display:'flex', alignItems:'center', justifyContent:'space-between', gap:32,
+              borderRadius:'var(--r-24)', padding: isMobile ? '32px 24px' : '48px 56px',
+              display:'flex', flexDirection: isMobile ? 'column' : 'row',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              justifyContent:'space-between', gap: isMobile ? 20 : 32,
             }}>
               <div>
-                <h3 style={{fontFamily:'var(--font-serif)', fontSize:26, fontWeight:600, lineHeight:1.5, margin:'0 0 12px'}}>
+                <h3 style={{fontFamily:'var(--font-serif)', fontSize: isMobile ? 22 : 26, fontWeight:600, lineHeight:1.5, margin:'0 0 12px'}}>
                   {p.name}に相談してみる。
                 </h3>
                 <p style={{fontSize:14, color:'rgba(255,255,255,.85)', margin:0, lineHeight:1.8}}>
                   ご希望の相談方法と、簡単な相談内容をお送りください。
                 </p>
               </div>
-              <div style={{display:'flex', gap:10, flex:'0 0 auto'}}>
-                <Button variant="accent" size="lg" iconRight={Ico.arrow}
+              <div style={{display:'flex', gap:10, flex:'0 0 auto', width: isMobile ? '100%' : 'auto'}}>
+                <Button variant="accent" size="lg" fullWidth={isMobile} iconRight={Ico.arrow}
                         onClick={()=>window.HY_NAV?.('consult', {pharmacistId:p.id, mode:'direct'})}>
                   この薬剤師に相談する
                 </Button>
