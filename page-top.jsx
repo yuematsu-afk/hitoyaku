@@ -103,7 +103,7 @@ function Hero() {
       <section style={{background:'var(--bg-base)', position:'relative', overflow:'hidden'}}>
         <div style={{aspectRatio:'16/9', maxHeight:260, overflow:'hidden'}}>
           <img src="photos/hero.jpg" alt="薬剤師とのご相談"
-            style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'20% 20%', display:'block'}}/>
+            style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'25% 20%', display:'block'}}/>
         </div>
         <div className="container-wide" style={{padding:'32px 16px 64px'}}>
           {copy}
@@ -133,7 +133,7 @@ function HeroVisual({ decorative }) {
       aspectRatio:'4/5', maxHeight:560, boxShadow:'var(--shadow-3)',
     }}>
       <img src="photos/hero.jpg" alt="薬剤師とのご相談"
-        style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'20% top', display:'block'}}/>
+        style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'25% top', display:'block'}}/>
 
       {/* floating cards — inside container so they never overflow into the copy */}
       {!decorative && (
