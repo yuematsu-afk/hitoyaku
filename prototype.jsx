@@ -1,17 +1,28 @@
 // ヒトヤク — Interactive Prototype Router
-// Mounts in a fixed 1440-wide artboard. Pages: top, list, detail, consult, corp, pharma
+// externalNav=true: registers _HY_NAV_INTERNAL for outer App to wrap; outer App owns HY_NAV + scroll.
+// externalNav=false (default): registers HY_NAV directly (design canvas mode).
 
-function HitoyakuPrototype({ initial }) {
+function HitoyakuPrototype({ initial, externalNav }) {
   const [route, setRoute] = React.useState(initial || { page: 'top' });
   const scrollerRef = React.useRef(null);
 
   React.useEffect(() => {
-    window.HY_NAV = (page, params={}) => {
+    const nav = (page, params={}) => {
       setRoute({ page, ...params });
       if (scrollerRef.current) scrollerRef.current.scrollTop = 0;
     };
-    return () => { if (window.HY_NAV) delete window.HY_NAV; };
-  }, []);
+    if (externalNav) {
+      window._HY_NAV_INTERNAL = nav;
+      // also set HY_NAV so page components work before outer App wires up
+      if (!window.HY_NAV) window.HY_NAV = nav;
+    } else {
+      window.HY_NAV = nav;
+    }
+    return () => {
+      delete window._HY_NAV_INTERNAL;
+      if (!externalNav) delete window.HY_NAV;
+    };
+  }, [externalNav]);
 
   let view;
   switch (route.page) {
@@ -23,6 +34,15 @@ function HitoyakuPrototype({ initial }) {
     case 'faq':     view = <PageFaqStub/>; break;
     case 'top':
     default:        view = <PageTop/>;
+  }
+
+  // In externalNav mode the outer .hy-app-scroll div owns scrolling; just flow naturally.
+  if (externalNav) {
+    return (
+      <div style={{ width: '100%', background: 'var(--bg-base)' }}>
+        {view}
+      </div>
+    );
   }
 
   return (

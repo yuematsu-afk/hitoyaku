@@ -3,27 +3,21 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>ヒトヤク — サービスサイト デザイン</title>
+<title>ヒトヤク — 薬剤師を選んで、相談できるサービス</title>
+<meta name="description" content="飲み合わせ、副作用、受診の目安。日常の薬の疑問を、自分に合った薬剤師にゆっくり相談できる場所です。"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="tokens.css"/>
-
 <style>
-  /* Canvas-level chrome */
-  body { background: #f0eee9; }
-  .hy-prototype-frame {
-    width: 1440px; height: 900px; background: var(--bg-base);
-    border-radius: 16px; overflow: hidden; position: relative;
-    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg-base); }
+  #root { height: 100vh; display: flex; flex-direction: column; }
+  .hy-app-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--bg-base);
   }
-  .hy-mobile-frame {
-    width: 390px; height: 844px; background: var(--bg-base);
-    border-radius: 36px; overflow: hidden; position: relative;
-    box-shadow: 0 1px 2px rgba(0,0,0,.04);
-  }
-  /* Hide tweaks chrome inside sub-iframes */
-  .twk-panel { display: none !important; }
 </style>
 </head>
 <body>
@@ -47,111 +41,59 @@
 <script type="text/babel" src="page-corp.jsx"></script>
 <script type="text/babel" src="page-pharma.jsx"></script>
 
-<!-- Prototype router -->
+<!-- Router -->
 <script type="text/babel" src="prototype.jsx"></script>
 
-<!-- Reference artboards -->
-<script type="text/babel" src="artboard-sitemap.jsx"></script>
-<script type="text/babel" src="artboard-system.jsx"></script>
-<script type="text/babel" src="artboard-notes.jsx"></script>
-
-<!-- Tweaks + Canvas -->
+<!-- Tweaks panel -->
 <script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel" src="design-canvas.jsx"></script>
 
 <div id="root"></div>
 
 <script type="text/babel">
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
-// Single source of truth for tweaks → propagated to window.HY_TWEAKS so
-// nested page components (Hero, PharmacistCard) can read without re-render plumbing.
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+const TWEAK_DEFAULTS = {
   "palette": "green",
   "heroLayout": "right",
   "cardStyle": "medium"
-}/*EDITMODE-END*/;
+};
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const scrollerRef = useRef(null);
 
-  // expose to non-react consumers (page components read from window.HY_TWEAKS)
   useEffect(() => {
     window.HY_TWEAKS = t;
     document.documentElement.setAttribute('data-palette', t.palette);
   }, [t]);
 
+  useEffect(() => {
+    window.HY_NAV = (page, params = {}) => {
+      setPanelOpen(false);
+      window._HY_NAV_INTERNAL?.(page, params);
+      if (scrollerRef.current) scrollerRef.current.scrollTop = 0;
+    };
+  }, []);
+
+  const openPanel = () => { setPanelOpen(true); window.postMessage({ type: '__activate_edit_mode' }, '*'); };
+
   return (
     <>
-      <DesignCanvas>
-        <DCSection id="overview" title="ヒトヤク" subtitle="薬剤師を選べる健康相談 — サービスサイト全体デザイン">
-          <DCArtboard id="sitemap" label="01 · サイトマップと情報設計" width={1440} height={1500}>
-            <ArtboardSitemap/>
-          </DCArtboard>
-        </DCSection>
+      <div ref={scrollerRef} className="hy-app-scroll">
+        <HitoyakuPrototype initial={{ page: 'top' }} externalNav/>
+      </div>
 
-        <DCSection id="prototype" title="インタラクティブプロトタイプ" subtitle="↑ クリックで詳細遷移・検索フィルタ・フォーム入力が動作">
-          <DCArtboard id="proto-top" label="01 · トップページ" width={1440} height={900}>
-            <div className="hy-prototype-frame">
-              <HitoyakuPrototype initial={{page:'top'}}/>
-            </div>
-          </DCArtboard>
-          <DCArtboard id="proto-list" label="02 · 薬剤師一覧 (検索/フィルタ動作)" width={1440} height={900}>
-            <div className="hy-prototype-frame">
-              <HitoyakuPrototype initial={{page:'list'}}/>
-            </div>
-          </DCArtboard>
-          <DCArtboard id="proto-detail" label="03 · 薬剤師詳細 (最重要ページ)" width={1440} height={900}>
-            <div className="hy-prototype-frame">
-              <HitoyakuPrototype initial={{page:'detail', id:'p01'}}/>
-            </div>
-          </DCArtboard>
-          <DCArtboard id="proto-consult" label="04 · 相談フォーム" width={1440} height={900}>
-            <div className="hy-prototype-frame">
-              <HitoyakuPrototype initial={{page:'consult'}}/>
-            </div>
-          </DCArtboard>
-          <DCArtboard id="proto-corp" label="05 · 法人向け" width={1440} height={900}>
-            <div className="hy-prototype-frame">
-              <HitoyakuPrototype initial={{page:'corp'}}/>
-            </div>
-          </DCArtboard>
-          <DCArtboard id="proto-pharma" label="06 · 薬剤師・薬局向け" width={1440} height={900}>
-            <div className="hy-prototype-frame">
-              <HitoyakuPrototype initial={{page:'pharma'}}/>
-            </div>
-          </DCArtboard>
-          <DCArtboard id="proto-faq" label="07 · FAQ" width={1440} height={900}>
-            <div className="hy-prototype-frame">
-              <HitoyakuPrototype initial={{page:'faq'}}/>
-            </div>
-          </DCArtboard>
-        </DCSection>
-
-        <DCSection id="mobile" title="モバイル表示" subtitle="iPhone (390×844) — 主要画面のスマホ最適化">
-          <DCArtboard id="m-top" label="モバイル · トップ" width={390} height={844}>
-            <MobileViewport><HitoyakuPrototype initial={{page:'top'}}/></MobileViewport>
-          </DCArtboard>
-          <DCArtboard id="m-list" label="モバイル · 一覧" width={390} height={844}>
-            <MobileViewport><HitoyakuPrototype initial={{page:'list'}}/></MobileViewport>
-          </DCArtboard>
-          <DCArtboard id="m-detail" label="モバイル · 薬剤師詳細" width={390} height={844}>
-            <MobileViewport><HitoyakuPrototype initial={{page:'detail', id:'p01'}}/></MobileViewport>
-          </DCArtboard>
-        </DCSection>
-
-        <DCSection id="system" title="デザインシステム" subtitle="トークン・タイポグラフィ・コンポーネント">
-          <DCArtboard id="ds" label="デザインシステム" width={1440} height={2200}>
-            <ArtboardSystem/>
-          </DCArtboard>
-        </DCSection>
-
-        <DCSection id="handoff" title="Claude Code 実装ハンドオフ" subtitle="技術スタック・コンポーネント一覧・データモデル">
-          <DCArtboard id="notes" label="実装メモ" width={1440} height={2000}>
-            <ArtboardNotes/>
-          </DCArtboard>
-        </DCSection>
-      </DesignCanvas>
+      {!panelOpen && (
+        <button onClick={openPanel} style={{
+          position: 'fixed', bottom: 16, right: 16, zIndex: 2147483645,
+          background: 'rgba(53,94,69,0.90)', color: '#f1ead8',
+          border: 'none', borderRadius: 8, padding: '8px 14px',
+          fontSize: 12, fontWeight: 600, letterSpacing: '0.05em',
+          cursor: 'pointer', backdropFilter: 'blur(8px)',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.25)',
+        }}>⚙ Tweaks</button>
+      )}
 
       <TweaksPanel title="ヒトヤク Tweaks">
         <TweakSection label="ブランド">
@@ -159,13 +101,12 @@ function App() {
             label="メインカラー"
             value={t.palette}
             options={[
-              {value:'green', colors:['#355E45','#4A7A5C','#C9DDD3']},
-              {value:'mint',  colors:['#2F6F66','#3F9088','#CCE5E1']},
-              {value:'blue',  colors:['#2C4F75','#4775A1','#D2DEEC']},
-              {value:'beige', colors:['#6E4F2C','#9C7647','#E8D9C0']},
-            ].map(o => o.colors)}
+              ['#355E45','#4A7A5C','#C9DDD3'],
+              ['#2F6F66','#3F9088','#CCE5E1'],
+              ['#2C4F75','#4775A1','#D2DEEC'],
+              ['#6E4F2C','#9C7647','#E8D9C0'],
+            ]}
             onChange={(v) => {
-              // TweakColor passes back the value; map array back to key
               const map = { '#355E45':'green','#2F6F66':'mint','#2C4F75':'blue','#6E4F2C':'beige' };
               const key = Array.isArray(v) ? map[v[0]] : map[v] || 'green';
               setTweak('palette', key);
@@ -199,38 +140,6 @@ function App() {
         </TweakSection>
       </TweaksPanel>
     </>
-  );
-}
-
-// Mobile viewport — sets HY_MOBILE flag inside its subtree so MobileBottomCTA renders.
-function MobileViewport({ children }) {
-  React.useEffect(() => {
-    // crude — we only set when mobile artboards exist in DOM; safe globally for this preview.
-    window.HY_MOBILE = true;
-  }, []);
-  return (
-    <div style={{
-      width:390, height:844, background:'var(--bg-base)',
-      borderRadius:36, overflow:'hidden', position:'relative',
-      border:'8px solid #1F2A24',
-    }}>
-      {/* Status bar */}
-      <div style={{
-        height:36, background:'#fff', display:'flex', alignItems:'center',
-        justifyContent:'space-between', padding:'0 22px', fontSize:13, fontWeight:600,
-        position:'relative', zIndex:50, borderBottom:'1px solid var(--line-soft)',
-      }}>
-        <span>9:41</span>
-        <span style={{display:'flex',gap:6,alignItems:'center'}}>
-          <span style={{width:18,height:10,border:'1px solid #1F2A24',borderRadius:2,position:'relative'}}>
-            <span style={{position:'absolute',inset:1,background:'#1F2A24',width:'70%'}}/>
-          </span>
-        </span>
-      </div>
-      <div style={{position:'absolute', top:36, left:0, right:0, bottom:0}}>
-        {children}
-      </div>
-    </div>
   );
 }
 
