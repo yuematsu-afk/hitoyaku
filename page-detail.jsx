@@ -83,7 +83,7 @@ function PageDetail({ id }) {
             {/* Profile */}
             <Block title="プロフィール" eyebrow="PROFILE">
               <p style={{fontSize:15, lineHeight:2, color:'var(--ink-1)', margin:'0 0 28px'}}>{p.profile}</p>
-              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:28}}>
+              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 20 : 28}}>
                 <div>
                   <SubTitle>経歴</SubTitle>
                   <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:10}}>
