@@ -148,41 +148,31 @@ function SectionHead({ eyebrow, title, lede, align='left', titleAs='h2' }) {
   );
 }
 
-// ─── Pharmacist photo placeholder ────────────────────────────
-// A warm gradient + initial. Wrapped in <image-slot> so the user can
-// drag in real photos later.
+// ─── Pharmacist photo ────────────────────────────────────────
 function PharmacistPhoto({ p, size = 160, rounded = '50%', slotId }) {
-  const initial = (p.name?.[0] || 'P');
   const hue = p.photoHue ?? 140;
   const bg = `linear-gradient(140deg, hsl(${hue} 32% 86%) 0%, hsl(${hue} 28% 74%) 100%)`;
-  // image-slot is registered via image-slot.js — but we don't always need it
-  // here, since pharmacist photos number 8+ and slot ids could collide. We use
-  // a plain div for now and expose slotId optionally for hero use.
-  const inner = (
+  const photoSrc = p.photo || null;
+
+  const inner = photoSrc ? (
+    <img src={photoSrc} alt={p.name}
+      style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', display:'block'}}/>
+  ) : (
     <div style={{
       width:'100%', height:'100%', background: bg,
       display:'flex', alignItems:'center', justifyContent:'center',
       color:`hsl(${hue} 40% 28%)`, fontFamily:'var(--font-serif)',
       fontSize: size*0.42, fontWeight:600, position:'relative', overflow:'hidden',
     }}>
-      <span style={{position:'relative', zIndex:1}}>{initial}</span>
-      {/* subtle wave deco */}
+      <span style={{position:'relative', zIndex:1}}>{p.name?.[0] || 'P'}</span>
       <svg viewBox="0 0 200 200" style={{position:'absolute',inset:0,opacity:.25}} preserveAspectRatio="none">
         <path d="M0,140 C50,110 100,170 200,130 L200,200 L0,200 Z" fill={`hsl(${hue} 38% 64%)`}/>
       </svg>
     </div>
   );
-  if (slotId) {
-    return (
-      <image-slot id={slotId} shape="circle"
-                  style={{width:size, height:size, borderRadius:rounded, display:'block', overflow:'hidden'}}
-                  placeholder={`${p.name}の写真`}>
-        {inner}
-      </image-slot>
-    );
-  }
+
   return (
-    <div style={{width:size, height:size, borderRadius:rounded, overflow:'hidden'}}>{inner}</div>
+    <div style={{width:size, height:size, borderRadius:rounded, overflow:'hidden', flexShrink:0}}>{inner}</div>
   );
 }
 
