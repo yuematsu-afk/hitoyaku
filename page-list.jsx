@@ -33,32 +33,39 @@ function PageList() {
       <Breadcrumb items={[{label:'トップ', go:'top'},{label:'薬剤師を探す'}]}/>
 
       {/* Hero ribbon */}
-      <section style={{background:'var(--brand-wash)', padding:'56px 0 72px'}}>
+      <section style={{background:'var(--brand-wash)', padding: isMobile ? '28px 0 36px' : '56px 0 72px'}}>
         <div className="container">
-          <div style={{fontSize:12, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:14}}>
-            — PHARMACISTS DIRECTORY
-          </div>
+          {!isMobile && (
+            <div style={{fontSize:12, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:14}}>
+              — PHARMACISTS DIRECTORY
+            </div>
+          )}
           <h1 style={{
             fontFamily:'var(--font-serif)', fontWeight:600,
-            fontSize:'clamp(32px, 4vw, 52px)', lineHeight:1.4, margin:0,
+            fontSize: isMobile ? '26px' : 'clamp(32px, 4vw, 52px)', lineHeight:1.4, margin:0,
             color:'var(--ink-1)',
           }}>
-            あなたに合いそうな薬剤師を、<br/>ゆっくり探してください。
+            あなたに合いそうな<br/>薬剤師を探してください。
           </h1>
-          <p style={{marginTop:20, fontSize:15, color:'var(--ink-2)', lineHeight:1.9, maxWidth:640}}>
-            得意分野・対応言語・相談方法から、自分の悩みに合う薬剤師を見つけられます。「まず誰に聞けばいいか分からない」場合は、運営にご相談ください。
-          </p>
+          {!isMobile && (
+            <p style={{marginTop:20, fontSize:15, color:'var(--ink-2)', lineHeight:1.9, maxWidth:640}}>
+              得意分野・対応言語・相談方法から、自分の悩みに合う薬剤師を見つけられます。「まず誰に聞けばいいか分からない」場合は、運営にご相談ください。
+            </p>
+          )}
           <div style={{
-            marginTop:32, background:'#fff', borderRadius:'var(--r-pill)',
-            padding:'6px 6px 6px 24px', display:'flex', alignItems:'center', gap:14,
-            boxShadow:'var(--shadow-2)', maxWidth: 720,
+            marginTop: isMobile ? 20 : 32,
+            background:'#fff', borderRadius:'var(--r-pill)',
+            padding: isMobile ? '4px 4px 4px 14px' : '6px 6px 6px 24px',
+            display:'flex', alignItems:'center', gap: isMobile ? 8 : 14,
+            boxShadow:'var(--shadow-2)',
           }}>
-            <span style={{color:'var(--ink-3)'}}>{Ico.search}</span>
+            <span style={{color:'var(--ink-3)', flexShrink:0}}>{Ico.search}</span>
             <input value={q} onChange={(e)=>setQ(e.target.value)}
-              placeholder="例: 漢方、サプリ、子どもの解熱剤、英語対応..."
+              placeholder={isMobile ? '漢方、飲み合わせ、英語対応...' : '例: 漢方、サプリ、子どもの解熱剤、英語対応...'}
               style={{
-                flex:1, border:0, outline:'none', background:'transparent',
-                fontFamily:'inherit', fontSize:15, color:'var(--ink-1)', padding:'14px 0',
+                flex:1, border:0, outline:'none', background:'transparent', minWidth:0,
+                fontFamily:'inherit', fontSize: isMobile ? 14 : 15, color:'var(--ink-1)',
+                padding: isMobile ? '10px 0' : '14px 0',
               }}/>
             <Button size="sm" variant="deep">検索</Button>
           </div>
@@ -137,7 +144,8 @@ function PageList() {
 
 function Breadcrumb({ items }) {
   return (
-    <div className="container" style={{padding:'12px 24px', fontSize:12, color:'var(--ink-3)', display:'flex', alignItems:'center', gap:12}}>
+    <div style={{position:'sticky', top:'var(--nav-h)', zIndex:90, background:'rgba(255,255,255,0.97)', backdropFilter:'blur(8px)', borderBottom:'1px solid var(--line-soft)'}}>
+    <div className="container" style={{padding:'10px 24px', fontSize:12, color:'var(--ink-3)', display:'flex', alignItems:'center', gap:12}}>
       <button onClick={() => window.HY_BACK ? window.HY_BACK() : window.HY_NAV?.('top')} style={{
         display:'inline-flex', alignItems:'center', gap:5,
         background:'none', border:'1px solid var(--line-mid)', borderRadius:'var(--r-pill)',
@@ -158,6 +166,7 @@ function Breadcrumb({ items }) {
           </React.Fragment>
         ))}
       </div>
+    </div>
     </div>
   );
 }
