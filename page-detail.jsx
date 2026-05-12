@@ -1,6 +1,7 @@
 // ヒトヤク — Pharmacist Detail Page (最重要ページ)
 function PageDetail({ id }) {
   const { PHARMACISTS, SPECIALTIES, CONSULT_CATEGORIES } = window.HY_DATA;
+  const isMobile = useIsMobile();
   const p = PHARMACISTS.find(x=>x.id===id) || PHARMACISTS[0];
   const related = PHARMACISTS.filter(x=>x.id!==p.id && x.specialties.some(s=>p.specialties.includes(s))).slice(0,3);
 
@@ -14,11 +15,11 @@ function PageDetail({ id }) {
       ]}/>
 
       {/* Hero */}
-      <section style={{padding:'40px 0 80px'}}>
+      <section style={{padding: isMobile ? '24px 0 48px' : '40px 0 80px'}}>
         <div className="container" style={{
-          display:'grid', gridTemplateColumns:'380px 1fr', gap:64, alignItems:'start',
+          display:'grid', gridTemplateColumns: isMobile ? '1fr' : '380px 1fr', gap: isMobile ? 32 : 64, alignItems:'start',
         }}>
-          <div style={{position:'sticky', top:96}}>
+          <div style={isMobile ? {} : {position:'sticky', top:96}}>
             <div style={{
               background:'#fff', borderRadius:'var(--r-24)', overflow:'hidden',
               border:'1px solid var(--line-soft)', boxShadow:'var(--shadow-2)',

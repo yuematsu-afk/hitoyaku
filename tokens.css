@@ -133,3 +133,9 @@ img { display: block; max-width: 100%; }
 /* Scrollbar polish inside the design canvas viewport */
 .hy-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
 .hy-scroll::-webkit-scrollbar-thumb { background: var(--line-mid); border-radius: 3px; }
+
+/* ─── Mobile responsive ─── */
+@media (max-width: 768px) {
+  :root { --nav-h: 60px; }
+  .container, .container-narrow, .container-wide { padding: 0 16px; }
+}

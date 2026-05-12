@@ -4,6 +4,16 @@
 
 const { useState, useEffect, useRef, useMemo } = React;
 
+function useIsMobile(bp = 768) {
+  const [m, setM] = useState(typeof window !== 'undefined' && window.innerWidth < bp);
+  useEffect(() => {
+    const h = () => setM(window.innerWidth < bp);
+    window.addEventListener('resize', h);
+    return () => window.removeEventListener('resize', h);
+  }, [bp]);
+  return m;
+}
+
 // ─── Wordmark ────────────────────────────────────────────────
 function Wordmark({ size = 22, color, sub = true }) {
   return (
@@ -178,6 +188,8 @@ function PharmacistPhoto({ p, size = 160, rounded = '50%', slotId }) {
 
 // ─── Header (global nav) ─────────────────────────────────────
 function SiteHeader({ current, transparent }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
   const nav = [
     { id:'top',     label:'ヒトヤクとは' },
     { id:'list',    label:'薬剤師を探す' },
@@ -186,10 +198,12 @@ function SiteHeader({ current, transparent }) {
     { id:'pharma',  label:'薬剤師・薬局の方へ' },
     { id:'faq',     label:'よくある質問' },
   ];
+  const go = (id) => { window.HY_NAV?.(id); setMenuOpen(false); };
+
   return (
     <header style={{
-      position:'sticky', top:0, zIndex:50,
-      background: transparent ? 'rgba(250,250,247,.86)' : 'rgba(255,255,255,.92)',
+      position:'sticky', top:0, zIndex:100,
+      background: transparent ? 'rgba(250,250,247,.92)' : 'rgba(255,255,255,.96)',
       backdropFilter:'saturate(140%) blur(10px)',
       borderBottom:'1px solid var(--line-soft)',
     }}>
@@ -198,28 +212,69 @@ function SiteHeader({ current, transparent }) {
         height:'var(--nav-h)',
       }}>
         <Wordmark/>
-        <nav style={{display:'flex', alignItems:'center', gap:32}}>
+
+        {!isMobile && (
+          <nav style={{display:'flex', alignItems:'center', gap:28}}>
+            {nav.map(n=>(
+              <a key={n.id} href={`#${n.id}`} onClick={(e)=>{e.preventDefault(); go(n.id);}}
+                 style={{
+                   fontSize:13, color: current===n.id ? 'var(--brand-deep)' : 'var(--ink-2)',
+                   fontWeight: current===n.id ? 600 : 500, padding:'4px 0',
+                   borderBottom: current===n.id ? '2px solid var(--brand)' : '2px solid transparent',
+                 }}>{n.label}</a>
+            ))}
+          </nav>
+        )}
+
+        {!isMobile && (
+          <div style={{display:'flex', gap:8}}>
+            <Button size="sm" variant="ghost" onClick={()=>go('consult')}>ヒトヤクに相談する</Button>
+            <Button size="sm" variant="primary" iconRight={Ico.arrow} onClick={()=>go('list')}>薬剤師を探す</Button>
+          </div>
+        )}
+
+        {isMobile && (
+          <button onClick={()=>setMenuOpen(o=>!o)} style={{
+            background:'none', border:'none', padding:'8px', cursor:'pointer',
+            display:'flex', flexDirection:'column', gap:5, alignItems:'center', justifyContent:'center',
+          }}>
+            {menuOpen ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6 6 18M6 6l12 12" stroke="var(--ink-1)" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M3 6h18M3 12h18M3 18h18" stroke="var(--ink-1)" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            )}
+          </button>
+        )}
+      </div>
+
+      {isMobile && menuOpen && (
+        <div style={{
+          background:'#fff', borderTop:'1px solid var(--line-soft)',
+          boxShadow:'var(--shadow-3)', padding:'8px 0 16px',
+        }}>
           {nav.map(n=>(
-            <a key={n.id} href={`#${n.id}`}
-               onClick={(e)=>{e.preventDefault(); window.HY_NAV?.(n.id);}}
+            <a key={n.id} href={`#${n.id}`} onClick={(e)=>{e.preventDefault(); go(n.id);}}
                style={{
-                 fontSize:13, color: current===n.id ? 'var(--brand-deep)' : 'var(--ink-2)',
-                 fontWeight: current===n.id ? 600 : 500,
-                 position:'relative', padding:'4px 0',
-                 borderBottom: current===n.id ? '2px solid var(--brand)' : '2px solid transparent',
+                 display:'block', padding:'14px 24px',
+                 fontSize:15, fontWeight: current===n.id ? 600 : 400,
+                 color: current===n.id ? 'var(--brand-deep)' : 'var(--ink-1)',
+                 borderBottom:'1px solid var(--line-soft)',
                }}>{n.label}</a>
           ))}
-        </nav>
-        <div style={{display:'flex',gap:8}}>
-          <Button size="sm" variant="ghost" onClick={()=>window.HY_NAV?.('consult')}>
-            ヒトヤクに相談する
-          </Button>
-          <Button size="sm" variant="primary" iconRight={Ico.arrow}
-                  onClick={()=>window.HY_NAV?.('list')}>
-            薬剤師を探す
-          </Button>
+          <div style={{padding:'16px 24px 0', display:'flex', flexDirection:'column', gap:8}}>
+            <Button variant="deep" fullWidth iconRight={Ico.arrow} onClick={()=>go('consult')}>
+              ヒトヤクに相談する
+            </Button>
+            <Button variant="ghost" fullWidth onClick={()=>go('list')}>
+              薬剤師を探す
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }
@@ -237,12 +292,15 @@ function SiteFooter() {
       </ul>
     </div>
   );
+  const isMobile = useIsMobile();
   return (
-    <footer style={{background:'var(--bg-soft)', borderTop:'1px solid var(--line-soft)', padding:'72px 0 32px', marginTop: 120}}>
+    <footer style={{background:'var(--bg-soft)', borderTop:'1px solid var(--line-soft)', padding: isMobile ? '48px 0 24px' : '72px 0 32px', marginTop: isMobile ? 64 : 120}}>
       <div className="container-wide" style={{
-        display:'grid', gridTemplateColumns:'1.4fr 1fr 1fr 1fr 1fr', gap:48,
+        display:'grid',
+        gridTemplateColumns: isMobile ? '1fr 1fr' : '1.4fr 1fr 1fr 1fr 1fr',
+        gap: isMobile ? '32px 24px' : 48,
       }}>
-        <div>
+        <div style={{gridColumn: isMobile ? '1 / -1' : 'auto'}}>
           <Wordmark size={24}/>
           <p style={{marginTop:16, fontSize:13, lineHeight:1.8, color:'var(--ink-2)', maxWidth: 320}}>
             ヒトヤクは、薬や体調の不安を、自分に合った薬剤師に気軽に相談できるサービスです。
@@ -257,22 +315,15 @@ function SiteFooter() {
         <Col title="ご利用の方へ" items={[
           {label:'法人の方へ', go:'corp'},
           {label:'薬剤師・薬局の方へ', go:'pharma'},
-          {label:'お問い合わせ'},
         ]}/>
-        <Col title="運営" items={[
-          {label:'運営会社'},
-          {label:'プレスリリース'},
-          {label:'採用情報'},
-        ]}/>
-        <Col title="ご利用情報" items={[
-          {label:'利用規約'},
-          {label:'プライバシーポリシー'},
-          {label:'特定商取引法表記'},
-        ]}/>
+        {!isMobile && <Col title="運営" items={[{label:'運営会社'},{label:'採用情報'}]}/>}
+        {!isMobile && <Col title="ご利用情報" items={[{label:'利用規約'},{label:'プライバシーポリシー'},{label:'特定商取引法表記'}]}/>}
       </div>
       <div className="container-wide" style={{
-        marginTop:64, paddingTop:24, borderTop:'1px solid var(--line-mid)',
-        display:'flex', justifyContent:'space-between', fontSize:12, color:'var(--ink-3)',
+        marginTop: isMobile ? 32 : 64, paddingTop:24, borderTop:'1px solid var(--line-mid)',
+        display:'flex', flexDirection: isMobile ? 'column' : 'row',
+        justifyContent:'space-between', gap: isMobile ? 8 : 0,
+        fontSize:12, color:'var(--ink-3)',
       }}>
         <div>© 2026 Hitoyaku, Inc.</div>
         <div>ヒトヤクは薬剤師による健康・服薬相談サービスです。医師の診断や治療に代わるものではありません。</div>

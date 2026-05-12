@@ -1,12 +1,13 @@
 // ヒトヤク — Pharmacist Join (薬剤師・薬局向け) Page
 function PagePharma() {
+  const isMobile = useIsMobile();
   return (
     <div style={{background:'var(--bg-base)'}}>
       <SiteHeader current="pharma"/>
       <Breadcrumb items={[{label:'トップ',go:'top'},{label:'薬剤師・薬局の方へ'}]}/>
 
-      <section style={{padding:'48px 0 96px', background:'var(--brand-wash)'}}>
-        <div className="container" style={{display:'grid', gridTemplateColumns:'1.1fr 1fr', gap:64, alignItems:'center'}}>
+      <section style={{padding: isMobile ? '40px 0 56px' : '48px 0 96px', background:'var(--brand-wash)'}}>
+        <div className="container" style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1.1fr 1fr', gap: isMobile ? 32 : 64, alignItems:'center'}}>
           <div>
             <div style={{fontSize:12, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:18}}>— FOR PHARMACISTS</div>
             <h1 style={{fontFamily:'var(--font-serif)',fontWeight:600,fontSize:'clamp(36px,4.4vw,56px)',lineHeight:1.4,margin:0,color:'var(--ink-1)'}}>
@@ -26,10 +27,10 @@ function PagePharma() {
       </section>
 
       {/* Why join */}
-      <section style={{padding:'120px 0'}}>
+      <section style={{padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container">
           <SectionHead eyebrow="参加のメリット" title={<>「自分の強み」を活かして、<br/>新しい接点をつくる。</>}/>
-          <div style={{marginTop:56, display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:24}}>
+          <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 16 : 24}}>
             {[
               {n:'01',t:'専門性と人柄を見える化',d:'プロフィール・メッセージ・得意分野を発信。「合いそう」を相談前に伝えられます。'},
               {n:'02',t:'相談者との新しい接点',d:'処方箋に来た方だけでなく、新たな相談者と出会えます。'},

@@ -52,6 +52,29 @@ const TWEAK_DEFAULTS = {
   "cardStyle": "medium"
 };
 
+function MobileBottomBar() {
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const check = () => setVisible(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  if (!visible) return null;
+  return (
+    <div style={{
+      position:'fixed', bottom:0, left:0, right:0, zIndex:200,
+      background:'rgba(255,255,255,.97)', backdropFilter:'blur(8px)',
+      borderTop:'1px solid var(--line-soft)',
+      padding:'10px 16px 10px',
+      display:'flex', gap:8,
+    }}>
+      <Button variant="ghost" size="md" fullWidth onClick={()=>window.HY_NAV?.('consult')}>相談する</Button>
+      <Button variant="deep" size="md" fullWidth iconRight={Ico.arrow} onClick={()=>window.HY_NAV?.('list')}>薬剤師を探す</Button>
+    </div>
+  );
+}
+
 function App() {
   const [route, setRoute] = useState({ page: 'top' });
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
@@ -90,6 +113,8 @@ function App() {
       <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }}>
         {view}
       </div>
+
+      <MobileBottomBar/>
 
       {!panelOpen && (
         <button onClick={openPanel} style={{

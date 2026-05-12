@@ -27,7 +27,8 @@ function PageTop() {
 // ── Hero ─────────────────────────────────────────────────────
 function Hero() {
   const t = window.HY_TWEAKS || {};
-  const layout = t.heroLayout || 'right'; // 'left' | 'right' | 'fullbleed'
+  const isMobile = useIsMobile();
+  const layout = isMobile ? 'stack' : (t.heroLayout || 'right'); // 'left' | 'right' | 'fullbleed' | 'stack'
 
   const copy = (
     <div style={{display:'flex', flexDirection:'column', gap:32}}>
@@ -91,6 +92,16 @@ function Hero() {
       <section style={{position:'relative', background:'var(--brand-wash)', overflow:'hidden'}}>
         <div style={{position:'absolute', inset:0, opacity:.5}}><HeroVisual decorative/></div>
         <div className="container-wide" style={{position:'relative', padding:'120px 24px 140px', maxWidth: 880}}>
+          {copy}
+        </div>
+      </section>
+    );
+  }
+
+  if (layout === 'stack') {
+    return (
+      <section style={{background:'var(--bg-base)', position:'relative', overflow:'hidden'}}>
+        <div className="container-wide" style={{padding:'48px 16px 64px'}}>
           {copy}
         </div>
       </section>
@@ -217,6 +228,7 @@ function DecorPortrait() {
 
 // ── Problem ──────────────────────────────────────────────────
 function ProblemSection() {
+  const isMobile = useIsMobile();
   const problems = [
     {q:'ネット検索だけでは、不安が逆に増える。', d:'信頼できる情報源にたどり着けず、結局判断できない。'},
     {q:'病院に行くほどではない気がする。', d:'でも、誰かに確かめておきたい気持ちはある。'},
@@ -224,7 +236,7 @@ function ProblemSection() {
     {q:'家族の薬や、サプリの飲み合わせが心配。', d:'年齢が上がると、確認したいことが増えてくる。'},
   ];
   return (
-    <section style={{background:'var(--bg-soft)', padding:'120px 0'}}>
+    <section style={{background:'var(--bg-soft)', padding: isMobile ? '64px 0' : '120px 0'}}>
       <div className="container">
         <SectionHead
           eyebrow="ありませんか、こんな迷い"
@@ -232,8 +244,8 @@ function ProblemSection() {
           lede="多くの方が、薬や体調について「聞ける専門家」を見つけられずにいます。ヒトヤクは、その距離を埋めるためのサービスです。"
         />
         <div style={{
-          marginTop:64, display:'grid',
-          gridTemplateColumns:'repeat(2, 1fr)', gap:24,
+          marginTop: isMobile ? 32 : 64, display:'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap:16,
         }}>
           {problems.map((p,i)=>(
             <div key={i} style={{
@@ -261,6 +273,7 @@ function ProblemSection() {
 
 // ── Features ─────────────────────────────────────────────────
 function FeatureSection() {
+  const isMobile = useIsMobile();
   const features = [
     {
       tag:'01 / SELECT',
@@ -285,13 +298,13 @@ function FeatureSection() {
     },
   ];
   return (
-    <section style={{padding:'120px 0'}}>
+    <section style={{padding: isMobile ? '64px 0' : '120px 0'}}>
       <div className="container">
         <SectionHead
           eyebrow="ヒトヤクでできること"
           title={<>「薬剤師を選ぶ」という<br/>あたらしい体験。</>}
         />
-        <div style={{marginTop:64, display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:24}}>
+        <div style={{marginTop: isMobile ? 32 : 64, display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap:16}}>
           {features.map((f,i)=>(
             <div key={i} style={{
               background:f.bg, borderRadius:'var(--r-24)', padding:'40px 36px 56px',
@@ -319,9 +332,10 @@ function FeatureSection() {
 
 // ── Pick (薬剤師を選べることの説明) ───────────────────────────
 function PickSection() {
+  const isMobile = useIsMobile();
   return (
-    <section style={{background:'var(--brand-deep)', color:'#fff', padding:'120px 0'}}>
-      <div className="container" style={{display:'grid', gridTemplateColumns:'1fr 1.2fr', gap:80, alignItems:'center'}}>
+    <section style={{background:'var(--brand-deep)', color:'#fff', padding: isMobile ? '64px 0' : '120px 0'}}>
+      <div className="container" style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.2fr', gap: isMobile ? 40 : 80, alignItems:'center'}}>
         <div>
           <div style={{fontSize:12, letterSpacing:'.2em', color:'var(--brand-soft)', fontWeight:600, marginBottom:20}}>
             — なぜ「選べる」が大切か
@@ -376,10 +390,12 @@ function PickIllustration() {
 
 // ── Pharmacist Preview ───────────────────────────────────────
 function PharmacistPreview({ pharmacists }) {
+  const isMobile = useIsMobile();
+  const shown = isMobile ? pharmacists.slice(0, 2) : pharmacists;
   return (
-    <section style={{padding:'120px 0'}}>
+    <section style={{padding: isMobile ? '64px 0' : '120px 0'}}>
       <div className="container">
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',gap:32,flexWrap:'wrap'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',gap:24,flexWrap:'wrap'}}>
           <SectionHead
             eyebrow="薬剤師を知る"
             title={<>気になる薬剤師から、<br/>はじめてみる。</>}
@@ -388,8 +404,8 @@ function PharmacistPreview({ pharmacists }) {
             すべての薬剤師を見る
           </Button>
         </div>
-        <div style={{marginTop:56, display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20}}>
-          {pharmacists.map(p=> <PharmacistCard key={p.id} p={p} variant="medium"/>)}
+        <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 20}}>
+          {shown.map(p=> <PharmacistCard key={p.id} p={p} variant="medium"/>)}
         </div>
       </div>
     </section>
@@ -499,6 +515,7 @@ function PharmacistCard({ p, variant='medium', onClick }) {
 
 // ── How it works (相談までの流れ) ──────────────────────────────
 function FlowSection() {
+  const isMobile = useIsMobile();
   const steps = [
     { n:'01', t:'薬剤師を探す', d:'得意分野や対応方法から、気になる薬剤師を見つけます。' },
     { n:'02', t:'プロフィールを読む', d:'人柄・経歴・相談スタンスを確認。「合いそう」と感じたら次へ。' },
@@ -506,26 +523,26 @@ function FlowSection() {
     { n:'04', t:'返信を受け取る', d:'LINE・メール・オンライン面談など、ご希望の方法で。' },
   ];
   return (
-    <section style={{background:'var(--bg-soft)', padding:'120px 0'}}>
+    <section style={{background:'var(--bg-soft)', padding: isMobile ? '64px 0' : '120px 0'}}>
       <div className="container">
         <SectionHead eyebrow="ご利用の流れ" title={<>相談するまでの、<br/>4つのステップ。</>}/>
-        <div style={{marginTop:64, position:'relative'}}>
-          <div style={{
+        <div style={{marginTop: isMobile ? 32 : 64, position:'relative'}}>
+          {!isMobile && <div style={{
             position:'absolute', top:36, left:'4%', right:'4%', height:1,
             borderTop:'1px dashed var(--line-strong)', zIndex:0,
-          }}/>
-          <div style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:24, position:'relative'}}>
+          }}/>}
+          <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 20 : 24, position:'relative'}}>
             {steps.map((s,i)=>(
               <div key={i} style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
                 <div style={{
-                  width:72, height:72, borderRadius:'50%', background:'#fff',
+                  width: isMobile ? 52 : 72, height: isMobile ? 52 : 72, borderRadius:'50%', background:'#fff',
                   border:'1px solid var(--line-mid)', display:'flex',
-                  alignItems:'center', justifyContent:'center', marginBottom:24,
-                  fontFamily:'var(--font-serif)', fontSize:22, color:'var(--brand-deep)',
+                  alignItems:'center', justifyContent:'center', marginBottom: isMobile ? 14 : 24,
+                  fontFamily:'var(--font-serif)', fontSize: isMobile ? 16 : 22, color:'var(--brand-deep)',
                   fontWeight:600,
                 }}>{s.n}</div>
-                <div style={{fontSize:18, fontWeight:600, color:'var(--ink-1)', marginBottom:10}}>{s.t}</div>
-                <div style={{fontSize:14, color:'var(--ink-2)', lineHeight:1.85}}>{s.d}</div>
+                <div style={{fontSize: isMobile ? 14 : 18, fontWeight:600, color:'var(--ink-1)', marginBottom: isMobile ? 6 : 10}}>{s.t}</div>
+                <div style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.85}}>{s.d}</div>
               </div>
             ))}
           </div>
@@ -537,9 +554,10 @@ function FlowSection() {
 
 // ── Dual entry (法人 + 薬剤師・薬局) ──────────────────────────
 function DualEntrySection() {
+  const isMobile = useIsMobile();
   return (
-    <section style={{padding:'120px 0'}}>
-      <div className="container" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:32}}>
+    <section style={{padding: isMobile ? '64px 0' : '120px 0'}}>
+      <div className="container" style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 16 : 32}}>
         <EntryCard
           eyebrow="法人ご担当者の方へ"
           title="従業員の健康相談窓口として。"
@@ -593,18 +611,19 @@ function EntryCard({eyebrow, title, lede, ctaLabel, ctaTarget, bg, accent, featu
 
 // ── Trust ────────────────────────────────────────────────────
 function TrustSection() {
+  const isMobile = useIsMobile();
   const stats = [
-    { v:'120+', l:'登録薬剤師数' },
-    { v:'85%',  l:'認定薬剤師比率' },
-    { v:'24h',  l:'平均初回返信時間' },
-    { v:'4.7',  l:'利用後満足度 (5点満点)' },
+    { v:'5名', l:'登録薬剤師数（順次拡大中）' },
+    { v:'15年+', l:'平均薬剤師経験年数' },
+    { v:'24h',   l:'平均初回返信時間' },
+    { v:'無料',  l:'初回運営相談' },
   ];
   return (
-    <section style={{background:'var(--bg-tint)', padding:'120px 0'}}>
+    <section style={{background:'var(--bg-tint)', padding: isMobile ? '64px 0' : '120px 0'}}>
       <div className="container">
         <SectionHead align="center" eyebrow="安心の理由"
           title={<>はじめての方にも、<br/>安心していただける工夫を。</>}/>
-        <div style={{marginTop:56, display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:24}}>
+        <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 24}}>
           {stats.map((s,i)=>(
             <div key={i} style={{background:'#fff', borderRadius:'var(--r-20)', padding:'28px', textAlign:'center'}}>
               <div style={{fontFamily:'var(--font-serif)', fontSize:42, fontWeight:600, color:'var(--brand-deep)', letterSpacing:'-.01em'}}>{s.v}</div>
@@ -642,13 +661,16 @@ function FaqShort() {
 
 // ── Final CTA ────────────────────────────────────────────────
 function FinalCTA() {
+  const isMobile = useIsMobile();
   return (
-    <section style={{padding:'40px 0 120px'}}>
+    <section style={{padding: isMobile ? '32px 0 80px' : '40px 0 120px'}}>
       <div className="container">
         <div style={{
           background:'var(--brand-deep)', borderRadius:'var(--r-24)',
-          padding:'72px 64px', color:'#fff', position:'relative', overflow:'hidden',
-          display:'grid', gridTemplateColumns:'1.4fr 1fr', gap:48, alignItems:'center',
+          padding: isMobile ? '40px 24px' : '72px 64px',
+          color:'#fff', position:'relative', overflow:'hidden',
+          display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr',
+          gap: isMobile ? 28 : 48, alignItems:'center',
         }}>
           <div>
             <h2 style={{

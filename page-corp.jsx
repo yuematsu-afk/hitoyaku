@@ -1,13 +1,14 @@
 // ヒトヤク — Corporate (法人向け) Page
 function PageCorp() {
+  const isMobile = useIsMobile();
   return (
     <div style={{background:'var(--bg-base)'}}>
       <SiteHeader current="corp"/>
       <Breadcrumb items={[{label:'トップ',go:'top'},{label:'法人の方へ'}]}/>
 
       {/* Hero */}
-      <section style={{padding:'48px 0 96px', background:'var(--accent-warm-soft)', position:'relative', overflow:'hidden'}}>
-        <div className="container" style={{display:'grid', gridTemplateColumns:'1.1fr 1fr', gap:64, alignItems:'center'}}>
+      <section style={{padding: isMobile ? '40px 0 56px' : '48px 0 96px', background:'var(--accent-warm-soft)', position:'relative', overflow:'hidden'}}>
+        <div className="container" style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1.1fr 1fr', gap: isMobile ? 32 : 64, alignItems:'center'}}>
           <div>
             <div style={{fontSize:12, letterSpacing:'.2em', color:'#8B5A2B', fontWeight:600, marginBottom:18}}>— FOR COMPANIES</div>
             <h1 style={{fontFamily:'var(--font-serif)',fontWeight:600,fontSize:'clamp(36px,4.4vw,56px)',lineHeight:1.4,margin:0,color:'var(--ink-1)'}}>
@@ -27,10 +28,10 @@ function PageCorp() {
       </section>
 
       {/* Problem */}
-      <section style={{padding:'120px 0'}}>
+      <section style={{padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container">
           <SectionHead eyebrow="健康経営の現場で" title={<>従業員の小さな不安は、<br/>意外と拾えていない。</>}/>
-          <div style={{marginTop:56, display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:24}}>
+          <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 16 : 24}}>
             {[
               {t:'病院に行くほどではない健康相談', d:'頭痛、便秘、不眠、サプリ選び。社内では聞きづらい。'},
               {t:'産業医面談までのハードル', d:'予約・対面が前提だと、軽い相談は埋もれてしまう。'},

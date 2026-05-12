@@ -1,11 +1,13 @@
 // ヒトヤク — Pharmacist List Page
 function PageList() {
   const { PHARMACISTS, SPECIALTIES } = window.HY_DATA;
+  const isMobile = useIsMobile();
   const [q, setQ] = React.useState('');
   const [picked, setPicked] = React.useState([]);     // specialty ids
   const [onlineOnly, setOnlineOnly] = React.useState(false);
   const [langOnly, setLangOnly] = React.useState(false);
   const [sort, setSort] = React.useState('recommended');
+  const [filterOpen, setFilterOpen] = React.useState(false);
 
   const toggle = (id) => setPicked(p => p.includes(id) ? p.filter(x=>x!==id) : [...p, id]);
 
@@ -64,18 +66,39 @@ function PageList() {
       </section>
 
       {/* List w/ sidebar */}
-      <section style={{padding:'72px 0 80px'}}>
-        <div className="container" style={{display:'grid', gridTemplateColumns:'260px 1fr', gap:48, alignItems:'start'}}>
-          <aside style={{position:'sticky', top:96}}>
-            <FilterPanel
-              picked={picked} toggle={toggle}
-              onlineOnly={onlineOnly} setOnlineOnly={setOnlineOnly}
-              langOnly={langOnly} setLangOnly={setLangOnly}/>
-          </aside>
+      <section style={{padding: isMobile ? '24px 0 64px' : '72px 0 80px'}}>
+        <div className="container" style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '260px 1fr', gap: isMobile ? 0 : 48, alignItems:'start'}}>
+          {/* モバイル: 折り畳みフィルター */}
+          {isMobile ? (
+            <div style={{marginBottom:16}}>
+              <button onClick={()=>setFilterOpen(o=>!o)} style={{
+                display:'flex', alignItems:'center', gap:8,
+                background:'#fff', border:'1px solid var(--line-mid)',
+                borderRadius:'var(--r-pill)', padding:'10px 18px',
+                fontSize:13, fontWeight:500, color:'var(--ink-1)', cursor:'pointer', width:'100%', justifyContent:'center',
+              }}>
+                {Ico.filter} 絞り込み {filterOpen ? '▲' : '▼'}
+              </button>
+              {filterOpen && (
+                <div style={{marginTop:12, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-16)', padding:'20px'}}>
+                  <FilterPanel picked={picked} toggle={toggle}
+                    onlineOnly={onlineOnly} setOnlineOnly={setOnlineOnly}
+                    langOnly={langOnly} setLangOnly={setLangOnly}/>
+                </div>
+              )}
+            </div>
+          ) : (
+            <aside style={{position:'sticky', top:96}}>
+              <FilterPanel picked={picked} toggle={toggle}
+                onlineOnly={onlineOnly} setOnlineOnly={setOnlineOnly}
+                langOnly={langOnly} setLangOnly={setLangOnly}/>
+            </aside>
+          )}
           <div>
             <div style={{
-              display:'flex',justifyContent:'space-between',alignItems:'center',
+              display:'flex', justifyContent:'space-between', alignItems:'center',
               marginBottom:24, paddingBottom:20, borderBottom:'1px solid var(--line-soft)',
+              flexWrap:'wrap', gap:12,
             }}>
               <div style={{fontSize:14, color:'var(--ink-2)'}}>
                 <strong style={{color:'var(--ink-1)', fontFamily:'var(--font-serif)', fontSize:22, fontWeight:600}}>{filtered.length}</strong>
@@ -98,7 +121,7 @@ function PageList() {
             {filtered.length === 0 ? (
               <EmptyState/>
             ) : (
-              <div style={{display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:20}}>
+              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 16 : 20}}>
                 {filtered.map(p=> <PharmacistCard key={p.id} p={p}/>)}
               </div>
             )}
