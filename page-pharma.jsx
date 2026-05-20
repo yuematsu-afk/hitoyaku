@@ -1,6 +1,48 @@
 // ヒトヤク — Pharmacist Join (薬剤師・薬局向け) Page
 function PagePharma() {
   const isMobile = useIsMobile();
+  const [formStatus, setFormStatus] = React.useState('idle'); // idle|sending|success|error
+  const [specs, setSpecs] = React.useState([]);
+  const [online, setOnline] = React.useState('');
+  const formRef = React.useRef(null);
+
+  const toggleSpec = (id) => setSpecs(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+
+  const scrollToForm = () => {
+    document.getElementById('pharma-contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    const fd = new FormData(formRef.current);
+    const specLabels = specs.map(id => window.HY_DATA.SPECIALTIES.find(s => s.id === id)?.label).filter(Boolean).join(', ');
+    const payload = {
+      access_key: '1f72d159-2aa7-4eda-8925-864f3656e2e3',
+      subject: '【ヒトヤク薬剤師参加】お問い合わせ',
+      from_name: 'ヒトヤク 薬剤師登録窓口',
+      pharmacist_name: fd.get('pharmacist_name') || '',
+      license: fd.get('license') || '',
+      affiliation: fd.get('affiliation') || '',
+      location: fd.get('location') || '',
+      specialties: specLabels,
+      online: online,
+      reason: fd.get('reason') || '',
+      email: fd.get('email') || '',
+    };
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      setFormStatus(data.success ? 'success' : 'error');
+    } catch {
+      setFormStatus('error');
+    }
+  };
+
   return (
     <div style={{background:'var(--bg-base)'}}>
       <SiteHeader current="pharma"/>
@@ -18,8 +60,7 @@ function PagePharma() {
               漢方、女性の健康、子育て、外国語対応など、あなたの「これが伝えたい」を活かせます。
             </p>
             <div style={{marginTop:32, display:'flex',gap:12,flexWrap:'wrap'}}>
-              <Button size="lg" variant="deep" iconRight={Ico.arrow}>薬剤師として参加する</Button>
-              <Button size="lg" variant="ghost">薬局法人として問い合わせる</Button>
+              <Button size="lg" variant="ghost" onClick={scrollToForm}>薬局法人として問い合わせる</Button>
             </div>
           </div>
           <PharmaHeroVisual isMobile={isMobile}/>
@@ -85,43 +126,74 @@ function PagePharma() {
       </section>
 
       {/* Form */}
-      <section style={{padding: isMobile ? '40px 0 56px' : '40px 0 120px'}}>
+      <section id="pharma-contact" style={{padding: isMobile ? '40px 0 56px' : '40px 0 120px'}}>
         <div className="container-narrow">
           <SectionHead align="center" eyebrow="参加お問い合わせ" title="まずはお話しさせてください。"/>
           <div style={{marginTop:48, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding: isMobile ? '28px 20px' : '40px 48px'}}>
-            <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
-              <Field label="お名前" required><Input placeholder="例: 中村 結衣"/></Field>
-              <Field label="薬剤師資格" required>
-                <Select><option>選択してください</option><option>あり</option><option>申請中</option><option>なし(薬局法人としての問い合わせ)</option></Select>
-              </Field>
-              <Field label="ご所属(薬局・法人名)"><Input placeholder="例: みどり薬局 表参道店"/></Field>
-              <Field label="ご所在地"><Input placeholder="例: 東京都・港区"/></Field>
-            </div>
-            <div style={{marginTop:20, display:'flex', flexDirection:'column', gap:20}}>
-              <Field label="得意分野 (複数選択可)" required>
-                <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
-                  {window.HY_DATA.SPECIALTIES.map(s=>(
-                    <Tag key={s.id} tone="outline" size="lg">{s.label}</Tag>
-                  ))}
+            {formStatus === 'success' ? (
+              <div style={{textAlign:'center', padding:'40px 0'}}>
+                <div style={{width:56,height:56,borderRadius:'50%',background:'var(--brand-wash)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 20px',color:'var(--brand)'}}>
+                  {Ico.check}
                 </div>
-              </Field>
-              <Field label="オンライン対応">
-                <div style={{display:'flex',gap: isMobile ? 16 : 24, flexWrap:'wrap'}}>
-                  {['可','店舗のみ希望','要相談'].map(t=>(
-                    <label key={t} style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:14}}>
-                      <input type="radio" name="online" style={{accentColor:'var(--brand)'}}/>{t}
-                    </label>
-                  ))}
+                <div style={{fontFamily:'var(--font-serif)',fontSize:22,fontWeight:600,color:'var(--ink-1)',marginBottom:10}}>送信が完了しました</div>
+                <p style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.9}}>お問い合わせいただきありがとうございます。<br/>担当者より2〜3営業日以内にご連絡いたします。</p>
+              </div>
+            ) : (
+              <form ref={formRef} onSubmit={handleSubmit}>
+                <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
+                  <Field label="お名前" required><Input name="pharmacist_name" placeholder="例: 中村 結衣" required/></Field>
+                  <Field label="薬剤師資格" required>
+                    <Select name="license" required>
+                      <option value="">選択してください</option>
+                      <option>あり</option>
+                      <option>申請中</option>
+                      <option>なし(薬局法人としての問い合わせ)</option>
+                    </Select>
+                  </Field>
+                  <Field label="ご所属(薬局・法人名)"><Input name="affiliation" placeholder="例: みどり薬局 表参道店"/></Field>
+                  <Field label="ご所在地"><Input name="location" placeholder="例: 東京都・港区"/></Field>
                 </div>
-              </Field>
-              <Field label="参加希望理由 / 伝えたい強み" required>
-                <Textarea placeholder="どんな相談に応えていきたいか、自由にお書きください"/>
-              </Field>
-              <Field label="ご連絡先" required><Input type="email" placeholder="メールアドレス"/></Field>
-            </div>
-            <div style={{marginTop:24, textAlign:'center'}}>
-              <Button size="lg" variant="deep" iconRight={Ico.arrow}>送信する</Button>
-            </div>
+                <div style={{marginTop:20, display:'flex', flexDirection:'column', gap:20}}>
+                  <Field label="得意分野 (複数選択可)" required>
+                    <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                      {window.HY_DATA.SPECIALTIES.map(s=>(
+                        <span key={s.id} onClick={()=>toggleSpec(s.id)} style={{
+                          display:'inline-block', fontSize:13, padding:'7px 14px',
+                          borderRadius:'var(--r-pill)', fontWeight:500, cursor:'pointer',
+                          border:'1px solid '+(specs.includes(s.id)?'var(--brand)':'var(--line-mid)'),
+                          background:specs.includes(s.id)?'var(--brand-wash)':'transparent',
+                          color:specs.includes(s.id)?'var(--brand-deep)':'var(--ink-2)',
+                          transition:'all .15s',
+                        }}>{s.label}</span>
+                      ))}
+                    </div>
+                  </Field>
+                  <Field label="オンライン対応">
+                    <div style={{display:'flex',gap: isMobile ? 16 : 24, flexWrap:'wrap'}}>
+                      {['可','店舗のみ希望','要相談'].map(t=>(
+                        <label key={t} style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:14,cursor:'pointer'}}>
+                          <input type="radio" name="online" value={t} checked={online===t} onChange={()=>setOnline(t)} style={{accentColor:'var(--brand)'}}/>{t}
+                        </label>
+                      ))}
+                    </div>
+                  </Field>
+                  <Field label="参加希望理由 / 伝えたい強み" required>
+                    <Textarea name="reason" placeholder="どんな相談に応えていきたいか、自由にお書きください" required/>
+                  </Field>
+                  <Field label="ご連絡先" required>
+                    <Input name="email" type="email" placeholder="メールアドレス" required/>
+                  </Field>
+                </div>
+                <div style={{marginTop:24, textAlign:'center'}}>
+                  <Button size="lg" variant="deep" iconRight={Ico.arrow} disabled={formStatus==='sending'}>
+                    {formStatus === 'sending' ? '送信中...' : '送信する'}
+                  </Button>
+                  {formStatus === 'error' && (
+                    <p style={{marginTop:12,fontSize:13,color:'#c0392b'}}>送信に失敗しました。もう一度お試しください。</p>
+                  )}
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>

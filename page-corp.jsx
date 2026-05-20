@@ -1,6 +1,46 @@
 // ヒトヤク — Corporate (法人向け) Page
 function PageCorp() {
   const isMobile = useIsMobile();
+  const [formStatus, setFormStatus] = React.useState('idle'); // idle|sending|success|error
+  const [purposes, setPurposes] = React.useState([]);
+  const [wish, setWish] = React.useState('');
+  const formRef = React.useRef(null);
+
+  const togglePurpose = (t) => setPurposes(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]);
+
+  const scrollToForm = () => {
+    document.getElementById('corp-contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    const fd = new FormData(formRef.current);
+    const payload = {
+      access_key: '1f72d159-2aa7-4eda-8925-864f3656e2e3',
+      subject: '【ヒトヤク法人向け】お問い合わせ',
+      from_name: 'ヒトヤク for Business',
+      company: fd.get('company') || '',
+      name: fd.get('name') || '',
+      email: fd.get('email') || '',
+      size: fd.get('size') || '',
+      purpose: purposes.join(', '),
+      wish: wish,
+      message: fd.get('message') || '',
+    };
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      setFormStatus(data.success ? 'success' : 'error');
+    } catch {
+      setFormStatus('error');
+    }
+  };
+
   return (
     <div style={{background:'var(--bg-base)'}}>
       <SiteHeader current="corp"/>
@@ -19,8 +59,8 @@ function PageCorp() {
               日常的な健康相談を、薬剤師に気軽に聞ける窓口として、福利厚生にご導入いただけます。
             </p>
             <div style={{marginTop:32, display:'flex', gap:12, flexWrap:'wrap'}}>
-              <Button size="lg" variant="accent" iconRight={Ico.arrow}>法人向け資料を請求する</Button>
-              <Button size="lg" variant="ghost">導入相談する</Button>
+              <Button size="lg" variant="accent" iconRight={Ico.arrow} onClick={scrollToForm}>法人向け資料を請求する</Button>
+              <Button size="lg" variant="ghost" onClick={scrollToForm}>導入相談する</Button>
             </div>
           </div>
           <CorpHeroVisual isMobile={isMobile}/>
@@ -85,7 +125,12 @@ function PageCorp() {
               {p:'50代男性 / 管理職', q:'親の薬が増えてきた。整理してもいいのか相談したい。'},
             ].map((c,i)=>(
               <div key={i} style={{background:'var(--bg-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '20px 16px' : '28px 32px', display:'flex', gap:14, alignItems:'flex-start'}}>
-                <div style={{flex:'0 0 44px',width:44,height:44,borderRadius:'50%',background:'var(--bg-tint)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--ink-2)',fontFamily:'var(--font-serif)'}}>{c.p.split(' ')[0].slice(0,1)}</div>
+                <div style={{flex:'0 0 44px',width:44,height:44,borderRadius:'50%',background:'var(--bg-tint)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--ink-2)'}}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.6"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                  </svg>
+                </div>
                 <div>
                   <div style={{fontSize:12,color:'var(--ink-3)',marginBottom:6}}>{c.p}</div>
                   <div style={{fontSize: isMobile ? 14 : 15,lineHeight:1.8,color:'var(--ink-1)'}}>「{c.q}」</div>
@@ -117,49 +162,73 @@ function PageCorp() {
         </div>
       </section>
 
-      {/* Form preview */}
-      <section style={{padding: isMobile ? '56px 0' : '120px 0'}}>
+      {/* Form */}
+      <section id="corp-contact" style={{padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container-narrow">
           <SectionHead align="center" eyebrow="お問い合わせ" title="まずは資料からどうぞ。"/>
           <div style={{marginTop:48, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding: isMobile ? '28px 20px' : '40px 48px', boxShadow:'var(--shadow-1)'}}>
-            <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
-              <Field label="会社名" required><Input placeholder="例: 株式会社ヒトヤク"/></Field>
-              <Field label="ご担当者名" required><Input placeholder="例: 山田 太郎"/></Field>
-              <Field label="メールアドレス" required><Input type="email" placeholder="例: yamada@example.co.jp"/></Field>
-              <Field label="従業員数" required>
-                <Select>
-                  <option>選択してください</option>
-                  <option>～50名</option><option>51～200名</option>
-                  <option>201～500名</option><option>501名以上</option>
-                </Select>
-              </Field>
-            </div>
-            <div style={{marginTop:20}}>
-              <Field label="ご検討の目的 (複数選択可)">
-                <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
-                  {['福利厚生強化','健康経営','女性活躍支援','育児世代支援','産業保健の補完','その他'].map(t=>(
-                    <Tag key={t} tone="outline" size="lg">{t}</Tag>
-                  ))}
+            {formStatus === 'success' ? (
+              <div style={{textAlign:'center', padding:'40px 0'}}>
+                <div style={{width:56,height:56,borderRadius:'50%',background:'var(--brand-wash)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 20px',color:'var(--brand)'}}>
+                  {Ico.check}
                 </div>
-              </Field>
-            </div>
-            <div style={{marginTop:20}}>
-              <Field label="ご希望" required>
-                <div style={{display:'flex',gap: isMobile ? 16 : 24,flexWrap:'wrap'}}>
-                  {['資料請求','オンライン相談','見積依頼'].map(t=>(
-                    <label key={t} style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:14}}>
-                      <input type="radio" name="want" style={{accentColor:'var(--brand)'}}/>{t}
-                    </label>
-                  ))}
+                <div style={{fontFamily:'var(--font-serif)',fontSize:22,fontWeight:600,color:'var(--ink-1)',marginBottom:10}}>送信が完了しました</div>
+                <p style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.9}}>お問い合わせいただきありがとうございます。<br/>担当者より2〜3営業日以内にご連絡いたします。</p>
+              </div>
+            ) : (
+              <form ref={formRef} onSubmit={handleSubmit}>
+                <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
+                  <Field label="会社名" required><Input name="company" placeholder="例: 株式会社ヒトヤク" required/></Field>
+                  <Field label="ご担当者名" required><Input name="name" placeholder="例: 山田 太郎" required/></Field>
+                  <Field label="メールアドレス" required><Input name="email" type="email" placeholder="例: yamada@example.co.jp" required/></Field>
+                  <Field label="従業員数" required>
+                    <Select name="size" required>
+                      <option value="">選択してください</option>
+                      <option>～50名</option><option>51～200名</option>
+                      <option>201～500名</option><option>501名以上</option>
+                    </Select>
+                  </Field>
                 </div>
-              </Field>
-            </div>
-            <div style={{marginTop:20}}>
-              <Field label="お問い合わせ内容"><Textarea placeholder="ご質問やご要望があればお知らせください"/></Field>
-            </div>
-            <div style={{marginTop:24, textAlign:'center'}}>
-              <Button size="lg" variant="accent" iconRight={Ico.arrow}>送信する</Button>
-            </div>
+                <div style={{marginTop:20}}>
+                  <Field label="ご検討の目的 (複数選択可)">
+                    <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+                      {['福利厚生強化','健康経営','女性活躍支援','育児世代支援','産業保健の補完','その他'].map(t=>(
+                        <span key={t} onClick={()=>togglePurpose(t)} style={{
+                          display:'inline-block', fontSize:13, padding:'7px 14px',
+                          borderRadius:'var(--r-pill)', fontWeight:500, cursor:'pointer',
+                          border:'1px solid '+(purposes.includes(t)?'var(--brand)':'var(--line-mid)'),
+                          background:purposes.includes(t)?'var(--brand-wash)':'transparent',
+                          color:purposes.includes(t)?'var(--brand-deep)':'var(--ink-2)',
+                          transition:'all .15s',
+                        }}>{t}</span>
+                      ))}
+                    </div>
+                  </Field>
+                </div>
+                <div style={{marginTop:20}}>
+                  <Field label="ご希望" required>
+                    <div style={{display:'flex',gap: isMobile ? 16 : 24,flexWrap:'wrap'}}>
+                      {['資料請求','オンライン相談','見積依頼'].map(t=>(
+                        <label key={t} style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:14,cursor:'pointer'}}>
+                          <input type="radio" name="wish" value={t} checked={wish===t} onChange={()=>setWish(t)} style={{accentColor:'var(--brand)'}}/>{t}
+                        </label>
+                      ))}
+                    </div>
+                  </Field>
+                </div>
+                <div style={{marginTop:20}}>
+                  <Field label="お問い合わせ内容"><Textarea name="message" placeholder="ご質問やご要望があればお知らせください"/></Field>
+                </div>
+                <div style={{marginTop:24, textAlign:'center'}}>
+                  <Button size="lg" variant="accent" iconRight={Ico.arrow} disabled={formStatus==='sending'}>
+                    {formStatus === 'sending' ? '送信中...' : '送信する'}
+                  </Button>
+                  {formStatus === 'error' && (
+                    <p style={{marginTop:12,fontSize:13,color:'#c0392b'}}>送信に失敗しました。もう一度お試しください。</p>
+                  )}
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>
