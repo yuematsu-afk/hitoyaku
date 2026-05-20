@@ -305,6 +305,12 @@ function SiteFooter() {
           <p style={{marginTop:16, fontSize:13, lineHeight:1.8, color:'var(--ink-2)', maxWidth: 320}}>
             ヒトヤクは、薬や体調の不安を、自分に合った薬剤師に気軽に相談できるサービスです。
           </p>
+          <dl style={{marginTop:20, fontSize:12, color:'var(--ink-3)', lineHeight:1.9, display:'grid', gridTemplateColumns:'auto 1fr', columnGap:12, rowGap:2, maxWidth:320}}>
+            <dt style={{fontWeight:500}}>運営</dt><dd style={{margin:0}}>SASAERU合同会社</dd>
+            <dt style={{fontWeight:500}}>代表者</dt><dd style={{margin:0}}>植松 勇樹</dd>
+            <dt style={{fontWeight:500}}>所在地</dt><dd style={{margin:0}}>京都府京都市山科区<br/>小野御所ノ内町5-1</dd>
+            <dt style={{fontWeight:500}}>メール</dt><dd style={{margin:0}}>y.uematsu@sasa-eru.com</dd>
+          </dl>
         </div>
         <Col title="サービス" items={[
           {label:'ヒトヤクとは', go:'top'},
@@ -325,7 +331,7 @@ function SiteFooter() {
         justifyContent:'space-between', gap: isMobile ? 8 : 0,
         fontSize:12, color:'var(--ink-3)',
       }}>
-        <div>© 2026 Hitoyaku, Inc.</div>
+        <div>© 2026 SASAERU合同会社</div>
         <div>ヒトヤクは薬剤師による健康・服薬相談サービスです。医師の診断や治療に代わるものではありません。</div>
       </div>
     </footer>
