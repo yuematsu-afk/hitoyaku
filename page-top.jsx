@@ -79,7 +79,7 @@ function Hero() {
           ))}
         </div>
         <div style={{fontSize:13, color:'var(--ink-2)'}}>
-          認定薬剤師を中心に <strong style={{color:'var(--ink-1)', fontWeight:600}}>120名</strong> が在籍。
+          <strong style={{color:'var(--ink-1)', fontWeight:600}}>5名</strong> の薬剤師が在籍・随時拡大中。
         </div>
       </div>
     </div>
