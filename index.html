@@ -38,19 +38,13 @@
 <!-- Prototype router (still exports HitoyakuPrototype for backward compat) -->
 <script type="text/babel" src="prototype.jsx"></script>
 
-<!-- Tweaks panel -->
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-
 <div id="root"></div>
 
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
-const TWEAK_DEFAULTS = {
-  "palette": "green",
-  "heroLayout": "right",
-  "cardStyle": "medium"
-};
+window.HY_TWEAKS = { palette: 'green', heroLayout: 'right', cardStyle: 'medium' };
+document.documentElement.setAttribute('data-palette', 'green');
 
 function MobileBottomBar() {
   const [visible, setVisible] = React.useState(false);
@@ -77,15 +71,8 @@ function MobileBottomBar() {
 
 function App() {
   const [route, setRoute] = useState({ page: 'top' });
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [panelOpen, setPanelOpen] = useState(false);
   const routeRef = useRef({ page: 'top' });
   const historyStack = useRef([]);
-
-  useEffect(() => {
-    window.HY_TWEAKS = t;
-    document.documentElement.setAttribute('data-palette', t.palette);
-  }, [t]);
 
   useEffect(() => {
     routeRef.current = route;
@@ -120,74 +107,12 @@ function App() {
     default:        view = <PageTop/>;
   }
 
-  const openPanel = () => {
-    setPanelOpen(true);
-    window.postMessage({ type: '__activate_edit_mode' }, '*');
-  };
-
   return (
     <>
       <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }}>
         {view}
       </div>
-
       <MobileBottomBar/>
-
-      {!panelOpen && (
-        <button onClick={openPanel} style={{
-          position: 'fixed', bottom: 16, right: 16, zIndex: 2147483645,
-          background: 'rgba(53,94,69,0.90)', color: '#f1ead8',
-          border: 'none', borderRadius: 8, padding: '8px 14px',
-          fontSize: 12, fontWeight: 600, letterSpacing: '0.05em',
-          cursor: 'pointer', backdropFilter: 'blur(8px)',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.25)',
-        }}>⚙ Tweaks</button>
-      )}
-
-      <TweaksPanel title="ヒトヤク Tweaks">
-        <TweakSection label="ブランド">
-          <TweakColor
-            label="メインカラー"
-            value={t.palette}
-            options={[
-              ['#355E45','#4A7A5C','#C9DDD3'],
-              ['#2F6F66','#3F9088','#CCE5E1'],
-              ['#2C4F75','#4775A1','#D2DEEC'],
-              ['#6E4F2C','#9C7647','#E8D9C0'],
-            ]}
-            onChange={(v) => {
-              const map = { '#355E45':'green','#2F6F66':'mint','#2C4F75':'blue','#6E4F2C':'beige' };
-              const key = Array.isArray(v) ? map[v[0]] : map[v] || 'green';
-              setTweak('palette', key);
-            }}
-          />
-        </TweakSection>
-        <TweakSection label="トップ ヒーロー">
-          <TweakRadio
-            label="レイアウト"
-            value={t.heroLayout}
-            options={[
-              {value:'left',      label:'写真 左'},
-              {value:'right',     label:'写真 右'},
-              {value:'fullbleed', label:'全幅'},
-            ]}
-            onChange={(v) => setTweak('heroLayout', v)}
-          />
-        </TweakSection>
-        <TweakSection label="薬剤師カード">
-          <TweakRadio
-            label="スタイル"
-            value={t.cardStyle}
-            options={[
-              {value:'large',   label:'写真大'},
-              {value:'medium',  label:'標準'},
-              {value:'row',     label:'横並び'},
-              {value:'compact', label:'コンパクト'},
-            ]}
-            onChange={(v) => setTweak('cardStyle', v)}
-          />
-        </TweakSection>
-      </TweaksPanel>
     </>
   );
 }

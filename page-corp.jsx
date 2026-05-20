@@ -23,7 +23,7 @@ function PageCorp() {
               <Button size="lg" variant="ghost">導入相談する</Button>
             </div>
           </div>
-          <CorpHeroVisual/>
+          <CorpHeroVisual isMobile={isMobile}/>
         </div>
       </section>
 
@@ -37,7 +37,7 @@ function PageCorp() {
               {t:'産業医面談までのハードル', d:'予約・対面が前提だと、軽い相談は埋もれてしまう。'},
               {t:'女性・育児世代特有の相談', d:'生理・更年期・子どもの薬。専門家への接点が必要。'},
             ].map((p,i)=>(
-              <div key={i} style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-20)', padding:'32px'}}>
+              <div key={i} style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '24px 20px' : '32px'}}>
                 <div style={{fontFamily:'var(--font-serif)', color:'var(--accent-warm)', fontSize:36, fontWeight:600, marginBottom:14}}>{String(i+1).padStart(2,'0')}</div>
                 <div style={{fontSize:17, fontWeight:600, color:'var(--ink-1)', lineHeight:1.6, marginBottom:10}}>{p.t}</div>
                 <div style={{fontSize:14, color:'var(--ink-2)', lineHeight:1.9}}>{p.d}</div>
@@ -48,25 +48,25 @@ function PageCorp() {
       </section>
 
       {/* Merits */}
-      <section style={{background:'var(--brand-deep)', color:'#fff', padding:'120px 0'}}>
+      <section style={{background:'var(--brand-deep)', color:'#fff', padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container">
           <div style={{maxWidth: 720}}>
             <div style={{fontSize:12,letterSpacing:'.2em',color:'var(--brand-soft)',fontWeight:600,marginBottom:18}}>— MERITS</div>
-            <h2 style={{fontFamily:'var(--font-serif)',fontSize:'clamp(28px,3.4vw,40px)',fontWeight:600,lineHeight:1.5,margin:0}}>
+            <h2 style={{fontFamily:'var(--font-serif)',fontSize:'clamp(24px,3.4vw,40px)',fontWeight:600,lineHeight:1.5,margin:0}}>
               健康経営にも、従業員満足にも、<br/>静かに効いていく仕組みです。
             </h2>
           </div>
-          <div style={{marginTop:56, display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20}}>
+          <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 20}}>
             {[
               {t:'日常的に使える健康相談窓口', d:'予約不要・LINEから気軽に。'},
               {t:'女性・育児・高齢家族にも', d:'特化分野を持つ薬剤師が在籍。'},
               {t:'管理者の運用負担を抑える', d:'導入後の運用は基本ヒトヤク側で完結。'},
               {t:'利用レポートで効果を把握', d:'匿名集計で利用傾向をご報告。'},
             ].map((m,i)=>(
-              <div key={i} style={{background:'rgba(255,255,255,.06)', border:'1px solid rgba(255,255,255,.14)', borderRadius:'var(--r-20)', padding:'32px 28px'}}>
-                <div style={{width:40,height:40,borderRadius:10,background:'var(--accent-warm)',marginBottom:18,display:'flex',alignItems:'center',justifyContent:'center'}}>{Ico.check}</div>
-                <div style={{fontSize:16,fontWeight:600,marginBottom:8,lineHeight:1.5}}>{m.t}</div>
-                <div style={{fontSize:13,color:'rgba(255,255,255,.7)',lineHeight:1.8}}>{m.d}</div>
+              <div key={i} style={{background:'rgba(255,255,255,.06)', border:'1px solid rgba(255,255,255,.14)', borderRadius:'var(--r-20)', padding: isMobile ? '20px 16px' : '32px 28px'}}>
+                <div style={{width:36,height:36,borderRadius:10,background:'var(--accent-warm)',marginBottom:14,display:'flex',alignItems:'center',justifyContent:'center'}}>{Ico.check}</div>
+                <div style={{fontSize: isMobile ? 13 : 16,fontWeight:600,marginBottom:8,lineHeight:1.5}}>{m.t}</div>
+                <div style={{fontSize: isMobile ? 12 : 13,color:'rgba(255,255,255,.7)',lineHeight:1.8}}>{m.d}</div>
               </div>
             ))}
           </div>
@@ -74,21 +74,21 @@ function PageCorp() {
       </section>
 
       {/* Use cases */}
-      <section style={{padding:'120px 0'}}>
+      <section style={{padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container">
           <SectionHead eyebrow="利用シーン" title="こんな場面で、薬剤師が頼れます。"/>
-          <div style={{marginTop:56, display:'grid', gridTemplateColumns:'1fr 1fr', gap:24}}>
+          <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 12 : 24}}>
             {[
               {p:'30代女性 / マーケティング', q:'PMSの薬と、貧血のサプリの飲み合わせを確認したい。'},
               {p:'40代男性 / 営業職', q:'出張先で胃薬を選びたいが、何を買えばいいか分からない。'},
               {p:'30代女性 / エンジニア', q:'子どもの熱が38度。市販の解熱剤、どこまで使っていいか?'},
               {p:'50代男性 / 管理職', q:'親の薬が増えてきた。整理してもいいのか相談したい。'},
             ].map((c,i)=>(
-              <div key={i} style={{background:'var(--bg-soft)', borderRadius:'var(--r-20)', padding:'28px 32px', display:'flex', gap:18, alignItems:'flex-start'}}>
-                <div style={{flex:'0 0 48px',width:48,height:48,borderRadius:'50%',background:'var(--bg-tint)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--ink-2)',fontFamily:'var(--font-serif)'}}>{c.p.split(' ')[0].slice(0,1)}</div>
+              <div key={i} style={{background:'var(--bg-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '20px 16px' : '28px 32px', display:'flex', gap:14, alignItems:'flex-start'}}>
+                <div style={{flex:'0 0 44px',width:44,height:44,borderRadius:'50%',background:'var(--bg-tint)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--ink-2)',fontFamily:'var(--font-serif)'}}>{c.p.split(' ')[0].slice(0,1)}</div>
                 <div>
                   <div style={{fontSize:12,color:'var(--ink-3)',marginBottom:6}}>{c.p}</div>
-                  <div style={{fontSize:15,lineHeight:1.8,color:'var(--ink-1)'}}>「{c.q}」</div>
+                  <div style={{fontSize: isMobile ? 14 : 15,lineHeight:1.8,color:'var(--ink-1)'}}>「{c.q}」</div>
                 </div>
               </div>
             ))}
@@ -97,10 +97,10 @@ function PageCorp() {
       </section>
 
       {/* Flow */}
-      <section style={{background:'var(--bg-soft)', padding:'120px 0'}}>
+      <section style={{background:'var(--bg-soft)', padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container">
           <SectionHead eyebrow="導入の流れ" title="お問い合わせから運用開始まで、3-4週間。"/>
-          <div style={{marginTop:56, display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:24}}>
+          <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 20 : 24}}>
             {[
               {n:'01',t:'資料請求・お問い合わせ',d:'まずはサービス内容をご確認ください。'},
               {n:'02',t:'要件ヒアリング',d:'従業員数・想定利用シーンを伺います。'},
@@ -108,8 +108,8 @@ function PageCorp() {
               {n:'04',t:'導入・社内案内',d:'従業員向け案内テンプレもご用意。'},
             ].map(s=>(
               <div key={s.n}>
-                <div style={{fontFamily:'var(--font-serif)',fontSize:36,fontWeight:600,color:'var(--accent-warm)'}}>{s.n}</div>
-                <div style={{fontSize:16,fontWeight:600,color:'var(--ink-1)',marginTop:10,marginBottom:8}}>{s.t}</div>
+                <div style={{fontFamily:'var(--font-serif)',fontSize:32,fontWeight:600,color:'var(--accent-warm)'}}>{s.n}</div>
+                <div style={{fontSize: isMobile ? 14 : 16,fontWeight:600,color:'var(--ink-1)',marginTop:8,marginBottom:6}}>{s.t}</div>
                 <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.85}}>{s.d}</div>
               </div>
             ))}
@@ -118,11 +118,11 @@ function PageCorp() {
       </section>
 
       {/* Form preview */}
-      <section style={{padding:'120px 0'}}>
+      <section style={{padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container-narrow">
           <SectionHead align="center" eyebrow="お問い合わせ" title="まずは資料からどうぞ。"/>
-          <div style={{marginTop:48, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding:'40px 48px', boxShadow:'var(--shadow-1)'}}>
-            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:20}}>
+          <div style={{marginTop:48, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding: isMobile ? '28px 20px' : '40px 48px', boxShadow:'var(--shadow-1)'}}>
+            <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
               <Field label="会社名" required><Input placeholder="例: 株式会社ヒトヤク"/></Field>
               <Field label="ご担当者名" required><Input placeholder="例: 山田 太郎"/></Field>
               <Field label="メールアドレス" required><Input type="email" placeholder="例: yamada@example.co.jp"/></Field>
@@ -145,7 +145,7 @@ function PageCorp() {
             </div>
             <div style={{marginTop:20}}>
               <Field label="ご希望" required>
-                <div style={{display:'flex',gap:24,flexWrap:'wrap'}}>
+                <div style={{display:'flex',gap: isMobile ? 16 : 24,flexWrap:'wrap'}}>
                   {['資料請求','オンライン相談','見積依頼'].map(t=>(
                     <label key={t} style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:14}}>
                       <input type="radio" name="want" style={{accentColor:'var(--brand)'}}/>{t}
@@ -169,7 +169,40 @@ function PageCorp() {
   );
 }
 
-function CorpHeroVisual() {
+function CorpHeroVisual({ isMobile }) {
+  const messages = [
+    {f:1, t:'最近頭痛がひどくて、市販薬を変えたいです。'},
+    {f:0, t:'今飲んでいるお薬と、頭痛のタイミングを教えていただけますか?'},
+    {f:1, t:'ロキソニンを朝のみ。午後にズキズキします。'},
+    {f:0, t:'肩こりや姿勢の影響かもしれません。一度こちらの市販薬を試してみてはいかがでしょう。'},
+  ];
+
+  if (isMobile) {
+    return (
+      <div style={{background:'#fff', borderRadius:'var(--r-24)', boxShadow:'var(--shadow-2)', padding:'20px 16px', display:'flex', flexDirection:'column', gap:10}}>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:4}}>
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <div style={{width:32,height:32,borderRadius:'50%',background:'var(--brand-wash)',color:'var(--brand-deep)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'var(--font-serif)',fontWeight:600,fontSize:13}}>K</div>
+            <div>
+              <div style={{fontSize:12,fontWeight:600}}>会社の健康相談</div>
+              <div style={{fontSize:10,color:'var(--ink-3)'}}>ヒトヤク for Business</div>
+            </div>
+          </div>
+          <span style={{fontSize:10,color:'var(--ink-3)'}}>14:32</span>
+        </div>
+        {messages.map((m,i)=>(
+          <div key={i} style={{
+            alignSelf: m.f===1?'flex-end':'flex-start', maxWidth:'85%',
+            background: m.f===1?'var(--brand)':'var(--bg-soft)',
+            color: m.f===1?'#fff':'var(--ink-1)',
+            borderRadius: m.f===1?'16px 16px 4px 16px':'16px 16px 16px 4px',
+            padding:'9px 13px', fontSize:12, lineHeight:1.7,
+          }}>{m.t}</div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div style={{position:'relative', aspectRatio:'1/1', maxHeight: 480}}>
       <div style={{
@@ -187,12 +220,7 @@ function CorpHeroVisual() {
           </div>
           <span style={{fontSize:11,color:'var(--ink-3)'}}>14:32</span>
         </div>
-        {[
-          {f:1, t:'最近頭痛がひどくて、市販薬を変えたいです。'},
-          {f:0, t:'今飲んでいるお薬と、頭痛のタイミングを教えていただけますか?'},
-          {f:1, t:'ロキソニンを朝のみ。午後にズキズキします。'},
-          {f:0, t:'肩こりや姿勢の影響かもしれません。一度こちらの市販薬を試してみてはいかがでしょう。'},
-        ].map((m,i)=>(
+        {messages.map((m,i)=>(
           <div key={i} style={{
             alignSelf: m.f===1?'flex-end':'flex-start', maxWidth:'80%',
             background: m.f===1?'var(--brand)':'var(--bg-soft)',

@@ -22,7 +22,7 @@ function PagePharma() {
               <Button size="lg" variant="ghost">薬局法人として問い合わせる</Button>
             </div>
           </div>
-          <PharmaHeroVisual/>
+          <PharmaHeroVisual isMobile={isMobile}/>
         </div>
       </section>
 
@@ -36,9 +36,9 @@ function PagePharma() {
               {n:'02',t:'相談者との新しい接点',d:'処方箋に来た方だけでなく、新たな相談者と出会えます。'},
               {n:'03',t:'継続的な関係につなげる',d:'一度きりではなく、継続相談・かかりつけ関係に発展できます。'},
             ].map(b=>(
-              <div key={b.n} style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-20)', padding:'36px 32px'}}>
+              <div key={b.n} style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '24px 20px' : '36px 32px'}}>
                 <div style={{fontFamily:'var(--font-serif)',fontSize:42,fontWeight:600,color:'var(--brand-deep)',marginBottom:18}}>{b.n}</div>
-                <div style={{fontSize:18,fontWeight:600,color:'var(--ink-1)',marginBottom:12,lineHeight:1.5}}>{b.t}</div>
+                <div style={{fontSize: isMobile ? 16 : 18,fontWeight:600,color:'var(--ink-1)',marginBottom:12,lineHeight:1.5}}>{b.t}</div>
                 <div style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.95}}>{b.d}</div>
               </div>
             ))}
@@ -47,8 +47,8 @@ function PagePharma() {
       </section>
 
       {/* How profile appears */}
-      <section style={{background:'var(--bg-soft)',padding:'120px 0'}}>
-        <div className="container" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:64,alignItems:'center'}}>
+      <section style={{background:'var(--bg-soft)',padding: isMobile ? '56px 0' : '120px 0'}}>
+        <div className="container" style={{display:'grid',gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',gap: isMobile ? 40 : 64,alignItems:'center'}}>
           <div>
             <SectionHead eyebrow="プロフィールの見え方" title="温かく、でも専門性が伝わる紹介ページ。"/>
             <ul style={{listStyle:'none',padding:0,margin:'32px 0 0',display:'flex',flexDirection:'column',gap:14}}>
@@ -64,10 +64,10 @@ function PagePharma() {
       </section>
 
       {/* Flow */}
-      <section style={{padding:'120px 0'}}>
+      <section style={{padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container">
           <SectionHead eyebrow="参加の流れ" title="申し込みから掲載まで、最短2週間。"/>
-          <div style={{marginTop:56, display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:24}}>
+          <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 20 : 24}}>
             {[
               {n:'01',t:'参加申し込み',d:'資格・所属先・得意分野をお知らせください。'},
               {n:'02',t:'オンライン面談',d:'運営とご挨拶。サービス説明と方針確認。'},
@@ -75,8 +75,8 @@ function PagePharma() {
               {n:'04',t:'掲載・運用開始',d:'相談受付状況はご自身で調整いただけます。'},
             ].map(s=>(
               <div key={s.n}>
-                <div style={{fontFamily:'var(--font-serif)',fontSize:36,fontWeight:600,color:'var(--brand-deep)'}}>{s.n}</div>
-                <div style={{fontSize:16,fontWeight:600,color:'var(--ink-1)',marginTop:10,marginBottom:8}}>{s.t}</div>
+                <div style={{fontFamily:'var(--font-serif)',fontSize:32,fontWeight:600,color:'var(--brand-deep)'}}>{s.n}</div>
+                <div style={{fontSize: isMobile ? 14 : 16,fontWeight:600,color:'var(--ink-1)',marginTop:8,marginBottom:6}}>{s.t}</div>
                 <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.85}}>{s.d}</div>
               </div>
             ))}
@@ -85,11 +85,11 @@ function PagePharma() {
       </section>
 
       {/* Form */}
-      <section style={{padding:'40px 0 120px'}}>
+      <section style={{padding: isMobile ? '40px 0 56px' : '40px 0 120px'}}>
         <div className="container-narrow">
           <SectionHead align="center" eyebrow="参加お問い合わせ" title="まずはお話しさせてください。"/>
-          <div style={{marginTop:48, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding:'40px 48px'}}>
-            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:20}}>
+          <div style={{marginTop:48, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding: isMobile ? '28px 20px' : '40px 48px'}}>
+            <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
               <Field label="お名前" required><Input placeholder="例: 中村 結衣"/></Field>
               <Field label="薬剤師資格" required>
                 <Select><option>選択してください</option><option>あり</option><option>申請中</option><option>なし(薬局法人としての問い合わせ)</option></Select>
@@ -106,7 +106,7 @@ function PagePharma() {
                 </div>
               </Field>
               <Field label="オンライン対応">
-                <div style={{display:'flex',gap:24}}>
+                <div style={{display:'flex',gap: isMobile ? 16 : 24, flexWrap:'wrap'}}>
                   {['可','店舗のみ希望','要相談'].map(t=>(
                     <label key={t} style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:14}}>
                       <input type="radio" name="online" style={{accentColor:'var(--brand)'}}/>{t}
@@ -131,8 +131,31 @@ function PagePharma() {
   );
 }
 
-function PharmaHeroVisual() {
+function PharmaHeroVisual({ isMobile }) {
   const { PHARMACISTS } = window.HY_DATA;
+
+  if (isMobile) {
+    return (
+      <div style={{background:'#fff',borderRadius:'var(--r-24)',boxShadow:'var(--shadow-2)',padding:'20px 16px'}}>
+        <div style={{display:'flex',gap:14,alignItems:'flex-start'}}>
+          <PharmacistPhoto p={PHARMACISTS[1]} size={64} rounded="var(--r-12)"/>
+          <div style={{minWidth:0}}>
+            <StatusDot status="online"/>
+            <div style={{fontFamily:'var(--font-serif)',fontSize:18,fontWeight:600,marginTop:4}}>{PHARMACISTS[1].name}</div>
+            <div style={{fontSize:11,color:'var(--ink-3)',marginTop:2}}>{PHARMACISTS[1].title.split(' /')[0]}</div>
+          </div>
+        </div>
+        <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.85,marginTop:14}}>「{PHARMACISTS[1].shortMessage}」</div>
+        <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:12}}>
+          {['飲み合わせ','慢性疾患','英語対応'].map(t=> <Tag key={t} tone="brand" size="sm">{t}</Tag>)}
+        </div>
+        <div style={{marginTop:14,background:'var(--accent-warm)',color:'#fff',padding:'10px 16px',borderRadius:'var(--r-12)',fontSize:13,fontWeight:600,display:'inline-block'}}>
+          新着相談: 3件
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{position:'relative', aspectRatio:'1/1', maxHeight:480}}>
       <div style={{position:'absolute',inset:'8% 8% 24% 12%',background:'#fff',borderRadius:'var(--r-24)',boxShadow:'var(--shadow-2)',overflow:'hidden',padding:24}}>
