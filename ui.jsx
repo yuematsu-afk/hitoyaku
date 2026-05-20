@@ -309,7 +309,7 @@ function SiteFooter() {
             <dt style={{fontWeight:500}}>運営</dt><dd style={{margin:0}}>SASAERU合同会社</dd>
             <dt style={{fontWeight:500}}>代表者</dt><dd style={{margin:0}}>植松 勇樹</dd>
             <dt style={{fontWeight:500}}>所在地</dt><dd style={{margin:0}}>京都府京都市山科区<br/>小野御所ノ内町5-1</dd>
-            <dt style={{fontWeight:500}}>メール</dt><dd style={{margin:0}}>y.uematsu@sasa-eru.com</dd>
+            <dt style={{fontWeight:500}}>メール</dt><dd style={{margin:0}}>info@hito-yaku.com</dd>
           </dl>
         </div>
         <Col title="サービス" items={[
