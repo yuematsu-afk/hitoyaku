@@ -23,6 +23,7 @@ jobs:
         run: pip install tweepy
 
       - name: Post tweet
+        id: post
         env:
           TWITTER_API_KEY:             ${{ secrets.TWITTER_API_KEY }}
           TWITTER_API_SECRET:          ${{ secrets.TWITTER_API_SECRET }}
