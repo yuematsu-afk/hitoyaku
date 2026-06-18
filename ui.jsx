@@ -339,34 +339,21 @@ function SiteFooter() {
           {label:'薬剤師・薬局の方へ', go:'pharma'},
         ]}/>
         {!isMobile && <Col title="運営" items={[{label:'運営会社'},{label:'採用情報'}]}/>}
-        {!isMobile && <Col title="ご利用情報" items={[{label:'利用規約', go:'terms'},{label:'登録薬剤師等利用規約', go:'terms-pharma'},{label:'プライバシーポリシー', go:'privacy'},{label:'特定商取引法表記'}]}/>}
+        <Col title="ご利用情報" items={[
+          {label:'利用規約', go:'terms'},
+          {label:'登録薬剤師等利用規約', go:'terms-pharma'},
+          {label:'プライバシーポリシー', go:'privacy'},
+          {label:'特定商取引法表記'},
+        ]}/>
       </div>
       <div className="container-wide" style={{
         marginTop: isMobile ? 32 : 64, paddingTop:24, borderTop:'1px solid var(--line-mid)',
+        display:'flex', flexDirection: isMobile ? 'column' : 'row',
+        justifyContent:'space-between', gap: isMobile ? 8 : 0,
+        fontSize:12, color:'var(--ink-3)',
       }}>
-        <div style={{
-          display:'flex', flexWrap:'wrap', gap:'8px 20px',
-          marginBottom:16, fontSize:12,
-        }}>
-          {[
-            {label:'利用規約', go:'terms'},
-            {label:'登録薬剤師等利用規約', go:'terms-pharma'},
-            {label:'プライバシーポリシー', go:'privacy'},
-          ].map((it,i)=>(
-            <a key={i} href="#" onClick={(e)=>{e.preventDefault(); window.HY_NAV?.(it.go);}}
-               style={{color:'var(--ink-2)', textDecoration:'none', borderBottom:'1px solid var(--line-mid)'}}>
-              {it.label}
-            </a>
-          ))}
-        </div>
-        <div style={{
-          display:'flex', flexDirection: isMobile ? 'column' : 'row',
-          justifyContent:'space-between', gap: isMobile ? 8 : 0,
-          fontSize:12, color:'var(--ink-3)',
-        }}>
-          <div>© 2026 SASAERU合同会社</div>
-          <div>ヒトヤクは薬剤師による健康・服薬相談サービスです。医師の診断や治療に代わるものではありません。</div>
-        </div>
+        <div>© 2026 SASAERU合同会社</div>
+        <div>ヒトヤクは薬剤師による健康・服薬相談サービスです。医師の診断や治療に代わるものではありません。</div>
       </div>
     </footer>
   );
