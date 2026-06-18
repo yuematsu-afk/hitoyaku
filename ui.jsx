@@ -343,7 +343,7 @@ function SiteFooter() {
           {label:'利用規約', go:'terms'},
           {label:'登録薬剤師等利用規約', go:'terms-pharma'},
           {label:'プライバシーポリシー', go:'privacy'},
-          {label:'特定商取引法表記'},
+          {label:'特定商取引法表記', go:'tokutei'},
         ]}/>
       </div>
       <div className="container-wide" style={{

@@ -778,4 +778,99 @@ function PagePrivacy() {
   );
 }
 
-Object.assign(window, { PageTermsUser, PageTermsPharma, PagePrivacy });
+// ── 特定商取引法に基づく表記 ────────────────────────────────
+
+function PageTokutei() {
+  const isMobile = useIsMobile();
+  const rows = [
+    { label:'販売業者',           value:'ＳＡＳＡＥＲＵ合同会社' },
+    { label:'代表者',             value:'植松 勇樹' },
+    { label:'所在地',             value:'京都府京都市山科区小野御所ノ内町５−１' },
+    { label:'お問い合わせ',       value:'info@hito-yaku.com\nメールにてお問い合わせください。お問い合わせへの返答は原則として平日10:00〜18:00に行います。' },
+    { label:'サービス名',         value:'ヒトヤク（オンライン服薬指導・薬剤師相談サービス）' },
+    { label:'料金',               value:'・一般利用者：現在無料（将来有料化予定。変更の際は事前にサイト上でお知らせします）\n・薬局法人・法人のお客様：別途お問い合わせください' },
+    { label:'支払方法',           value:'別途お問い合わせください' },
+    { label:'支払時期',           value:'別途お問い合わせください' },
+    { label:'サービス提供時期',   value:'ご登録・審査完了後、速やかにご利用いただけます' },
+    { label:'キャンセル・解約',   value:'別途お問い合わせください' },
+    { label:'動作環境',           value:'インターネット接続環境が必要です。最新版のWebブラウザ（Chrome・Safari・Firefox・Edge等）を推奨します' },
+    { label:'特記事項',           value:'本サービスは健康・服薬相談サービスです。医療行為の提供ではなく、医師の診断・治療に代わるものではありません' },
+  ];
+  return (
+    <div style={{background:'var(--bg-base)'}}>
+      <SiteHeader/>
+      <TermsBreadcrumb title="特定商取引法に基づく表記"/>
+
+      <section style={{background:'var(--brand-wash)', padding: isMobile ? '36px 0' : '64px 0'}}>
+        <div className="container">
+          {!isMobile && (
+            <div style={{fontSize:12, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:14}}>
+              — SPECIFIED COMMERCIAL TRANSACTIONS ACT
+            </div>
+          )}
+          <h1 style={{
+            fontFamily:'var(--font-serif)', fontWeight:600,
+            fontSize: isMobile ? '22px' : 'clamp(26px, 3vw, 40px)',
+            lineHeight:1.4, margin:'0 0 12px', color:'var(--ink-1)',
+          }}>特定商取引法に基づく表記</h1>
+          <p style={{fontSize:13, color:'var(--ink-3)', margin:0}}>
+            特定商取引に関する法律第11条に基づく表示です。
+          </p>
+        </div>
+      </section>
+
+      <section style={{padding: isMobile ? '40px 0 80px' : '72px 0 100px'}}>
+        <div className="container">
+          <div style={{maxWidth: isMobile ? '100%' : 860, margin:'0 auto'}}>
+            <table style={{
+              width:'100%', borderCollapse:'collapse',
+              fontSize:15, lineHeight:1.9,
+            }}>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={i} style={{borderBottom:'1px solid var(--line-soft)'}}>
+                    <th style={{
+                      width: isMobile ? '7em' : '12em',
+                      padding: isMobile ? '16px 12px 16px 0' : '20px 24px 20px 0',
+                      verticalAlign:'top', textAlign:'left',
+                      fontSize:13, fontWeight:600, color:'var(--ink-3)',
+                      whiteSpace:'nowrap', flexShrink:0,
+                    }}>{row.label}</th>
+                    <td style={{
+                      padding: isMobile ? '16px 0' : '20px 0',
+                      color:'var(--ink-1)', verticalAlign:'top',
+                    }}>
+                      {row.value.split('\n').map((line, j) => (
+                        <React.Fragment key={j}>
+                          {j > 0 && <br/>}
+                          {line}
+                        </React.Fragment>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div style={{
+              marginTop:48, background:'var(--brand-wash)',
+              borderRadius:'var(--r-16)', padding: isMobile ? '20px' : '24px 32px',
+              fontSize:13, color:'var(--ink-2)', lineHeight:1.9,
+            }}>
+              料金・支払・解約条件の詳細については、下記よりお問い合わせください。
+              <div style={{marginTop:12}}>
+                <Button size="sm" variant="deep" onClick={()=>window.HY_NAV?.('consult')}>
+                  お問い合わせはこちら
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <SiteFooter/>
+    </div>
+  );
+}
+
+Object.assign(window, { PageTermsUser, PageTermsPharma, PagePrivacy, PageTokutei });
