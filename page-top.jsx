@@ -148,7 +148,7 @@ function HeroVisual({ decorative }) {
             <div style={{minWidth:0, flex:1}}>
               <div style={{fontSize:13,fontWeight:600,color:'var(--ink-1)'}}>{PHARMACISTS[0].name}</div>
               <div style={{fontSize:11,color:'var(--ink-3)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
-                漢方 / 女性の健康
+                {PHARMACISTS[0].specialties.slice(0,2).map(sid=>window.HY_DATA.SPECIALTIES.find(s=>s.id===sid)?.label).join(' / ')}
               </div>
               <div style={{marginTop:4}}><StatusDot status="online"/></div>
             </div>
@@ -358,24 +358,24 @@ function PickSection() {
 
 function PickIllustration() {
   const { PHARMACISTS } = window.HY_DATA;
-  const list = PHARMACISTS.slice(0, 6);
+  const list = PHARMACISTS.slice(0, Math.min(6, PHARMACISTS.length));
   return (
     <div style={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:14, position:'relative'}}>
       {list.map((p, i)=>(
         <div key={p.id} style={{
-          background: i===2 ? '#fff' : 'rgba(255,255,255,.08)',
-          border: i===2 ? '2px solid var(--accent-warm)' : '1px solid rgba(255,255,255,.16)',
+          background: i===1 ? '#fff' : 'rgba(255,255,255,.08)',
+          border: i===1 ? '2px solid var(--accent-warm)' : '1px solid rgba(255,255,255,.16)',
           borderRadius:'var(--r-16)', padding:'16px',
-          color: i===2 ? 'var(--ink-1)' : '#fff',
-          position:'relative', transform: i===2 ? 'translateY(-12px) scale(1.04)' : 'none',
+          color: i===1 ? 'var(--ink-1)' : '#fff',
+          position:'relative', transform: i===1 ? 'translateY(-12px) scale(1.04)' : 'none',
           transition:'transform .3s',
         }}>
           <PharmacistPhoto p={p} size={72} rounded="var(--r-12)"/>
           <div style={{marginTop:12, fontSize:13, fontWeight:600}}>{p.name}</div>
-          <div style={{fontSize:11, color: i===2?'var(--ink-3)':'rgba(255,255,255,.7)', marginTop:4}}>
+          <div style={{fontSize:11, color: i===1?'var(--ink-3)':'rgba(255,255,255,.7)', marginTop:4}}>
             {p.specialties.slice(0,2).map(sid=>window.HY_DATA.SPECIALTIES.find(s=>s.id===sid)?.label).join(' / ')}
           </div>
-          {i===2 && (
+          {i===1 && (
             <div style={{
               position:'absolute', top:-10, right:-10, background:'var(--accent-warm)',
               color:'#fff', fontSize:10, fontWeight:600, padding:'4px 10px', borderRadius:'var(--r-pill)',
@@ -657,9 +657,6 @@ function FaqShort() {
             { q:'相談内容は秘密にしてもらえますか?', a:'守秘義務に基づき、相談内容は厳重に管理されます。第三者への共有はいたしません。' },
             { q:'家族の薬について相談できますか?', a:'はい、可能です。ご家族の処方薬・市販薬・サプリのご相談を多く受けています。' },
           ]}/>
-        </div>
-        <div style={{textAlign:'center', marginTop:40}}>
-          <Button variant="ghost" iconRight={Ico.arrow}>すべてのFAQを見る</Button>
         </div>
       </div>
     </section>
