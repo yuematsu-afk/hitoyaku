@@ -39,7 +39,13 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ access_key: WEB3FORMS_KEY, subject: 'ヒトヤク 新しいご相談', ...payload }),
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: 'ヒトヤク 新しいご相談',
+          from_name: 'ヒトヤク',
+          ...(form.contactType === 'email' && form.contact ? { replyto: form.contact } : {}),
+          ...payload,
+        }),
       });
       const data = await res.json();
       if (data.success) {

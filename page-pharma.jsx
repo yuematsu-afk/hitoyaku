@@ -21,6 +21,7 @@ function PagePharma() {
       access_key: '1f72d159-2aa7-4eda-8925-864f3656e2e3',
       subject: '【ヒトヤク薬剤師参加】お問い合わせ',
       from_name: 'ヒトヤク 薬剤師登録窓口',
+      replyto: fd.get('email') || '',
       pharmacist_name: fd.get('pharmacist_name') || '',
       license: fd.get('license') || '',
       affiliation: fd.get('affiliation') || '',

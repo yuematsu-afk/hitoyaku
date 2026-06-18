@@ -20,6 +20,7 @@ function PageCorp() {
       access_key: '1f72d159-2aa7-4eda-8925-864f3656e2e3',
       subject: '【ヒトヤク法人向け】お問い合わせ',
       from_name: 'ヒトヤク for Business',
+      replyto: fd.get('email') || '',
       company: fd.get('company') || '',
       name: fd.get('name') || '',
       email: fd.get('email') || '',
