@@ -102,4 +102,4 @@ function MobileBottomCTA() {
   );
 }
 
-Object.assign(window, { HitoyakuPrototype });
+Object.assign(window, { HitoyakuPrototype, PageFaqStub, FaqGroup });

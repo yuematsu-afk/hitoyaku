@@ -286,15 +286,20 @@ function SiteFooter() {
       <div style={{fontSize:12, color:'var(--ink-3)', letterSpacing:'.16em', marginBottom:16}}>{title}</div>
       <ul style={{listStyle:'none',padding:0,margin:0,display:'flex',flexDirection:'column',gap:10}}>
         {items.map((it,i)=>(
-          <li key={i}><a href="#" onClick={(e)=>{e.preventDefault(); it.go && window.HY_NAV?.(it.go);}}
-                         style={{fontSize:14,color:'var(--ink-1)'}}>{it.label}</a></li>
+          <li key={i}>
+            {it.go
+              ? <a href="#" onClick={(e)=>{e.preventDefault(); window.HY_NAV?.(it.go);}}
+                   style={{fontSize:14,color:'var(--ink-1)'}}>{it.label}</a>
+              : <span style={{fontSize:14,color:'var(--ink-3)',cursor:'default'}}>{it.label}</span>
+            }
+          </li>
         ))}
       </ul>
     </div>
   );
   const isMobile = useIsMobile();
   return (
-    <footer style={{background:'var(--bg-soft)', borderTop:'1px solid var(--line-soft)', padding: isMobile ? '48px 0 24px' : '72px 0 32px', marginTop: isMobile ? 64 : 120}}>
+    <footer style={{background:'var(--bg-soft)', borderTop:'1px solid var(--line-soft)', padding: isMobile ? '48px 0 80px' : '72px 0 32px', marginTop: isMobile ? 64 : 120}}>
       <div className="container-wide" style={{
         display:'grid',
         gridTemplateColumns: isMobile ? '1fr 1fr' : '1.4fr 1fr 1fr 1fr 1fr',

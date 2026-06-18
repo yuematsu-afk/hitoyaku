@@ -16,8 +16,9 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
   const upd = (k,v) => setForm(f=>({...f,[k]:v}));
   const toggleMethod = (m) => upd('methodPref', form.methodPref.includes(m) ? form.methodPref.filter(x=>x!==m) : [...form.methodPref, m]);
 
+  const isMobile = useIsMobile();
   const selectedP = PHARMACISTS.find(x=>x.id===form.pharmacist);
-  const canSubmit = form.name && form.contact && form.body && form.consent1;
+  const canSubmit = form.name && form.contact && form.body && form.consent1 && form.consent2;
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -88,7 +89,7 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
           )}
 
           {step >= 2 && (
-            <div style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding:'40px 48px', boxShadow:'var(--shadow-1)'}}>
+            <div style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-24)', padding: isMobile ? '24px 16px' : '40px 48px', boxShadow:'var(--shadow-1)'}}>
               <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24, paddingBottom:16, borderBottom:'1px solid var(--line-soft)'}}>
                 <div>
                   <div style={{fontSize:11, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600}}>STEP 2 / 相談内容</div>
@@ -100,7 +101,7 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
               </div>
 
               <div style={{display:'flex', flexDirection:'column', gap:24}}>
-                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:20}}>
+                <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
                   <Field label="お名前またはニックネーム" required>
                     <Input placeholder="例: たけし" value={form.name} onChange={(e)=>upd('name',e.target.value)}/>
                   </Field>

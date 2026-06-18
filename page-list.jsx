@@ -60,14 +60,14 @@ function PageList() {
             boxShadow:'var(--shadow-2)',
           }}>
             <span style={{color:'var(--ink-3)', flexShrink:0}}>{Ico.search}</span>
-            <input value={q} onChange={(e)=>setQ(e.target.value)}
+            <input id="hy-search-input" value={q} onChange={(e)=>setQ(e.target.value)}
               placeholder={isMobile ? '漢方、飲み合わせ、英語対応...' : '例: 漢方、サプリ、子どもの解熱剤、英語対応...'}
               style={{
                 flex:1, border:0, outline:'none', background:'transparent', minWidth:0,
                 fontFamily:'inherit', fontSize: isMobile ? 14 : 15, color:'var(--ink-1)',
                 padding: isMobile ? '10px 0' : '14px 0',
               }}/>
-            <Button size="sm" variant="deep">検索</Button>
+            <Button size="sm" variant="deep" onClick={()=>document.getElementById('hy-search-input')?.blur()}>検索</Button>
           </div>
         </div>
       </section>
