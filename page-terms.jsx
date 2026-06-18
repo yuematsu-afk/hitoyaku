@@ -25,42 +25,98 @@ function TermsBreadcrumb({ title }) {
   );
 }
 
-function ArticleBlock({ num, title, items }) {
+function ArticleBlock({ num, title, items, id }) {
   return (
-    <div style={{paddingBottom:40, borderBottom:'1px solid var(--line-soft)', marginBottom:40}}>
+    <div id={id} style={{paddingBottom:48, borderBottom:'1px solid var(--line-soft)', marginBottom:48}}>
       <h2 style={{
-        fontFamily:'var(--font-serif)', fontWeight:600, fontSize:17,
-        color:'var(--ink-1)', margin:'0 0 16px',
-        display:'flex', gap:12, alignItems:'baseline',
+        fontFamily:'var(--font-serif)', fontWeight:600, fontSize:18,
+        color:'var(--ink-1)', margin:'0 0 20px',
+        display:'flex', gap:14, alignItems:'baseline',
+        lineHeight:1.5,
       }}>
-        <span style={{color:'var(--brand-deep)', flexShrink:0}}>{num}</span>
+        <span style={{
+          color:'var(--brand-deep)', flexShrink:0,
+          fontSize:13, fontWeight:600, letterSpacing:'.05em',
+          background:'var(--brand-wash)', padding:'3px 10px',
+          borderRadius:'var(--r-pill)', alignSelf:'center',
+        }}>{num}</span>
         <span>{title}</span>
       </h2>
-      <div style={{fontSize:14, lineHeight:2, color:'var(--ink-2)'}}>
+      <div style={{fontSize:15, lineHeight:2, color:'var(--ink-2)'}}>
         {items.map((item, i) => {
           if (item.type === 'p') {
-            return <p key={i} style={{margin:'0 0 12px'}}>{item.text}</p>;
+            return (
+              <p key={i} style={{margin:'0 0 14px', lineHeight:2}}>{item.text}</p>
+            );
           }
           if (item.type === 'num') {
             return (
-              <p key={i} style={{margin:'0 0 8px', paddingLeft:24}}>
-                <span style={{color:'var(--brand-deep)', fontWeight:500, marginRight:6}}>{item.n}.</span>
-                {item.text}
-              </p>
+              <div key={i} style={{
+                display:'flex', gap:10, alignItems:'flex-start',
+                margin:'0 0 10px', paddingLeft:8,
+              }}>
+                <span style={{
+                  color:'var(--brand-deep)', fontWeight:600, flexShrink:0,
+                  minWidth:24, fontFamily:'var(--font-serif)',
+                }}>{item.n}．</span>
+                <span style={{lineHeight:2}}>{item.text}</span>
+              </div>
             );
           }
           if (item.type === 'enum') {
             return (
-              <p key={i} style={{margin:'0 0 6px', paddingLeft:40}}>
-                <span style={{marginRight:6}}>{item.n}</span>
-                {item.text}
-              </p>
+              <div key={i} style={{
+                display:'flex', gap:8, alignItems:'flex-start',
+                margin:'0 0 6px', paddingLeft:40,
+              }}>
+                <span style={{flexShrink:0, minWidth:22, color:'var(--ink-1)', fontWeight:500}}>{item.n}</span>
+                <span style={{lineHeight:2}}>{item.text}</span>
+              </div>
             );
           }
           return null;
         })}
       </div>
     </div>
+  );
+}
+
+function TableOfContents({ articles }) {
+  return (
+    <nav style={{
+      background:'var(--bg-soft)', borderRadius:'var(--r-16)',
+      padding:'24px 20px', marginBottom:48,
+    }}>
+      <div style={{
+        fontSize:11, letterSpacing:'.18em', color:'var(--brand-deep)',
+        fontWeight:600, marginBottom:14,
+      }}>目　次</div>
+      <ol style={{margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:2}}>
+        {articles.map((a, i) => (
+          <li key={i}>
+            <a href={`#article-${i}`}
+               onClick={(e)=>{
+                 e.preventDefault();
+                 document.getElementById(`article-${i}`)?.scrollIntoView({behavior:'smooth', block:'start'});
+               }}
+               style={{
+                 display:'flex', gap:12, alignItems:'baseline',
+                 padding:'5px 8px', borderRadius:'var(--r-8)',
+                 fontSize:13, color:'var(--ink-2)', textDecoration:'none',
+                 transition:'background .12s',
+               }}
+               onMouseEnter={(e)=>e.currentTarget.style.background='var(--brand-wash)'}
+               onMouseLeave={(e)=>e.currentTarget.style.background='transparent'}>
+              <span style={{
+                color:'var(--brand-deep)', fontWeight:600, flexShrink:0,
+                fontSize:12, minWidth:52,
+              }}>{a.num}</span>
+              <span>{a.title}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 
@@ -90,36 +146,49 @@ function TermsLayout({ title, subtitle, articles, otherTerms }) {
       </section>
 
       <section style={{padding: isMobile ? '40px 0 80px' : '72px 0 100px'}}>
-        <div className="container" style={{maxWidth:800}}>
+        <div className="container">
           <div style={{
-            background:'var(--bg-soft)', borderRadius:'var(--r-16)',
-            padding: isMobile ? '16px 20px' : '20px 28px',
-            marginBottom:48, fontSize:13, color:'var(--ink-2)', lineHeight:1.8,
+            maxWidth: isMobile ? '100%' : 860,
+            margin:'0 auto',
           }}>
-            本規約は日本語を正文とします。本規約への同意は本サービスのご利用をもって行われるものとします。
-          </div>
-
-          {articles.map((a, i) => (
-            <ArticleBlock key={i} num={a.num} title={a.title} items={a.items}/>
-          ))}
-
-          {otherTerms && (
             <div style={{
-              background:'var(--brand-wash)', borderRadius:'var(--r-16)',
-              padding: isMobile ? '20px' : '28px 32px',
-              marginTop:16,
+              background:'#fff', border:'1px solid var(--line-soft)',
+              borderRadius:'var(--r-16)',
+              padding: isMobile ? '16px 20px' : '18px 28px',
+              marginBottom:40, fontSize:13, color:'var(--ink-2)', lineHeight:1.9,
+              display:'flex', gap:12, alignItems:'flex-start',
             }}>
-              <div style={{fontSize:13, fontWeight:600, color:'var(--brand-deep)', marginBottom:8}}>
-                {otherTerms.label}
-              </div>
-              <p style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.8, margin:'0 0 12px'}}>
-                {otherTerms.desc}
-              </p>
-              <Button size="sm" variant="deep" onClick={()=>window.HY_NAV?.(otherTerms.go)}>
-                {otherTerms.label}を見る
-              </Button>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{flexShrink:0, marginTop:2}}>
+                <circle cx="12" cy="12" r="9" stroke="var(--brand-deep)" strokeWidth="1.6"/>
+                <path d="M12 8v4M12 15v.5" stroke="var(--brand-deep)" strokeWidth="1.8" strokeLinecap="round"/>
+              </svg>
+              <span>本規約は日本語を正文とします。本規約への同意は本サービスのご利用をもって行われるものとします。</span>
             </div>
-          )}
+
+            <TableOfContents articles={articles}/>
+
+            {articles.map((a, i) => (
+              <ArticleBlock key={i} id={`article-${i}`} num={a.num} title={a.title} items={a.items}/>
+            ))}
+
+            {otherTerms && (
+              <div style={{
+                background:'var(--brand-wash)', borderRadius:'var(--r-16)',
+                padding: isMobile ? '20px' : '28px 32px',
+                marginTop:16,
+              }}>
+                <div style={{fontSize:13, fontWeight:600, color:'var(--brand-deep)', marginBottom:8}}>
+                  {otherTerms.label}
+                </div>
+                <p style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.8, margin:'0 0 12px'}}>
+                  {otherTerms.desc}
+                </p>
+                <Button size="sm" variant="deep" onClick={()=>window.HY_NAV?.(otherTerms.go)}>
+                  {otherTerms.label}を見る
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
