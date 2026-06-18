@@ -60,6 +60,7 @@ function PagePharma() {
               漢方、女性の健康、子育て、外国語対応など、あなたの「これが伝えたい」を活かせます。
             </p>
             <div style={{marginTop:32, display:'flex',gap:12,flexWrap:'wrap'}}>
+              <Button size="lg" variant="deep" iconRight={Ico.arrow} onClick={scrollToForm}>薬剤師として参加する</Button>
               <Button size="lg" variant="ghost" onClick={scrollToForm}>薬局法人として問い合わせる</Button>
             </div>
           </div>
@@ -81,6 +82,29 @@ function PagePharma() {
                 <div style={{fontFamily:'var(--font-serif)',fontSize:42,fontWeight:600,color:'var(--brand-deep)',marginBottom:18}}>{b.n}</div>
                 <div style={{fontSize: isMobile ? 16 : 18,fontWeight:600,color:'var(--ink-1)',marginBottom:12,lineHeight:1.5}}>{b.t}</div>
                 <div style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.95}}>{b.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Conditions */}
+      <section style={{background:'var(--brand-deep)',padding: isMobile ? '56px 0' : '80px 0'}}>
+        <div className="container">
+          <header style={{textAlign:'center',maxWidth:720,margin:'0 auto'}}>
+            <div style={{fontSize:12,letterSpacing:'.2em',color:'rgba(255,255,255,.6)',fontWeight:600,marginBottom:16}}>— 参加条件・費用</div>
+            <h2 style={{fontFamily:'var(--font-serif)',fontWeight:600,fontSize:'clamp(28px,3.4vw,44px)',lineHeight:1.35,margin:'0 0 18px',color:'#fff'}}>初期費用は無料。<br/>副業・兼業の方も歓迎します。</h2>
+          </header>
+          <div style={{marginTop: isMobile ? 32 : 48, display:'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: isMobile ? 12 : 20}}>
+            {[
+              {v:'無料', l:'初期費用・登録費用'},
+              {v:'副業OK', l:'現職の薬局勤務のまま参加可'},
+              {v:'自由', l:'相談受付・時間帯の管理'},
+              {v:'2週間', l:'申し込みから掲載まで（目安）'},
+            ].map((s,i)=>(
+              <div key={i} style={{background:'rgba(255,255,255,.08)',border:'1px solid rgba(255,255,255,.16)',borderRadius:'var(--r-20)',padding:'24px',textAlign:'center'}}>
+                <div style={{fontFamily:'var(--font-serif)',fontSize:36,fontWeight:600,color:'#fff',letterSpacing:'-.01em'}}>{s.v}</div>
+                <div style={{marginTop:8,fontSize:13,color:'rgba(255,255,255,.75)',lineHeight:1.6}}>{s.l}</div>
               </div>
             ))}
           </div>
@@ -219,7 +243,7 @@ function PharmaHeroVisual({ isMobile }) {
         </div>
         <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.85,marginTop:14}}>「{PHARMACISTS[1].shortMessage}」</div>
         <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:12}}>
-          {['飲み合わせ','慢性疾患','英語対応'].map(t=> <Tag key={t} tone="brand" size="sm">{t}</Tag>)}
+          {PHARMACISTS[1].specialties.slice(0,3).map(sid=>{const s=window.HY_DATA.SPECIALTIES.find(x=>x.id===sid);return s?<Tag key={sid} tone="brand" size="sm">{s.label}</Tag>:null;})}
         </div>
         <div style={{marginTop:14,background:'var(--accent-warm)',color:'#fff',padding:'10px 16px',borderRadius:'var(--r-12)',fontSize:13,fontWeight:600,display:'inline-block'}}>
           新着相談: 3件
@@ -241,7 +265,7 @@ function PharmaHeroVisual({ isMobile }) {
         </div>
         <div style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.85,marginTop:18}}>「{PHARMACISTS[1].shortMessage}」</div>
         <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:14}}>
-          {['飲み合わせ','慢性疾患','英語対応'].map(t=> <Tag key={t} tone="brand" size="sm">{t}</Tag>)}
+          {PHARMACISTS[1].specialties.slice(0,3).map(sid=>{const s=window.HY_DATA.SPECIALTIES.find(x=>x.id===sid);return s?<Tag key={sid} tone="brand" size="sm">{s.label}</Tag>:null;})}
         </div>
       </div>
       <div style={{
