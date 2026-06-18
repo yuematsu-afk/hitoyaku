@@ -339,7 +339,7 @@ function SiteFooter() {
           {label:'薬剤師・薬局の方へ', go:'pharma'},
         ]}/>
         {!isMobile && <Col title="運営" items={[{label:'運営会社'},{label:'採用情報'}]}/>}
-        {!isMobile && <Col title="ご利用情報" items={[{label:'利用規約'},{label:'プライバシーポリシー'},{label:'特定商取引法表記'}]}/>}
+        {!isMobile && <Col title="ご利用情報" items={[{label:'利用規約', go:'terms'},{label:'登録薬剤師等利用規約', go:'terms-pharma'},{label:'プライバシーポリシー'},{label:'特定商取引法表記'}]}/>}
       </div>
       <div className="container-wide" style={{
         marginTop: isMobile ? 32 : 64, paddingTop:24, borderTop:'1px solid var(--line-mid)',

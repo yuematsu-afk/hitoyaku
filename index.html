@@ -46,6 +46,7 @@
 <script type="text/babel" src="page-consult.jsx"></script>
 <script type="text/babel" src="page-corp.jsx"></script>
 <script type="text/babel" src="page-pharma.jsx"></script>
+<script type="text/babel" src="page-terms.jsx"></script>
 
 <!-- Prototype router (still exports HitoyakuPrototype for backward compat) -->
 <script type="text/babel" src="prototype.jsx"></script>
@@ -115,8 +116,10 @@ function App() {
     case 'detail':  view = <PageDetail id={route.id}/>;   break;
     case 'consult': view = <PageConsult pharmacistId={route.pharmacistId} mode={route.mode}/>; break;
     case 'corp':    view = <PageCorp/>;    break;
-    case 'pharma':  view = <PagePharma/>; break;
-    case 'faq':     view = <PageFaqStub/>; break;
+    case 'pharma':       view = <PagePharma/>; break;
+    case 'terms':        view = <PageTermsUser/>; break;
+    case 'terms-pharma': view = <PageTermsPharma/>; break;
+    case 'faq':          view = <PageFaqStub/>; break;
     default:        view = <PageTop/>;
   }
 
