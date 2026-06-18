@@ -177,9 +177,26 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
                   <Checkbox checked={form.consent1} onChange={()=>upd('consent1', !form.consent1)}>
                     ヒトヤクが医師の診断や治療に代わるものではないことを理解しました。<span style={{color:'var(--danger)'}}>(必須)</span>
                   </Checkbox>
-                  <Checkbox checked={form.consent2} onChange={()=>upd('consent2', !form.consent2)}>
-                    利用規約とプライバシーポリシーに同意します。<span style={{color:'var(--danger)'}}>(必須)</span>
-                  </Checkbox>
+                  {/* リンクを含むため label ラッパーを避けた独自実装 */}
+                  <div style={{display:'flex', gap:10, alignItems:'flex-start', cursor:'pointer', fontSize:14, lineHeight:1.7, color:'var(--ink-2)'}}>
+                    <span onClick={()=>upd('consent2', !form.consent2)} style={{
+                      flex:'0 0 20px', width:20, height:20, marginTop:3, borderRadius:5,
+                      border:`1.5px solid ${form.consent2?'var(--brand)':'var(--line-strong)'}`,
+                      background:form.consent2?'var(--brand)':'#fff',
+                      display:'inline-flex', alignItems:'center', justifyContent:'center',
+                      transition:'all .15s',
+                    }}>
+                      {form.consent2 && <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m5 12 5 5 9-11" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                    </span>
+                    <span onClick={()=>upd('consent2', !form.consent2)}>
+                      <a href="#" onClick={(e)=>{e.stopPropagation(); e.preventDefault(); window.HY_NAV?.('terms');}}
+                         style={{color:'var(--brand-deep)', textDecoration:'underline'}}>利用規約</a>
+                      と
+                      <a href="#" onClick={(e)=>{e.stopPropagation(); e.preventDefault(); window.HY_NAV?.('privacy');}}
+                         style={{color:'var(--brand-deep)', textDecoration:'underline'}}>プライバシーポリシー</a>
+                      に同意します。<span style={{color:'var(--danger)'}}>(必須)</span>
+                    </span>
+                  </div>
                 </div>
 
                 {submitError && (
