@@ -190,6 +190,17 @@ function PharmacistPhoto({ p, size = 160, rounded = '50%', slotId }) {
 function SiteHeader({ current, transparent }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = (e) => {
+      if (headerRef.current && !headerRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', close, true);
+    return () => document.removeEventListener('pointerdown', close, true);
+  }, [menuOpen]);
+
   const nav = [
     { id:'top',     label:'ヒトヤクとは' },
     { id:'list',    label:'薬剤師を探す' },
@@ -201,7 +212,7 @@ function SiteHeader({ current, transparent }) {
   const go = (id) => { window.HY_NAV?.(id); setMenuOpen(false); };
 
   return (
-    <header style={{
+    <header ref={headerRef} style={{
       position:'sticky', top:0, zIndex:100,
       background: transparent ? 'rgba(250,250,247,.92)' : 'rgba(255,255,255,.96)',
       backdropFilter:'saturate(140%) blur(10px)',

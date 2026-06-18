@@ -209,7 +209,11 @@ function PagePharma() {
                   </Field>
                 </div>
                 <div style={{marginTop:24, textAlign:'center'}}>
-                  <Button size="lg" variant="deep" iconRight={Ico.arrow} disabled={formStatus==='sending'}>
+                  {specs.length === 0 && (
+                    <p style={{fontSize:13,color:'var(--ink-3)',marginBottom:12}}>得意分野を1つ以上選択してください</p>
+                  )}
+                  <Button size="lg" variant="deep" iconRight={Ico.arrow}
+                    disabled={formStatus==='sending' || specs.length === 0}>
                     {formStatus === 'sending' ? '送信中...' : '送信する'}
                   </Button>
                   {formStatus === 'error' && (

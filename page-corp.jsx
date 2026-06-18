@@ -220,7 +220,11 @@ function PageCorp() {
                   <Field label="お問い合わせ内容"><Textarea name="message" placeholder="ご質問やご要望があればお知らせください"/></Field>
                 </div>
                 <div style={{marginTop:24, textAlign:'center'}}>
-                  <Button size="lg" variant="accent" iconRight={Ico.arrow} disabled={formStatus==='sending'}>
+                  {!wish && (
+                    <p style={{fontSize:13,color:'var(--ink-3)',marginBottom:12}}>ご希望（資料請求・相談・見積）を選択してください</p>
+                  )}
+                  <Button size="lg" variant="accent" iconRight={Ico.arrow}
+                    disabled={formStatus==='sending' || !wish}>
                     {formStatus === 'sending' ? '送信中...' : '送信する'}
                   </Button>
                   {formStatus === 'error' && (

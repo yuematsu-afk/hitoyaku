@@ -219,7 +219,13 @@ function EmptyState() {
       textAlign:'center', padding:'80px 24px',
       background:'var(--bg-soft)', borderRadius:'var(--r-20)',
     }}>
-      <div style={{fontSize:32, marginBottom:12}}>　</div>
+      <div style={{marginBottom:16, color:'var(--ink-4)'}}>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.4"/>
+          <path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+          <path d="M8 11h6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+        </svg>
+      </div>
       <h3 style={{fontFamily:'var(--font-serif)', fontWeight:600, fontSize:22, color:'var(--ink-1)', margin:'0 0 12px'}}>
         該当する薬剤師が見つかりませんでした
       </h3>

@@ -18,7 +18,8 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
 
   const isMobile = useIsMobile();
   const selectedP = PHARMACISTS.find(x=>x.id===form.pharmacist);
-  const canSubmit = form.name && form.contact && form.body && form.consent1 && form.consent2;
+  const canSubmit = form.name && form.contact && form.body && form.consent1 && form.consent2
+    && (mode !== 'direct' || form.pharmacist);
 
   const handleSubmit = async () => {
     setSubmitting(true);
