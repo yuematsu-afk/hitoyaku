@@ -266,7 +266,7 @@ function PageDetail({ id }) {
                   fontFamily:'var(--font-serif)', fontSize: isMobile ? 17 : 22, lineHeight:1.85,
                   color:'var(--ink-1)', margin:0, fontWeight:500,
                 }}>
-                  どんな小さな疑問でも大丈夫です。{p.name.split(' ')[1] || p.name}と申します。<br/>
+                  どんな小さな疑問でも大丈夫です。{p.name.split(' ')[0] || p.name}と申します。<br/>
                   {p.consultationStyle}
                 </p>
                 <div style={{marginTop:24, display:'flex', alignItems:'center', gap:14}}>
