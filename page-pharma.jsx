@@ -16,29 +16,20 @@ function PagePharma() {
     e.preventDefault();
     setFormStatus('sending');
     const fd = new FormData(formRef.current);
-    const specLabels = specs.map(id => window.HY_DATA.SPECIALTIES.find(s => s.id === id)?.label).filter(Boolean).join(', ');
     const payload = {
-      access_key: '1f72d159-2aa7-4eda-8925-864f3656e2e3',
-      subject: '【ヒトヤク薬剤師参加】お問い合わせ',
-      from_name: 'ヒトヤク 薬剤師登録窓口',
-      replyto: fd.get('email') || '',
-      pharmacist_name: fd.get('pharmacist_name') || '',
+      name: fd.get('pharmacist_name') || '',
       license: fd.get('license') || '',
-      affiliation: fd.get('affiliation') || '',
+      pharmacy_name: fd.get('affiliation') || '',
       location: fd.get('location') || '',
-      specialties: specLabels,
-      online: online,
+      specialties: specs,
+      online_preference: online,
       reason: fd.get('reason') || '',
       email: fd.get('email') || '',
+      review_status: 'pending',
     };
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      setFormStatus(data.success ? 'success' : 'error');
+      const { error } = await window.HY_SUPABASE.from('pharmacists').insert(payload);
+      setFormStatus(error ? 'error' : 'success');
     } catch {
       setFormStatus('error');
     }
@@ -160,8 +151,8 @@ function PagePharma() {
                 <div style={{width:56,height:56,borderRadius:'50%',background:'var(--brand-wash)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 20px',color:'var(--brand)'}}>
                   {Ico.check}
                 </div>
-                <div style={{fontFamily:'var(--font-serif)',fontSize:22,fontWeight:600,color:'var(--ink-1)',marginBottom:10}}>送信が完了しました</div>
-                <p style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.9}}>お問い合わせいただきありがとうございます。<br/>担当者より2〜3営業日以内にご連絡いたします。</p>
+                <div style={{fontFamily:'var(--font-serif)',fontSize:22,fontWeight:600,color:'var(--ink-1)',marginBottom:10}}>登録申請を受け付けました</div>
+                <p style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.9}}>ありがとうございます。内容を確認のうえ、審査が完了次第プロフィールを掲載いたします。<br/>掲載までに2週間程度いただく場合がございます。</p>
               </div>
             ) : (
               <form ref={formRef} onSubmit={handleSubmit}>

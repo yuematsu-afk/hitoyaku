@@ -1,22 +1,62 @@
 // ヒトヤク — Pharmacist List Page
+
+function dbRowToPharmacist(row) {
+  return {
+    id: row.id,
+    name: row.name || '',
+    nameKana: row.name_kana || '',
+    title: row.title || '薬剤師',
+    pharmacyName: row.pharmacy_name || '',
+    location: row.location || '',
+    photo: row.photo || null,
+    photoSeed: row.name || 'pharma',
+    photoHue: 140,
+    specialties: row.specialties || [],
+    languages: row.languages || ['日本語'],
+    onlineAvailable: row.online_available ?? true,
+    inPersonAvailable: row.in_person_available ?? true,
+    status: row.status || 'off',
+    shortMessage: row.short_message || '',
+    profile: row.profile || '',
+    career: row.career || [],
+    consultationStyle: row.consultation_style || '',
+    availableMethods: row.available_methods || [],
+    tags: row.tags || [],
+    yearsOfExperience: row.years_of_experience || 0,
+  };
+}
+
 function PageList() {
-  const { PHARMACISTS, SPECIALTIES } = window.HY_DATA;
+  const { SPECIALTIES } = window.HY_DATA;
   const isMobile = useIsMobile();
+  const [pharmacists, setPharmacists] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const [q, setQ] = React.useState('');
-  const [picked, setPicked] = React.useState([]);     // specialty ids
+  const [picked, setPicked] = React.useState([]);
   const [onlineOnly, setOnlineOnly] = React.useState(false);
   const [langOnly, setLangOnly] = React.useState(false);
   const [sort, setSort] = React.useState('recommended');
   const [filterOpen, setFilterOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    window.HY_SUPABASE
+      .from('pharmacists')
+      .select('*')
+      .eq('review_status', 'approved')
+      .then(({ data, error }) => {
+        if (!error && data) setPharmacists(data.map(dbRowToPharmacist));
+        setLoading(false);
+      });
+  }, []);
+
   const toggle = (id) => setPicked(p => p.includes(id) ? p.filter(x=>x!==id) : [...p, id]);
 
   const filtered = React.useMemo(() => {
-    let r = PHARMACISTS.filter(p=>{
-      if (q && !(p.name+p.shortMessage+p.tags.join(' ')+p.pharmacyName).toLowerCase().includes(q.toLowerCase())) return false;
+    let r = pharmacists.filter(p=>{
+      if (q && !(p.name+p.shortMessage+(p.tags||[]).join(' ')+p.pharmacyName).toLowerCase().includes(q.toLowerCase())) return false;
       if (picked.length && !picked.every(s=>p.specialties.includes(s))) return false;
       if (onlineOnly && !p.onlineAvailable) return false;
-      if (langOnly && p.languages.length<=1) return false;
+      if (langOnly && (p.languages||[]).length<=1) return false;
       return true;
     });
     if (sort === 'experience') r = [...r].sort((a,b)=>b.yearsOfExperience-a.yearsOfExperience);
@@ -25,7 +65,7 @@ function PageList() {
       r = [...r].sort((a,b)=>ord[a.status]-ord[b.status]);
     }
     return r;
-  }, [q, picked, onlineOnly, langOnly, sort]);
+  }, [q, picked, onlineOnly, langOnly, sort, pharmacists]);
 
   return (
     <div style={{background:'var(--bg-base)'}}>
@@ -108,8 +148,8 @@ function PageList() {
               flexWrap:'wrap', gap:12,
             }}>
               <div style={{fontSize:14, color:'var(--ink-2)'}}>
-                <strong style={{color:'var(--ink-1)', fontFamily:'var(--font-serif)', fontSize:22, fontWeight:600}}>{filtered.length}</strong>
-                <span style={{margin:'0 8px'}}>名の薬剤師</span>
+                {!loading && <strong style={{color:'var(--ink-1)', fontFamily:'var(--font-serif)', fontSize:22, fontWeight:600}}>{filtered.length}</strong>}
+                <span style={{margin:'0 8px'}}>{loading ? '読み込み中...' : '名の薬剤師'}</span>
                 {(picked.length>0 || onlineOnly || langOnly || q) && (
                   <button onClick={()=>{setPicked([]);setOnlineOnly(false);setLangOnly(false);setQ('');}}
                     style={{background:'none',border:0,color:'var(--brand-deep)',fontSize:12,textDecoration:'underline',cursor:'pointer'}}>
@@ -125,7 +165,9 @@ function PageList() {
               </Select>
             </div>
 
-            {filtered.length === 0 ? (
+            {loading ? (
+              <div style={{textAlign:'center', padding:'80px 0', color:'var(--ink-3)', fontSize:14}}>読み込み中...</div>
+            ) : filtered.length === 0 ? (
               <EmptyState/>
             ) : (
               <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 16 : 20}}>

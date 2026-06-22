@@ -1,9 +1,70 @@
 // ヒトヤク — Pharmacist Detail Page (最重要ページ)
+
+function dbRowToPharmacist(row) {
+  return {
+    id: row.id,
+    name: row.name || '',
+    nameKana: row.name_kana || '',
+    title: row.title || '薬剤師',
+    pharmacyName: row.pharmacy_name || '',
+    location: row.location || '',
+    photo: row.photo || null,
+    photoSeed: row.name || 'pharma',
+    photoHue: 140,
+    specialties: row.specialties || [],
+    languages: row.languages || ['日本語'],
+    onlineAvailable: row.online_available ?? true,
+    inPersonAvailable: row.in_person_available ?? true,
+    status: row.status || 'off',
+    shortMessage: row.short_message || '',
+    profile: row.profile || '',
+    career: row.career || [],
+    consultationStyle: row.consultation_style || '',
+    availableMethods: row.available_methods || [],
+    tags: row.tags || [],
+    yearsOfExperience: row.years_of_experience || 0,
+  };
+}
+
 function PageDetail({ id }) {
-  const { PHARMACISTS, SPECIALTIES, CONSULT_CATEGORIES } = window.HY_DATA;
+  const { SPECIALTIES, CONSULT_CATEGORIES } = window.HY_DATA;
   const isMobile = useIsMobile();
-  const p = PHARMACISTS.find(x=>x.id===id) || PHARMACISTS[0];
-  const related = PHARMACISTS.filter(x=>x.id!==p.id && x.specialties.some(s=>p.specialties.includes(s))).slice(0,3);
+  const [p, setP] = React.useState(null);
+  const [related, setRelated] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const db = window.HY_SUPABASE;
+    Promise.all([
+      db.from('pharmacists').select('*').eq('id', id).eq('review_status', 'approved').single(),
+      db.from('pharmacists').select('*').eq('review_status', 'approved').neq('id', id),
+    ]).then(([{ data: main, error }, { data: others }]) => {
+      if (!error && main) {
+        const pharmacist = dbRowToPharmacist(main);
+        setP(pharmacist);
+        if (others) {
+          const rel = others
+            .map(dbRowToPharmacist)
+            .filter(x => x.specialties.some(s => pharmacist.specialties.includes(s)))
+            .slice(0, 3);
+          setRelated(rel);
+        }
+      }
+      setLoading(false);
+    });
+  }, [id]);
+
+  if (loading) return (
+    <div style={{background:'var(--bg-base)', minHeight:'60vh', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--ink-3)', fontSize:14}}>
+      読み込み中...
+    </div>
+  );
+  if (!p) return (
+    <div style={{background:'var(--bg-base)', minHeight:'60vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:16}}>
+      <div style={{color:'var(--ink-2)', fontSize:15}}>薬剤師情報が見つかりませんでした。</div>
+      <Button variant="ghost" onClick={()=>window.HY_NAV?.('list')}>一覧に戻る</Button>
+    </div>
+  );
 
   return (
     <div style={{background:'var(--bg-base)'}}>
