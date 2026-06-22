@@ -145,9 +145,15 @@ function PageDetail({ id }) {
                 「{p.shortMessage}」
               </h1>
               <div style={{display:'flex', gap:8, flexWrap:'wrap', marginTop:24}}>
-                {p.specialties.map(sid=>(
+                {(p.specialties||[]).map(sid=>(
                   <Tag key={sid} tone="brand" size="lg">{SPECIALTIES.find(s=>s.id===sid)?.label}</Tag>
                 ))}
+                {(()=>{
+                  const structuredLabels = (p.specialties||[]).map(sid=>SPECIALTIES.find(s=>s.id===sid)?.label).filter(Boolean);
+                  return (p.tags||[]).filter(t=>!structuredLabels.includes(t)).map((t,i)=>(
+                    <Tag key={'c'+i} tone="neutral" size="lg">{t}</Tag>
+                  ));
+                })()}
               </div>
             </div>
 
@@ -182,25 +188,38 @@ function PageDetail({ id }) {
 
             {/* Consultation categories */}
             <Block title="相談できる内容" eyebrow="CATEGORIES">
-              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap:14}}>
-                {CONSULT_CATEGORIES.filter(c=>c.id!=='other').slice(0,8).map(c=>(
-                  <div key={c.id} style={{
-                    background:'#fff', border:'1px solid var(--line-soft)',
-                    borderRadius:'var(--r-16)', padding:'18px 22px',
-                    display:'flex', gap:14, alignItems:'flex-start',
-                  }}>
-                    <span style={{
-                      flex:'0 0 32px', width:32, height:32, borderRadius:'50%',
-                      background:'var(--brand-wash)', color:'var(--brand-deep)',
-                      display:'inline-flex', alignItems:'center', justifyContent:'center',
-                    }}>{Ico.check}</span>
-                    <div>
-                      <div style={{fontSize:14, fontWeight:600, color:'var(--ink-1)', marginBottom:4}}>{c.label}</div>
-                      <div style={{fontSize:12, color:'var(--ink-2)', lineHeight:1.7}}>{c.desc}</div>
-                    </div>
+              {(()=>{
+                const specToCat = {
+                  kampo:'kampo', otc:'otc', supplement:'supp',
+                  women:'women', pediatric:'kids', lifestyle:'lifestyle',
+                  chronic:'lifestyle', interact:'interact', sideeffect:'side',
+                };
+                const relevantIds = [...new Set((p.specialties||[]).map(s=>specToCat[s]).filter(Boolean))];
+                const cats = relevantIds.length > 0
+                  ? CONSULT_CATEGORIES.filter(c=>relevantIds.includes(c.id))
+                  : CONSULT_CATEGORIES.filter(c=>c.id!=='other').slice(0,4);
+                return (
+                  <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap:14}}>
+                    {cats.map(c=>(
+                      <div key={c.id} style={{
+                        background:'#fff', border:'1px solid var(--line-soft)',
+                        borderRadius:'var(--r-16)', padding:'18px 22px',
+                        display:'flex', gap:14, alignItems:'flex-start',
+                      }}>
+                        <span style={{
+                          flex:'0 0 32px', width:32, height:32, borderRadius:'50%',
+                          background:'var(--brand-wash)', color:'var(--brand-deep)',
+                          display:'inline-flex', alignItems:'center', justifyContent:'center',
+                        }}>{Ico.check}</span>
+                        <div>
+                          <div style={{fontSize:14, fontWeight:600, color:'var(--ink-1)', marginBottom:4}}>{c.label}</div>
+                          <div style={{fontSize:12, color:'var(--ink-2)', lineHeight:1.7}}>{c.desc}</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()}
             </Block>
 
             {/* Consultation methods */}
