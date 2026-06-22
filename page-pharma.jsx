@@ -6,7 +6,16 @@ function PagePharma() {
   const [methods, setMethods] = React.useState([]);
   const [online, setOnline] = React.useState('');
   const [career, setCareer] = React.useState(['', '', '']);
+  const [photoFile, setPhotoFile] = React.useState(null);
+  const [photoPreview, setPhotoPreview] = React.useState(null);
   const formRef = React.useRef(null);
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setPhotoFile(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
 
   const toggleSpec = (id) => setSpecs(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   const toggleMethod = (m) => setMethods(prev => prev.includes(m) ? prev.filter(x => x !== m) : [...prev, m]);
@@ -22,7 +31,24 @@ function PagePharma() {
     e.preventDefault();
     setFormStatus('sending');
     const fd = new FormData(formRef.current);
+
+    let photoUrl = null;
+    if (photoFile) {
+      const ext = photoFile.name.split('.').pop();
+      const fileName = `${Date.now()}.${ext}`;
+      const { error: uploadError } = await window.HY_SUPABASE.storage
+        .from('photos')
+        .upload(fileName, photoFile, { contentType: photoFile.type });
+      if (!uploadError) {
+        const { data: { publicUrl } } = window.HY_SUPABASE.storage
+          .from('photos')
+          .getPublicUrl(fileName);
+        photoUrl = publicUrl;
+      }
+    }
+
     const payload = {
+      photo: photoUrl,
       name: fd.get('pharmacist_name') || '',
       name_kana: fd.get('name_kana') || '',
       title: fd.get('title') || '',
@@ -192,6 +218,28 @@ function PagePharma() {
                       </Field>
                       <Field label="ご所属(薬局・法人名)"><Input name="affiliation" placeholder="例: みどり薬局 表参道店"/></Field>
                       <Field label="ご所在地"><Input name="location" placeholder="例: 東京都・港区"/></Field>
+                    </div>
+                    <div style={{marginTop:20}}>
+                      <Field label="プロフィール写真">
+                        <div style={{display:'flex', gap:16, alignItems:'center', flexWrap:'wrap'}}>
+                          {photoPreview && (
+                            <img src={photoPreview} alt="プレビュー" style={{
+                              width:80, height:80, borderRadius:'var(--r-12)',
+                              objectFit:'cover', border:'1px solid var(--line-soft)',
+                            }}/>
+                          )}
+                          <label style={{
+                            display:'inline-flex', alignItems:'center', gap:8,
+                            padding:'10px 20px', borderRadius:'var(--r-pill)',
+                            border:'1px solid var(--line-mid)', background:'#fff',
+                            fontSize:13, color:'var(--ink-1)', cursor:'pointer', fontFamily:'inherit',
+                          }}>
+                            {photoPreview ? '写真を変更' : '写真を選択'}
+                            <input type="file" accept="image/*" onChange={handlePhotoChange} style={{display:'none'}}/>
+                          </label>
+                          {!photoPreview && <span style={{fontSize:12, color:'var(--ink-3)'}}>JPG・PNG推奨。顔写真があると信頼感が上がります。</span>}
+                        </div>
+                      </Field>
                     </div>
                   </div>
 
