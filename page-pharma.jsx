@@ -6,8 +6,20 @@ function PagePharma() {
   const [methods, setMethods] = React.useState([]);
   const [online, setOnline] = React.useState('');
   const [career, setCareer] = React.useState(['', '', '']);
+  const [customTags, setCustomTags] = React.useState([]);
+  const [customTagInput, setCustomTagInput] = React.useState('');
   const [photoFile, setPhotoFile] = React.useState(null);
   const [photoPreview, setPhotoPreview] = React.useState(null);
+
+  const MAX_TAG_LEN = 15;
+  const addCustomTag = () => {
+    const val = customTagInput.trim();
+    if (val && !customTags.includes(val)) setCustomTags(prev => [...prev, val]);
+    setCustomTagInput('');
+  };
+  const handleCustomTagKey = (e) => {
+    if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addCustomTag(); }
+  };
   const formRef = React.useRef(null);
 
   const handlePhotoChange = (e) => {
@@ -65,7 +77,10 @@ function PagePharma() {
       profile: fd.get('profile') || '',
       career: career.filter(c => c.trim()),
       consultation_style: fd.get('consultation_style') || '',
-      tags: specs.map(id => window.HY_DATA.SPECIALTIES.find(s => s.id === id)?.label).filter(Boolean),
+      tags: [
+        ...specs.map(id => window.HY_DATA.SPECIALTIES.find(s => s.id === id)?.label).filter(Boolean),
+        ...customTags,
+      ],
       review_status: 'pending',
     };
     try {
@@ -259,6 +274,37 @@ function PagePharma() {
                               transition:'all .15s',
                             }}>{s.label}</span>
                           ))}
+                        </div>
+                      </Field>
+                      <Field label="オリジナルキーワード（任意）">
+                        <div style={{display:'flex',flexWrap:'wrap',gap:6,alignItems:'center',
+                          border:'1px solid var(--line-mid)',borderRadius:'var(--r-12)',
+                          padding:'8px 12px',minHeight:44,background:'#fff'}}>
+                          {customTags.map((t,i)=>(
+                            <span key={i} style={{
+                              display:'inline-flex',alignItems:'center',gap:4,
+                              fontSize:13,padding:'5px 10px',borderRadius:'var(--r-pill)',
+                              background:'var(--brand-wash)',color:'var(--brand-deep)',
+                              border:'1px solid var(--brand)',fontWeight:500,
+                            }}>
+                              {t}
+                              <button type="button" onClick={()=>setCustomTags(prev=>prev.filter((_,j)=>j!==i))}
+                                style={{background:'none',border:'none',cursor:'pointer',color:'var(--brand-deep)',
+                                  fontSize:14,lineHeight:1,padding:'0 2px',fontFamily:'inherit'}}>×</button>
+                            </span>
+                          ))}
+                          <input
+                            value={customTagInput}
+                            onChange={e=>setCustomTagInput(e.target.value.slice(0, MAX_TAG_LEN))}
+                            onKeyDown={handleCustomTagKey}
+                            onBlur={addCustomTag}
+                            placeholder={customTags.length===0 ? 'キーワードを入力してEnter' : '追加する'}
+                            style={{border:'none',outline:'none',fontSize:13,fontFamily:'inherit',
+                              color:'var(--ink-1)',background:'transparent',minWidth:140,flex:1}}
+                          />
+                        </div>
+                        <div style={{fontSize:11,color:'var(--ink-3)',marginTop:4}}>
+                          1タグ{MAX_TAG_LEN}文字以内。Enterまたはカンマで追加。「減薬相談」「妊娠中の薬」など自由に。
                         </div>
                       </Field>
                       <Field label="相談方法 (複数選択可)">
