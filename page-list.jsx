@@ -44,7 +44,11 @@ function PageList() {
       .select('*')
       .eq('review_status', 'approved')
       .then(({ data, error }) => {
-        if (!error && data) setPharmacists(data.map(dbRowToPharmacist));
+        if (!error && data && data.length > 0) {
+          setPharmacists(data.map(dbRowToPharmacist));
+        } else {
+          setPharmacists(window.HY_DATA.PHARMACISTS);
+        }
         setLoading(false);
       });
   }, []);

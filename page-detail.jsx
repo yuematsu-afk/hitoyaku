@@ -49,6 +49,13 @@ function PageDetail({ id }) {
             .slice(0, 3);
           setRelated(rel);
         }
+      } else {
+        const fallback = window.HY_DATA.PHARMACISTS.find(x => x.id === id) || window.HY_DATA.PHARMACISTS[0];
+        setP(fallback);
+        const rel = window.HY_DATA.PHARMACISTS
+          .filter(x => x.id !== fallback.id && x.specialties.some(s => fallback.specialties.includes(s)))
+          .slice(0, 3);
+        setRelated(rel);
       }
       setLoading(false);
     });
