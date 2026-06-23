@@ -45,7 +45,7 @@ function PageCorp() {
   return (
     <div style={{background:'var(--bg-base)'}}>
       <SiteHeader current="corp"/>
-      <Breadcrumb items={[{label:'トップ',go:'top'},{label:'法人の方へ'}]}/>
+      <Breadcrumb items={[{label:'トップ',go:'top'},{label:'一般法人の方へ'}]}/>
 
       {/* Hero */}
       <section style={{padding: isMobile ? '40px 0 56px' : '48px 0 96px', background:'var(--accent-warm-soft)', position:'relative', overflow:'hidden'}}>
@@ -60,7 +60,7 @@ function PageCorp() {
               日常的な健康相談を、薬剤師に気軽に聞ける窓口として、福利厚生にご導入いただけます。
             </p>
             <div style={{marginTop:32, display:'flex', gap:12, flexWrap:'wrap'}}>
-              <Button size="lg" variant="accent" iconRight={Ico.arrow} onClick={scrollToForm}>法人向け資料を請求する</Button>
+              <Button size="lg" variant="accent" iconRight={Ico.arrow} onClick={scrollToForm}>一般法人向け資料を請求する</Button>
               <Button size="lg" variant="ghost" onClick={scrollToForm}>導入相談する</Button>
             </div>
           </div>

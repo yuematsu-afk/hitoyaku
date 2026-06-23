@@ -53,6 +53,7 @@
 <script type="text/babel" src="page-corp.jsx"></script>
 <script type="text/babel" src="page-pharma.jsx"></script>
 <script type="text/babel" src="page-terms.jsx"></script>
+<script type="text/babel" src="page-contact.jsx"></script>
 
 <!-- Prototype router (still exports HitoyakuPrototype for backward compat) -->
 <script type="text/babel" src="prototype.jsx"></script>
@@ -90,8 +91,14 @@ function MobileBottomBar() {
 }
 
 function App() {
-  const [route, setRoute] = useState({ page: 'top' });
-  const routeRef = useRef({ page: 'top' });
+  const initPage = (() => {
+    const p = new URLSearchParams(window.location.search).get('join');
+    if (p === 'pharma') return 'pharma';
+    return 'top';
+  })();
+
+  const [route, setRoute] = useState({ page: initPage });
+  const routeRef = useRef({ page: initPage });
   const historyStack = useRef([]);
 
   useEffect(() => {
@@ -125,6 +132,7 @@ function App() {
     case 'pharma':       view = <PagePharma/>; break;
     case 'terms':        view = <PageTermsUser/>; break;
     case 'terms-pharma': view = <PageTermsPharma/>; break;
+    case 'contact':      view = <PageContact/>; break;
     case 'privacy':      view = <PagePrivacy/>; break;
     case 'tokutei':      view = <PageTokutei/>; break;
     case 'faq':          view = <PageFaqStub/>; break;

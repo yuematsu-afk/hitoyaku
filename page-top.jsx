@@ -566,10 +566,10 @@ function DualEntrySection() {
     <section style={{padding: isMobile ? '64px 0' : '120px 0'}}>
       <div className="container" style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 16 : 32}}>
         <EntryCard
-          eyebrow="法人ご担当者の方へ"
+          eyebrow="一般法人ご担当者の方へ"
           title="従業員の健康相談窓口として。"
           lede="日々の薬や体調の疑問を、専門家に気軽に聞ける環境を、福利厚生として導入いただけます。"
-          ctaLabel="法人向け資料を請求する"
+          ctaLabel="一般法人向け資料を請求する"
           ctaTarget="corp"
           bg="var(--accent-warm-soft)"
           accent="#8B5A2B"
@@ -620,10 +620,10 @@ function EntryCard({eyebrow, title, lede, ctaLabel, ctaTarget, bg, accent, featu
 function TrustSection() {
   const isMobile = useIsMobile();
   const stats = [
-    { v:'5名', l:'登録薬剤師数（順次拡大中）' },
-    { v:'15年+', l:'平均薬剤師経験年数' },
+    { v:'無料',  l:'初回の運営相談' },
     { v:'24h',   l:'初回返信の目安時間' },
-    { v:'無料',  l:'初回運営相談' },
+    { v:'全国',  l:'対応エリア（オンライン相談）' },
+    { v:'4種',   l:'相談方法（LINE・メール・面談・店舗）' },
   ];
   return (
     <section style={{background:'var(--bg-tint)', padding: isMobile ? '64px 0' : '120px 0'}}>

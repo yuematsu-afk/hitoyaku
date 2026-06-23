@@ -205,7 +205,7 @@ function SiteHeader({ current, transparent }) {
     { id:'top',     label:'ヒトヤクとは' },
     { id:'list',    label:'薬剤師を探す' },
     { id:'consult', label:'相談する' },
-    { id:'corp',    label:'法人の方へ' },
+    { id:'corp',    label:'一般法人の方へ' },
     { id:'pharma',  label:'薬剤師・薬局の方へ' },
     { id:'faq',     label:'よくある質問' },
   ];
@@ -335,7 +335,7 @@ function SiteFooter() {
           {label:'よくある質問', go:'faq'},
         ]}/>
         <Col title="ご利用の方へ" items={[
-          {label:'法人の方へ', go:'corp'},
+          {label:'一般法人の方へ', go:'corp'},
           {label:'薬剤師・薬局の方へ', go:'pharma'},
         ]}/>
         {!isMobile && <Col title="運営" items={[{label:'運営会社'},{label:'採用情報'}]}/>}
@@ -344,6 +344,7 @@ function SiteFooter() {
           {label:'登録薬剤師等利用規約', go:'terms-pharma'},
           {label:'プライバシーポリシー', go:'privacy'},
           {label:'特定商取引法表記', go:'tokutei'},
+          {label:'お問い合わせ', go:'contact'},
         ]}/>
       </div>
       <div className="container-wide" style={{

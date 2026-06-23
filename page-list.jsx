@@ -125,7 +125,7 @@ function PageList() {
               <button onClick={()=>setFilterOpen(o=>!o)} style={{
                 display:'flex', alignItems:'center', gap:8,
                 background:'#fff', border:'1px solid var(--line-mid)',
-                borderRadius:'var(--r-pill)', padding:'10px 18px',
+                borderRadius:'var(--r-pill)', padding:'14px 18px',
                 fontSize:13, fontWeight:500, color:'var(--ink-1)', cursor:'pointer', width:'100%', justifyContent:'center',
               }}>
                 {Ico.filter} 絞り込み {filterOpen ? '▲' : '▼'}
