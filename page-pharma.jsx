@@ -525,8 +525,8 @@ function PagePharma() {
                             <Textarea name="short_message" placeholder="例: 「こんなこと聞いていいの?」そんな疑問に、気軽に答えられる薬剤師でいたいと思っています。" rows={2}/>
                             <div style={{fontSize:11,color:'var(--ink-3)',marginTop:4}}>60文字程度。任意。</div>
                           </Field>
-                          <Field label="メールアドレス">
-                            <Input name="email" type="email" placeholder="メールアドレス（任意）"/>
+                          <Field label="メールアドレス" required>
+                            <Input name="email" type="email" placeholder="メールアドレス" required/>
                           </Field>
                         </div>
                       </div>
