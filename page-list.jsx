@@ -122,14 +122,19 @@ function PageList() {
           {/* モバイル: 折り畳みフィルター */}
           {isMobile ? (
             <div style={{marginBottom:16}}>
-              <button onClick={()=>setFilterOpen(o=>!o)} style={{
-                display:'flex', alignItems:'center', gap:8,
-                background:'#fff', border:'1px solid var(--line-mid)',
-                borderRadius:'var(--r-pill)', padding:'14px 18px',
-                fontSize:13, fontWeight:500, color:'var(--ink-1)', cursor:'pointer', width:'100%', justifyContent:'center',
-              }}>
-                {Ico.filter} 絞り込み {filterOpen ? '▲' : '▼'}
-              </button>
+              {(() => {
+                const activeCount = picked.length + (onlineOnly ? 1 : 0) + (langOnly ? 1 : 0);
+                return (
+                  <button onClick={()=>setFilterOpen(o=>!o)} style={{
+                    display:'flex', alignItems:'center', gap:8,
+                    background:'#fff', border:`1px solid ${activeCount > 0 ? 'var(--brand)' : 'var(--line-mid)'}`,
+                    borderRadius:'var(--r-pill)', padding:'14px 18px',
+                    fontSize:13, fontWeight:500, color: activeCount > 0 ? 'var(--brand-deep)' : 'var(--ink-1)', cursor:'pointer', width:'100%', justifyContent:'center',
+                  }}>
+                    {Ico.filter} 絞り込み{activeCount > 0 ? `（${activeCount}）` : ''} {filterOpen ? '▲' : '▼'}
+                  </button>
+                );
+              })()}
               {filterOpen && (
                 <div style={{marginTop:12, background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-16)', padding:'20px'}}>
                   <FilterPanel picked={picked} toggle={toggle}
@@ -152,8 +157,7 @@ function PageList() {
               flexWrap:'wrap', gap:12,
             }}>
               <div style={{fontSize:14, color:'var(--ink-2)'}}>
-                {!loading && <strong style={{color:'var(--ink-1)', fontFamily:'var(--font-serif)', fontSize:22, fontWeight:600}}>{filtered.length}</strong>}
-                <span style={{margin:'0 8px'}}>{loading ? '読み込み中...' : '名の薬剤師'}</span>
+                {loading ? <span>読み込み中...</span> : <span><strong style={{color:'var(--ink-1)', fontFamily:'var(--font-serif)', fontSize:22, fontWeight:600}}>{filtered.length}</strong>名の薬剤師</span>}
                 {(picked.length>0 || onlineOnly || langOnly || q) && (
                   <button onClick={()=>{setPicked([]);setOnlineOnly(false);setLangOnly(false);setQ('');}}
                     style={{background:'none',border:0,color:'var(--brand-deep)',fontSize:12,textDecoration:'underline',cursor:'pointer'}}>
@@ -279,7 +283,7 @@ function EmptyState() {
         条件をゆるめるか、ヒトヤク運営にご相談ください。<br/>
         ご希望に近い薬剤師をご紹介できる場合があります。
       </p>
-      <Button variant="primary" onClick={()=>window.HY_NAV?.('consult')}>運営に相談する</Button>
+      <Button variant="deep" onClick={()=>window.HY_NAV?.('consult')}>運営に相談する</Button>
     </div>
   );
 }
