@@ -92,7 +92,7 @@ function PageDetail({ id }) {
               background:'#fff', borderRadius:'var(--r-24)', overflow:'hidden',
               border:'1px solid var(--line-soft)', boxShadow:'var(--shadow-2)',
             }}>
-              <div style={{aspectRatio:'4/5', position:'relative', overflow:'hidden'}}>
+              <div style={{aspectRatio: isMobile ? '1/1' : '4/5', position:'relative', overflow:'hidden'}}>
                 {p.photo
                   ? <img src={p.photo} alt={p.name} style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
                   : <PharmacistPhoto p={p} size={380} rounded={0}/>
@@ -158,33 +158,45 @@ function PageDetail({ id }) {
             </div>
 
             {/* Profile */}
-            <Block title="プロフィール" eyebrow="PROFILE">
-              <p style={{fontSize:15, lineHeight:2, color:'var(--ink-1)', margin:'0 0 28px'}}>{p.profile}</p>
-              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', gap: isMobile ? 20 : 28}}>
-                <div>
-                  <SubTitle>経歴</SubTitle>
-                  <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:12}}>
-                    {p.career.map((c,i)=>(
-                      <li key={i} style={{display:'flex', gap:12, fontSize:13, color:'var(--ink-2)', lineHeight:1.8}}>
-                        <span style={{
-                          flex:'0 0 22px', width:22, height:22, borderRadius:'50%',
-                          background:'var(--brand-wash)', color:'var(--brand-deep)',
-                          display:'inline-flex', alignItems:'center', justifyContent:'center',
-                          fontSize:10, fontWeight:700, marginTop:2, flexShrink:0,
-                        }}>{i+1}</span>
-                        <span>{c}</span>
-                      </li>
-                    ))}
-                  </ul>
+            {(p.profile || p.career.length > 0 || p.consultationStyle || p.yearsOfExperience > 0) && (
+              <Block title="プロフィール" eyebrow="PROFILE">
+                {p.profile && <p style={{fontSize:15, lineHeight:2, color:'var(--ink-1)', margin:'0 0 28px'}}>{p.profile}</p>}
+                <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', gap: isMobile ? 20 : 28}}>
+                  {p.career.length > 0 && (
+                    <div>
+                      <SubTitle>経歴</SubTitle>
+                      <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:12}}>
+                        {p.career.map((c,i)=>(
+                          <li key={i} style={{display:'flex', gap:12, fontSize:13, color:'var(--ink-2)', lineHeight:1.8}}>
+                            <span style={{
+                              flex:'0 0 22px', width:22, height:22, borderRadius:'50%',
+                              background:'var(--brand-wash)', color:'var(--brand-deep)',
+                              display:'inline-flex', alignItems:'center', justifyContent:'center',
+                              fontSize:10, fontWeight:700, marginTop:2, flexShrink:0,
+                            }}>{i+1}</span>
+                            <span>{c}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <div>
+                    {p.consultationStyle && (
+                      <>
+                        <SubTitle>相談スタンス</SubTitle>
+                        <p style={{fontSize:14, lineHeight:1.9, color:'var(--ink-2)', margin:0}}>{p.consultationStyle}</p>
+                      </>
+                    )}
+                    {p.yearsOfExperience > 0 && (
+                      <>
+                        <SubTitle style={{marginTop: p.consultationStyle ? 24 : 0}}>経験年数</SubTitle>
+                        <div style={{fontFamily:'var(--font-serif)', fontSize:36, fontWeight:600, color:'var(--brand-deep)'}}>{p.yearsOfExperience}<span style={{fontSize:14, color:'var(--ink-2)', fontFamily:'inherit', marginLeft:6}}>年</span></div>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <SubTitle>相談スタンス</SubTitle>
-                  <p style={{fontSize:14, lineHeight:1.9, color:'var(--ink-2)', margin:0}}>{p.consultationStyle}</p>
-                  <SubTitle style={{marginTop:24}}>経験年数</SubTitle>
-                  <div style={{fontFamily:'var(--font-serif)', fontSize:36, fontWeight:600, color:'var(--brand-deep)'}}>{p.yearsOfExperience}<span style={{fontSize:14, color:'var(--ink-2)', fontFamily:'inherit', marginLeft:6}}>年</span></div>
-                </div>
-              </div>
-            </Block>
+              </Block>
+            )}
 
             {/* Consultation categories */}
             <Block title="相談できる内容" eyebrow="CATEGORIES">
@@ -266,8 +278,8 @@ function PageDetail({ id }) {
                   fontFamily:'var(--font-serif)', fontSize: isMobile ? 17 : 22, lineHeight:1.85,
                   color:'var(--ink-1)', margin:0, fontWeight:500,
                 }}>
-                  どんな小さな疑問でも大丈夫です。{p.name.split(' ')[0] || p.name}と申します。<br/>
-                  {p.consultationStyle}
+                  どんな小さな疑問でも大丈夫です。{p.name.split(' ')[0] || p.name}と申します。
+                  {(p.consultationStyle || p.shortMessage) && <><br/>{p.consultationStyle || p.shortMessage}</>}
                 </p>
                 <div style={{marginTop:24, display:'flex', alignItems:'center', gap:14}}>
                   <PharmacistPhoto p={p} size={48}/>
@@ -282,11 +294,13 @@ function PageDetail({ id }) {
             <Disclaimer/>
 
             {/* Related */}
-            <Block title="同じ分野に強い薬剤師" eyebrow="RELATED">
-              <div style={{display:'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)', gap:16}}>
-                {related.map(rp=> <PharmacistCard key={rp.id} p={rp}/>)}
-              </div>
-            </Block>
+            {related.length > 0 && (
+              <Block title="同じ分野に強い薬剤師" eyebrow="RELATED">
+                <div style={{display:'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)', gap:16}}>
+                  {related.map(rp=> <PharmacistCard key={rp.id} p={rp}/>)}
+                </div>
+              </Block>
+            )}
 
             {/* Final CTA */}
             <div style={{
