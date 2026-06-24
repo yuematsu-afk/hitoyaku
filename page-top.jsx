@@ -361,6 +361,36 @@ function FeatureSection() {
             </div>
           ))}
         </div>
+
+        {/* AI差別化コピー */}
+        <div style={{
+          marginTop: isMobile ? 20 : 28,
+          background:'var(--brand-wash)',
+          borderRadius:'var(--r-20)',
+          padding: isMobile ? '32px 24px' : '44px 56px',
+          display:'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? 20 : 56,
+          alignItems:'center',
+        }}>
+          <div>
+            <div style={{fontSize:11, letterSpacing:'.18em', color:'var(--brand-deep)', fontWeight:600, marginBottom:18}}>
+              — ネット検索・AIとの違い
+            </div>
+            <h3 style={{
+              fontFamily:'var(--font-serif)',
+              fontSize: isMobile ? 22 : 28,
+              fontWeight:600, lineHeight:1.55,
+              margin:0, color:'var(--ink-1)',
+            }}>
+              「私の場合はどうなの？」に、<br/>AIは答えられない。
+            </h3>
+          </div>
+          <p style={{fontSize:15, lineHeight:2, color:'var(--ink-2)', margin:0}}>
+            AIは一般的な情報を教えてくれます。でも、あなたの薬歴・年齢・体質・他の薬との組み合わせを踏まえた答えは出せません。
+            薬剤師は、あなたの状況を聞いたうえで、個別に答えます。検索では届かない、人の言葉で。
+          </p>
+        </div>
       </div>
     </section>
   );
