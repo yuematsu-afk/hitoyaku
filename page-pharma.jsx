@@ -288,7 +288,7 @@ function PagePharma() {
             {[
               {n:'01',t:'あなたを探している患者に会える',d:'漢方、女性の健康、子育て、外国語対応——あなたの専門性を求めている患者が、全国にいます。'},
               {n:'02',t:'専門性が、患者に直接届く',d:'プロフィール・人柄・相談スタンスを発信。患者は「合いそう」と感じてから相談してきます。'},
-              {n:'03',t:'かかりつけ薬剤師として選ばれる',d:'一度きりではなく、LINEや継続相談を通じて、患者の生涯の健康パートナーへ発展できます。'},
+              {n:'03',t:'かかりつけ薬剤師として選ばれる',d:'一度きりではなく、継続的なやりとりを通じて、患者の生涯の健康パートナーへ発展できます。'},
             ].map(b=>(
               <div key={b.n} style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '24px 20px' : '36px 32px'}}>
                 <div style={{fontFamily:'var(--font-serif)',fontSize:42,fontWeight:600,color:'var(--brand-deep)',marginBottom:18}}>{b.n}</div>
