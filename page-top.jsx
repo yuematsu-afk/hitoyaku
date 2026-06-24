@@ -59,8 +59,8 @@ function Hero() {
         fontSize:17, lineHeight:1.95, color:'var(--ink-2)',
         margin:0, maxWidth: 480,
       }}>
-        飲み合わせ、副作用、市販薬、漢方、サプリ、受診の目安。
-        日常のちいさな疑問を、自分に合った薬剤師にゆっくり相談できる場所をつくりました。
+        ネット検索やAIで調べても、まだ不安が残ること、ありませんか。
+        飲み合わせ、副作用、市販薬、漢方、サプリ、受診の目安——日常のちいさな疑問を、自分に合った薬剤師にゆっくり相談できます。
       </p>
       <div style={{display:'flex',gap:12,flexWrap:'wrap',alignItems:'center'}}>
         <Button size="lg" variant="deep" iconRight={Ico.arrow}
@@ -739,6 +739,10 @@ function TrustSection() {
     { v:'全国',  l:'対応エリア（オンライン相談）' },
     { v:'4種',   l:'相談方法（LINE・メール・面談・店舗）' },
   ];
+  const voices = [
+    { text:'迅速、かつ的確に回答いただき助かりました。今後とも宜しくお願いします。', name:'Bさん（試験利用）' },
+    { text:'今の時代なんでもAIで教えてくれるが、人同士の質疑回答も大事だと思う！', name:'Dさん（試験利用）' },
+  ];
   return (
     <section style={{background:'var(--bg-tint)', padding: isMobile ? '64px 0' : '120px 0'}}>
       <div className="container">
@@ -752,6 +756,54 @@ function TrustSection() {
             </div>
           ))}
         </div>
+
+        {/* 調査データ バナー */}
+        <div style={{
+          marginTop: isMobile ? 24 : 32,
+          background:'var(--brand-deep)', borderRadius:'var(--r-20)',
+          padding: isMobile ? '24px 20px' : '32px 48px',
+          display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? 16 : 40, alignItems:'center',
+        }}>
+          <div>
+            <div style={{fontSize:11, letterSpacing:'.15em', color:'rgba(255,255,255,.5)', marginBottom:10, fontWeight:600}}>
+              — 1,200名への市場調査（2024年8月実施）
+            </div>
+            <div style={{fontSize: isMobile ? 15 : 17, color:'rgba(255,255,255,.9)', lineHeight:1.8}}>
+              薬剤師を選んで相談できるサービスを{' '}
+              <span style={{
+                fontFamily:'var(--font-serif)', fontSize: isMobile ? 34 : 44,
+                fontWeight:600, color:'var(--accent-warm)', display:'inline-block', lineHeight:1, verticalAlign:'middle', margin:'0 4px',
+              }}>73.7%</span>
+              {' '}が「無料なら使いたい」と回答。
+            </div>
+          </div>
+          <div style={{fontSize:13, color:'rgba(255,255,255,.65)', lineHeight:1.9}}>
+            「薬局で待ち時間が長い」が51.6%、「ゆっくり相談したい」という声が多数。
+            特定の疾患に詳しい薬剤師を求める声は36.6%、サプリ・飲み合わせへの相談ニーズも上位でした。
+          </div>
+        </div>
+
+        {/* ユーザーの声 */}
+        <div style={{marginTop: isMobile ? 20 : 24, display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 12 : 16}}>
+          {voices.map((v, i) => (
+            <div key={i} style={{
+              background:'#fff', borderRadius:'var(--r-16)',
+              border:'1px solid var(--line-soft)',
+              padding: isMobile ? '20px' : '24px 28px',
+              display:'flex', flexDirection:'column', gap:14,
+            }}>
+              <svg width="20" height="14" viewBox="0 0 20 14" fill="none" style={{flexShrink:0}}>
+                <path d="M0 14V8.4C0 3.733 2.333 1.067 7 0l1.05 1.4C5.717 2.133 4.4 3.6 4.2 6H7V14H0ZM11 14V8.4C11 3.733 13.333 1.067 18 0l1.05 1.4C16.717 2.133 15.4 3.6 15.2 6H18V14H11Z" fill="var(--brand)" opacity=".25"/>
+              </svg>
+              <p style={{fontSize: isMobile ? 14 : 15, lineHeight:1.85, color:'var(--ink-1)', margin:0, fontFamily:'var(--font-serif)', fontWeight:500}}>
+                {v.text}
+              </p>
+              <div style={{fontSize:11, color:'var(--ink-3)', fontWeight:600}}>— {v.name}</div>
+            </div>
+          ))}
+        </div>
+
         <div style={{marginTop:32}}><Disclaimer/></div>
       </div>
     </section>
@@ -826,7 +878,7 @@ function FinalCTA() {
 function ConsultExamplesSection() {
   const isMobile = useIsMobile();
   const examples = [
-    { q:'父が高血圧の薬を飲んでいます。市販のサプリを一緒に飲んでも大丈夫ですか？', tag:'飲み合わせ' },
+    { q:'父が高血圧の薬を飲んでいます。市販のサプリと一緒に飲んで大丈夫ですか？何がどう問題になるのか知りたいです。', tag:'飲み合わせ' },
     { q:'更年期のほてりや不眠がつらいです。病院に行く前に漢方で試してみたいのですが。', tag:'漢方相談' },
     { q:'子どもが38.5℃の熱があります。解熱剤はすぐ飲ませた方がいいですか？', tag:'子どもの薬' },
     { q:'ドラッグストアで頭痛薬を買いたいのですが、種類が多くて何を選べばいいか分かりません。', tag:'市販薬の選び方' },
@@ -837,7 +889,7 @@ function ConsultExamplesSection() {
         <SectionHead
           eyebrow="相談できること"
           title={<>「こんなこと聞いていいのかな」<br/>が、一番よく来る相談です。</>}
-          lede="受診するほどではないけれど、誰かに確かめておきたい。そういう疑問に答えられる薬剤師がいます。"
+          lede="1,200名への調査で「薬局でゆっくり話を聞いてもらえない」という声が5割超。受診するほどではないけれど、誰かに確かめておきたい——そういう疑問に答えられる薬剤師がいます。"
         />
         <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap:16}}>
           {examples.map((ex, i) => (
