@@ -215,11 +215,14 @@ function PageConsult({ pharmacistId, mode: initialMode }) {
 
                 <div style={{marginTop:16, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                   <button onClick={()=>setStep(1)} style={{background:'none',border:0,color:'var(--ink-2)',fontSize:13,cursor:'pointer'}}>← 戻る</button>
-                  <Button size="lg" variant="deep" disabled={!canSubmit || submitting}
-                    onClick={handleSubmit} iconRight={submitting ? null : Ico.arrow}
-                    style={{opacity: (canSubmit && !submitting)?1:.5, cursor: (canSubmit && !submitting)?'pointer':'not-allowed'}}>
-                    {submitting ? '送信中...' : 'この内容で送信する'}
-                  </Button>
+                  <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:6}}>
+                    <Button size="lg" variant="deep" disabled={!canSubmit || submitting}
+                      onClick={handleSubmit} iconRight={submitting ? null : Ico.arrow}
+                      style={{opacity: (canSubmit && !submitting)?1:.5, cursor: (canSubmit && !submitting)?'pointer':'not-allowed'}}>
+                      {submitting ? '送信中...' : 'この内容で送信する'}
+                    </Button>
+                    <span style={{fontSize:12, color:'var(--ink-3)'}}>通常24時間以内にご返信します</span>
+                  </div>
                 </div>
               </div>
             </div>

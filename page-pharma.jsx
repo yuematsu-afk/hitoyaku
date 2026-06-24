@@ -473,11 +473,11 @@ function PagePharma() {
                       <Field label="その他・オリジナルキーワード（任意）"><CustomTagInput/></Field>
                     </div>
                     <div style={{marginTop:32, textAlign:'center'}}>
-                      <p style={{fontSize:13, color:'var(--ink-3)', marginBottom:16}}>送信後、運営より2営業日以内にご連絡いたします。</p>
                       {specs.length === 0 && <p style={{fontSize:13,color:'var(--ink-3)',marginBottom:12}}>得意分野を1つ以上選択してください</p>}
                       <Button size="lg" variant="deep" iconRight={Ico.arrow} disabled={formStatusSimple==='sending' || specs.length===0}>
                         {formStatusSimple==='sending' ? '送信中...' : '連絡を希望する'}
                       </Button>
+                      <p style={{fontSize:12, color:'var(--ink-3)', marginTop:8, marginBottom:0}}>通常24時間以内にご返信します</p>
                       {formStatusSimple==='error' && <p style={{marginTop:12,fontSize:13,color:'#c0392b'}}>送信に失敗しました。</p>}
                     </div>
                   </form>
@@ -496,9 +496,9 @@ function PagePharma() {
                         <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
                           <Field label="お名前" required><Input name="name" placeholder="例: 田中 花子" required/></Field>
                           <Field label="ふりがな"><Input name="name_kana" placeholder="例: たなか はなこ"/></Field>
-                          <Field label="肩書き" required><Input name="title" placeholder="例: 薬剤師 / 管理薬剤師" required/></Field>
-                          <Field label="経験年数" required><Input name="years_of_experience" type="number" min="1" max="60" placeholder="例: 10" required/></Field>
-                          <Field label="ご所属"><Input name="affiliation" placeholder="例: みどり薬局"/></Field>
+                          <Field label="肩書き"><Input name="title" placeholder="例: 薬剤師 / 管理薬剤師"/></Field>
+                          <Field label="経験年数"><Input name="years_of_experience" type="number" min="1" max="60" placeholder="例: 10"/></Field>
+                          <Field label="ご所属（薬局名）" required><Input name="affiliation" placeholder="例: みどり薬局" required/></Field>
                           <Field label="ご所在地"><Input name="location" placeholder="例: 東京都・港区"/></Field>
                         </div>
                       </div>
@@ -507,7 +507,7 @@ function PagePharma() {
                         <div style={{display:'flex', flexDirection:'column', gap:20}}>
                           <Field label="得意分野 (1つ以上)" required><SpecSelector/></Field>
                           <Field label="その他・オリジナルキーワード（任意）"><CustomTagInput/></Field>
-                          <Field label="相談方法 (複数選択可)">
+                          <Field label="相談方法 (複数選択可)" required>
                             <div style={{display:'flex',gap: isMobile ? 12 : 24, flexWrap:'wrap'}}>
                               {['LINE','オンライン面談','店舗相談','メール'].map(m=>(
                                 <label key={m} style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:14,cursor:'pointer'}}>
@@ -521,21 +521,23 @@ function PagePharma() {
                       <div>
                         <SHead n="03" title="一言メッセージ・連絡先"/>
                         <div style={{display:'flex', flexDirection:'column', gap:20}}>
-                          <Field label="キャッチコピー（一言メッセージ）" required>
-                            <Textarea name="short_message" placeholder="例: 「こんなこと聞いていいの?」そんな疑問に、気軽に答えられる薬剤師でいたいと思っています。" rows={2} required/>
-                            <div style={{fontSize:11,color:'var(--ink-3)',marginTop:4}}>60文字程度。</div>
+                          <Field label="キャッチコピー（一言メッセージ）">
+                            <Textarea name="short_message" placeholder="例: 「こんなこと聞いていいの?」そんな疑問に、気軽に答えられる薬剤師でいたいと思っています。" rows={2}/>
+                            <div style={{fontSize:11,color:'var(--ink-3)',marginTop:4}}>60文字程度。任意。</div>
                           </Field>
-                          <Field label="メールアドレス" required>
-                            <Input name="email" type="email" placeholder="メールアドレス" required/>
+                          <Field label="メールアドレス">
+                            <Input name="email" type="email" placeholder="メールアドレス（任意）"/>
                           </Field>
                         </div>
                       </div>
                     </div>
                     <div style={{marginTop:40, textAlign:'center'}}>
                       {specs.length === 0 && <p style={{fontSize:13,color:'var(--ink-3)',marginBottom:12}}>得意分野を1つ以上選択してください</p>}
-                      <Button size="lg" variant="deep" iconRight={Ico.arrow} disabled={formStatusStandard==='sending' || specs.length===0}>
+                      {methods.length === 0 && <p style={{fontSize:13,color:'var(--ink-3)',marginBottom:12}}>相談方法を1つ以上選択してください</p>}
+                      <Button size="lg" variant="deep" iconRight={Ico.arrow} disabled={formStatusStandard==='sending' || specs.length===0 || methods.length===0}>
                         {formStatusStandard==='sending' ? '送信中...' : '登録申請する'}
                       </Button>
+                      <p style={{fontSize:12, color:'var(--ink-3)', marginTop:8, marginBottom:0}}>通常24時間以内にご返信します</p>
                       {formStatusStandard==='error' && <p style={{marginTop:12,fontSize:13,color:'#c0392b'}}>送信に失敗しました。</p>}
                     </div>
                   </form>
@@ -696,6 +698,7 @@ function PagePharma() {
                         disabled={formStatus==='sending' || specs.length === 0}>
                         {formStatus === 'sending' ? '送信中...' : '登録申請する'}
                       </Button>
+                      <p style={{fontSize:12, color:'var(--ink-3)', marginTop:8, marginBottom:0}}>通常24時間以内にご返信します</p>
                       {formStatus === 'error' && (
                         <p style={{marginTop:12,fontSize:13,color:'#c0392b'}}>送信に失敗しました。もう一度お試しください。</p>
                       )}
