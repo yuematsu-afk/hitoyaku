@@ -166,4 +166,6 @@ const CONSULT_CATEGORIES = [
   { id: 'other',    label: 'その他',         desc: '上記に当てはまらないご相談' },
 ];
 
-window.HY_DATA = { SPECIALTIES, PHARMACISTS, CONSULT_CATEGORIES };
+// 表示順: 飲み合わせ→漢方→市販薬→漢方→漢方 で専門の多様性を先に見せる
+const PHARMACISTS_ORDERED = [PHARMACISTS[0], PHARMACISTS[2], PHARMACISTS[1], PHARMACISTS[3], PHARMACISTS[4]];
+window.HY_DATA = { SPECIALTIES, PHARMACISTS: PHARMACISTS_ORDERED, CONSULT_CATEGORIES };

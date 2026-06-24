@@ -4,7 +4,8 @@
 
 function PageTop() {
   const { PHARMACISTS, SPECIALTIES } = window.HY_DATA;
-  const featured = PHARMACISTS.slice(0, 4);
+  // 飲み合わせ→漢方→市販薬→漢方の順で多様性を見せる
+  const featured = [PHARMACISTS[0], PHARMACISTS[2], PHARMACISTS[1], PHARMACISTS[3]];
 
   return (
     <div>
@@ -58,30 +59,38 @@ function Hero() {
         飲み合わせ、副作用、市販薬、漢方、サプリ、受診の目安。
         日常のちいさな疑問を、自分に合った薬剤師にゆっくり相談できる場所をつくりました。
       </p>
-      <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
+      <div style={{display:'flex',gap:12,flexWrap:'wrap',alignItems:'center'}}>
         <Button size="lg" variant="deep" iconRight={Ico.arrow}
                 onClick={()=>window.HY_NAV?.('list')}>
           自分に合う薬剤師を探す
         </Button>
-        <Button size="lg" variant="ghost"
-                onClick={()=>window.HY_NAV?.('consult')}>
-          まずはヒトヤクに相談する
-        </Button>
+        <button onClick={()=>window.HY_NAV?.('consult')} style={{
+          background:'none', border:'none', cursor:'pointer', fontFamily:'inherit',
+          fontSize:14, color:'var(--ink-2)', padding:'8px 4px',
+          textDecoration:'underline', textUnderlineOffset:3,
+        }}>まずは運営に相談する →</button>
       </div>
-      <div style={{display:'flex',gap:24,alignItems:'center',marginTop:8}}>
-        <div style={{display:'flex'}}>
-          {window.HY_DATA.PHARMACISTS.slice(0,4).map((p,i)=>(
-            <div key={p.id} style={{
-              width:36, height:36, borderRadius:'50%',
-              marginLeft: i===0?0:-10, border:'2px solid var(--bg-base)', overflow:'hidden',
-            }}>
-              <PharmacistPhoto p={p} size={32}/>
-            </div>
-          ))}
+      <div style={{display:'flex',gap:16,alignItems:'center',marginTop:8,flexWrap:'wrap'}}>
+        <div style={{display:'flex',alignItems:'center',gap:12}}>
+          <div style={{display:'flex'}}>
+            {window.HY_DATA.PHARMACISTS.slice(0,4).map((p,i)=>(
+              <div key={p.id} style={{
+                width:36, height:36, borderRadius:'50%',
+                marginLeft: i===0?0:-10, border:'2px solid var(--bg-base)', overflow:'hidden',
+              }}>
+                <PharmacistPhoto p={p} size={32}/>
+              </div>
+            ))}
+          </div>
+          <div style={{fontSize:13, color:'var(--ink-2)'}}>
+            <strong style={{color:'var(--ink-1)', fontWeight:600}}>5名</strong> の薬剤師が在籍・随時拡大中。
+          </div>
         </div>
-        <div style={{fontSize:13, color:'var(--ink-2)'}}>
-          <strong style={{color:'var(--ink-1)', fontWeight:600}}>5名</strong> の薬剤師が在籍・随時拡大中。
-        </div>
+        <span style={{
+          fontSize:11, fontWeight:600, padding:'4px 12px',
+          borderRadius:'var(--r-pill)', background:'var(--accent-warm)',
+          color:'#fff', whiteSpace:'nowrap',
+        }}>初回相談 無料</span>
       </div>
     </div>
   );
