@@ -15,10 +15,13 @@ function PageTop() {
       <FeatureSection/>
       <PickSection/>
       <PharmacistPreview pharmacists={featured}/>
+      <ConsultExamplesSection/>
       <FlowSection/>
       <JourneySection/>
       <DualEntrySection/>
+      <PricingSection/>
       <TrustSection/>
+      <AboutSection/>
       <FaqShort/>
       <FinalCTA/>
       <SiteFooter/>
@@ -813,6 +816,120 @@ function FinalCTA() {
           <svg viewBox="0 0 600 200" style={{position:'absolute',right:-100,bottom:-60,width:600,opacity:.14}}>
             <path d="M0,100 C150,40 300,160 600,80 L600,200 L0,200 Z" fill="#fff"/>
           </svg>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Consult Examples ────────────────────────────────────────
+function ConsultExamplesSection() {
+  const isMobile = useIsMobile();
+  const examples = [
+    { q:'父が高血圧の薬を飲んでいます。市販のサプリを一緒に飲んでも大丈夫ですか？', tag:'飲み合わせ' },
+    { q:'更年期のほてりや不眠がつらいです。病院に行く前に漢方で試してみたいのですが。', tag:'漢方相談' },
+    { q:'子どもが38.5℃の熱があります。解熱剤はすぐ飲ませた方がいいですか？', tag:'子どもの薬' },
+    { q:'ドラッグストアで頭痛薬を買いたいのですが、種類が多くて何を選べばいいか分かりません。', tag:'市販薬の選び方' },
+  ];
+  return (
+    <section style={{background:'var(--bg-soft)', padding: isMobile ? '64px 0' : '120px 0'}}>
+      <div className="container">
+        <SectionHead
+          eyebrow="相談できること"
+          title={<>「こんなこと聞いていいのかな」<br/>が、一番よく来る相談です。</>}
+          lede="受診するほどではないけれど、誰かに確かめておきたい。そういう疑問に答えられる薬剤師がいます。"
+        />
+        <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap:16}}>
+          {examples.map((ex, i) => (
+            <div key={i} style={{
+              background:'#fff', borderRadius:'var(--r-20)',
+              border:'1px solid var(--line-soft)', padding: isMobile ? '24px 20px' : '28px 32px',
+              display:'flex', flexDirection:'column', gap:14,
+            }}>
+              <Tag tone="brand" size="sm">{ex.tag}</Tag>
+              <p style={{
+                fontSize: isMobile ? 15 : 16, lineHeight:1.85,
+                color:'var(--ink-1)', margin:0,
+                fontFamily:'var(--font-serif)', fontWeight:500,
+              }}>「{ex.q}」</p>
+            </div>
+          ))}
+        </div>
+        <div style={{marginTop: isMobile ? 28 : 40, textAlign:'center'}}>
+          <Button variant="deep" iconRight={Ico.arrow} onClick={()=>window.HY_NAV?.('list')}>
+            薬剤師に相談してみる
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Pricing ──────────────────────────────────────────────────
+function PricingSection() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{padding: isMobile ? '64px 0' : '120px 0'}}>
+      <div className="container-narrow">
+        <SectionHead align="center" eyebrow="ご利用料金" title={<>まずは無料で試せます。</>}/>
+        <div style={{marginTop: isMobile ? 32 : 48, display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:20}}>
+          <div style={{background:'var(--brand-wash)', borderRadius:'var(--r-20)', padding: isMobile ? '28px 24px' : '40px 36px'}}>
+            <div style={{fontSize:11, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:12}}>— 運営への相談</div>
+            <div style={{fontFamily:'var(--font-serif)', fontSize:52, fontWeight:600, color:'var(--brand-deep)', lineHeight:1}}>¥0</div>
+            <p style={{fontSize:14, color:'var(--ink-2)', lineHeight:1.9, marginTop:16, marginBottom:0}}>
+              「誰に相談すればいいか分からない」場合は、ヒトヤク運営にまず相談ください。内容を整理し、合いそうな薬剤師をご紹介します。
+            </p>
+          </div>
+          <div style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '28px 24px' : '40px 36px'}}>
+            <div style={{fontSize:11, letterSpacing:'.2em', color:'var(--ink-3)', fontWeight:600, marginBottom:12}}>— 薬剤師への直接相談</div>
+            <div style={{fontFamily:'var(--font-serif)', fontSize:52, fontWeight:600, color:'var(--ink-1)', lineHeight:1}}>¥0〜</div>
+            <p style={{fontSize:14, color:'var(--ink-2)', lineHeight:1.9, marginTop:16, marginBottom:0}}>
+              薬剤師により異なります（無料〜コーヒー一杯程度が目安）。各薬剤師のプロフィールページで事前に確認できます。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── About ────────────────────────────────────────────────────
+function AboutSection() {
+  const isMobile = useIsMobile();
+  return (
+    <section style={{background:'var(--bg-soft)', padding: isMobile ? '64px 0' : '80px 0'}}>
+      <div className="container">
+        <div style={{
+          background:'#fff', borderRadius:'var(--r-24)',
+          border:'1px solid var(--line-soft)',
+          padding: isMobile ? '32px 24px' : '48px 56px',
+          display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? 32 : 56, alignItems:'center',
+        }}>
+          <div>
+            <div style={{fontSize:12, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:16}}>— 運営について</div>
+            <h2 style={{fontFamily:'var(--font-serif)', fontSize: isMobile ? 22 : 28, fontWeight:600, lineHeight:1.55, margin:'0 0 20px', color:'var(--ink-1)'}}>
+              薬剤師と患者の距離を縮めたい。そんな想いから始まりました。
+            </h2>
+            <p style={{fontSize:14, lineHeight:1.95, color:'var(--ink-2)', margin:0}}>
+              ヒトヤクは、SASAERU合同会社が運営するサービスです。「薬のことを気軽に聞ける人が身近にいれば、多くの不安は消える」という考えのもと、患者と薬剤師をつなぐ仕組みを作っています。
+            </p>
+          </div>
+          <div style={{display:'flex', flexDirection:'column', gap:20}}>
+            {[
+              {t:'守秘義務の遵守', d:'薬剤師は法律に基づく守秘義務を負います。相談内容が第三者に共有されることはありません。'},
+              {t:'薬剤師の審査', d:'掲載薬剤師は運営による確認を経ています。資格・経歴・専門性を審査しています。'},
+              {t:'医師の代替ではありません', d:'薬剤師による健康・服薬相談に特化しています。診断・処方・治療は行いません。'},
+            ].map((b,i)=>(
+              <div key={i} style={{display:'flex', gap:14, alignItems:'flex-start'}}>
+                <span style={{flex:'0 0 20px', color:'var(--brand)', marginTop:2}}>{Ico.check}</span>
+                <div>
+                  <div style={{fontSize:14, fontWeight:600, color:'var(--ink-1)', marginBottom:4}}>{b.t}</div>
+                  <div style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.85}}>{b.d}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
