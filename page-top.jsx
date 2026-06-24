@@ -278,6 +278,30 @@ function ProblemSection() {
             </div>
           ))}
         </div>
+
+        {/* 調査データ ハイライト */}
+        <div style={{
+          marginTop: isMobile ? 20 : 28,
+          background:'#fff', border:'1px solid var(--line-soft)',
+          borderRadius:'var(--r-20)', padding: isMobile ? '20px 20px' : '24px 36px',
+          display:'flex', flexWrap:'wrap', gap: isMobile ? 16 : 32, alignItems:'center',
+        }}>
+          <div style={{display:'flex', alignItems:'baseline', gap:10, flexShrink:0}}>
+            <span style={{
+              fontFamily:'var(--font-serif)', fontSize: isMobile ? 40 : 52,
+              fontWeight:600, color:'var(--brand-deep)', lineHeight:1,
+            }}>51.6<span style={{fontSize: isMobile ? 22 : 28}}>%</span></span>
+            <span style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.6}}>
+              が「薬局の<br/>待ち時間が長い」
+            </span>
+          </div>
+          <div style={{width:1, height:40, background:'var(--line-soft)', flexShrink:0, display: isMobile ? 'none' : 'block'}}/>
+          <div style={{flex:1, minWidth:180}}>
+            <p style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.85, margin:0}}>
+              1,200名への市場調査（2024年8月）より。待ち時間・相談しにくさ・ゆっくり話せない——薬局への不満は、窓口の構造的な問題です。ヒトヤクはその課題を、オンライン相談で解消します。
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -819,6 +843,9 @@ function FaqShort() {
         <div style={{marginTop:48}}>
           <FAQ items={[
             { q:'相談料はかかりますか?', a:'初回の運営相談は無料です。薬剤師との個別相談は、薬剤師ごとに無料・有料(コーヒー一杯程度〜)が異なります。各薬剤師ページで明示しています。' },
+            { q:'薬剤師へはどうやって連絡しますか?', a:'各薬剤師のプロフィールページから直接相談フォームで送れます。相談方法（LINE・メール・オンライン面談・対面）は薬剤師ごとに異なりますので、プロフィールで確認のうえご連絡ください。「どの薬剤師に聞けばいいか分からない」場合は、ヒトヤク運営にご相談いただければ合いそうな薬剤師をご紹介します。' },
+            { q:'返信にはどのくらいかかりますか?', a:'ヒトヤク運営への相談は24時間以内の返信を目安としています。薬剤師への直接相談の返信時間は薬剤師によって異なります。各プロフィールページでご確認ください。' },
+            { q:'どんな相談ができますか?', a:'飲み合わせ・副作用・市販薬の選び方・漢方・サプリメント・子どもの薬・女性の健康・受診の目安など、日常的な薬や健康に関する相談ができます。診断・処方・治療は行いません。' },
             { q:'処方箋を出してもらえますか?', a:'ヒトヤクは医師の診療や処方を行うサービスではありません。薬剤師による服薬・健康相談に特化しています。受診が必要と判断した場合は、医療機関への受診をお勧めします。' },
             { q:'相談内容は秘密にしてもらえますか?', a:'守秘義務に基づき、相談内容は厳重に管理されます。第三者への共有はいたしません。' },
             { q:'家族の薬について相談できますか?', a:'はい、可能です。ご家族の処方薬・市販薬・サプリのご相談を多く受けています。' },
