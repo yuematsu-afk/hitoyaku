@@ -222,11 +222,11 @@ function PagePharma() {
           <div>
             <div style={{fontSize:12, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:18}}>— FOR PHARMACISTS</div>
             <h1 style={{fontFamily:'var(--font-serif)',fontWeight:600,fontSize:'clamp(36px,4.4vw,56px)',lineHeight:1.4,margin:0,color:'var(--ink-1)'}}>
-              あなたの専門性を、<br/>必要としている人へ。
+              あなたの専門性を、<br/>生涯を通じて<br/>必要とされる力に。
             </h1>
             <p style={{marginTop:24, fontSize:16, lineHeight:1.95, color:'var(--ink-2)', maxWidth:520}}>
-              ヒトヤクは、薬剤師が自分の強みを発信し、相談したい人と出会える場所です。
-              漢方、女性の健康、子育て、外国語対応など、あなたの「これが伝えたい」を活かせます。
+              ヒトヤクは、薬剤師が自分の専門性を発信し、あなたを必要としている患者と出会える場所です。
+              一度きりの相談ではなく、生涯を通じた健康パートナーになれる——そんな新しい薬剤師の働き方を、ここから始めてください。
             </p>
             <div style={{marginTop:32, display:'flex',gap:12,flexWrap:'wrap'}}>
               <Button size="lg" variant="deep" iconRight={Ico.arrow} onClick={scrollToForm}>薬剤師として参加する</Button>
@@ -237,15 +237,58 @@ function PagePharma() {
         </div>
       </section>
 
-      {/* Why join */}
+      {/* Shift Vision */}
       <section style={{padding: isMobile ? '56px 0' : '120px 0'}}>
         <div className="container">
-          <SectionHead eyebrow="参加のメリット" title={<>「自分の強み」を活かして、<br/>新しい接点をつくる。</>}/>
+          <SectionHead eyebrow="薬剤師の、あたらしい働き方" title={<>「薬を渡す」から、<br/>「健康パートナー」へ。</>}/>
+          <p style={{marginTop:16, fontSize:15, lineHeight:2, color:'var(--ink-2)', maxWidth:560}}>
+            処方箋調剤のその先で、患者の生涯に寄り添う薬剤師が求められています。ヒトヤクは、その一歩を踏み出す場所です。
+          </p>
+          <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 16 : 32}}>
+            <div style={{background:'var(--bg-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '28px 24px' : '40px 36px'}}>
+              <div style={{fontSize:11, letterSpacing:'.2em', color:'var(--ink-3)', fontWeight:600, marginBottom:24}}>— これまでの薬剤師</div>
+              {[
+                '処方箋に合わせて薬を渡す',
+                '患者は薬局に来た人だけ',
+                '立地に縛られた働き方',
+                '一度きりの接点で終わる',
+              ].map((item, i) => (
+                <div key={i} style={{display:'flex', gap:12, alignItems:'flex-start', fontSize:14, color:'var(--ink-3)', marginBottom: i < 3 ? 14 : 0, lineHeight:1.7}}>
+                  <span style={{flex:'0 0 16px', marginTop:3, opacity:.5}}>—</span>{item}
+                </div>
+              ))}
+            </div>
+            <div style={{background:'var(--brand-wash)', border:'2px solid var(--brand)', borderRadius:'var(--r-20)', padding: isMobile ? '28px 24px' : '40px 36px', position:'relative'}}>
+              <div style={{
+                position:'absolute', top:-14, left:24,
+                background:'var(--brand)', color:'#fff',
+                fontSize:11, fontWeight:600, padding:'4px 14px',
+                borderRadius:'var(--r-pill)', letterSpacing:'.1em',
+              }}>ヒトヤクで実現できること</div>
+              {[
+                '患者の生涯に寄り添う健康パートナーになる',
+                '自分の専門性を求める患者と全国でつながる',
+                '立地に依存しないオンラインの相談接点を持つ',
+                'あなたを「かかりつけ」として選んでもらえる',
+              ].map((item, i) => (
+                <div key={i} style={{display:'flex', gap:12, alignItems:'flex-start', fontSize:14, color:'var(--ink-1)', marginBottom: i < 3 ? 14 : 0, lineHeight:1.7}}>
+                  <span style={{flex:'0 0 16px', color:'var(--brand)', marginTop:3}}>{Ico.check}</span>{item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why join */}
+      <section style={{background:'var(--bg-soft)', padding: isMobile ? '56px 0' : '120px 0'}}>
+        <div className="container">
+          <SectionHead eyebrow="参加することで変わること" title={<>薬剤師としての、<br/>あたらしい一歩。</>}/>
           <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 16 : 24}}>
             {[
-              {n:'01',t:'専門性と人柄を見える化',d:'プロフィール・メッセージ・得意分野を発信。「合いそう」を相談前に伝えられます。'},
-              {n:'02',t:'相談者との新しい接点',d:'処方箋に来た方だけでなく、新たな相談者と出会えます。'},
-              {n:'03',t:'継続的な関係につなげる',d:'一度きりではなく、継続相談・かかりつけ関係に発展できます。'},
+              {n:'01',t:'あなたを探している患者に会える',d:'漢方、女性の健康、子育て、外国語対応——あなたの専門性を求めている患者が、全国にいます。'},
+              {n:'02',t:'専門性が、患者に直接届く',d:'プロフィール・人柄・相談スタンスを発信。患者は「合いそう」と感じてから相談してきます。'},
+              {n:'03',t:'かかりつけ薬剤師として選ばれる',d:'一度きりではなく、LINEや継続相談を通じて、患者の生涯の健康パートナーへ発展できます。'},
             ].map(b=>(
               <div key={b.n} style={{background:'#fff', border:'1px solid var(--line-soft)', borderRadius:'var(--r-20)', padding: isMobile ? '24px 20px' : '36px 32px'}}>
                 <div style={{fontFamily:'var(--font-serif)',fontSize:42,fontWeight:600,color:'var(--brand-deep)',marginBottom:18}}>{b.n}</div>
@@ -253,6 +296,51 @@ function PagePharma() {
                 <div style={{fontSize:14,color:'var(--ink-2)',lineHeight:1.95}}>{b.d}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* For Pharmacy Corporations */}
+      <section style={{background:'var(--accent-warm-soft)', padding: isMobile ? '56px 0' : '80px 0'}}>
+        <div className="container">
+          <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 32 : 64, alignItems:'center'}}>
+            <div>
+              <div style={{fontSize:12, letterSpacing:'.2em', color:'#8B5A2B', fontWeight:600, marginBottom:18}}>— FOR PHARMACY CORPORATIONS</div>
+              <h2 style={{fontFamily:'var(--font-serif)', fontWeight:600, fontSize:'clamp(26px,3vw,40px)', lineHeight:1.45, margin:'0 0 24px', color:'var(--ink-1)'}}>
+                薬局法人の方へ。<br/>自社薬剤師を、<br/>全国の患者と繋げる。
+              </h2>
+              <div style={{display:'flex', flexDirection:'column', gap:18}}>
+                {[
+                  {t:'自社薬剤師の専門性を「見える化」', d:'プロフィール掲載で、薬剤師一人ひとりの強みを全国に発信。薬局ブランドの向上に直結します。'},
+                  {t:'立地に依存しない全国の患者接点', d:'オンライン相談を通じて、エリアを超えた患者との長期的な関係を築けます。'},
+                  {t:'薬剤師の活躍が売上に貢献', d:'かかりつけ患者の継続利用が、薬局全体の売上向上につながります。'},
+                ].map((b,i)=>(
+                  <div key={i} style={{display:'flex', gap:14, alignItems:'flex-start'}}>
+                    <span style={{flex:'0 0 20px', color:'#8B5A2B', marginTop:3}}>{Ico.check}</span>
+                    <div>
+                      <div style={{fontSize:15, fontWeight:600, color:'var(--ink-1)', marginBottom:4}}>{b.t}</div>
+                      <div style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.9}}>{b.d}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{marginTop:32}}>
+                <Button variant="accent" iconRight={Ico.arrow} onClick={scrollToForm}>薬局法人として問い合わせる</Button>
+              </div>
+            </div>
+            <div style={{background:'#fff', borderRadius:'var(--r-24)', padding: isMobile ? '28px 24px' : '40px 36px', border:'1px solid rgba(139,90,43,.15)', boxShadow:'var(--shadow-1)'}}>
+              <div style={{fontFamily:'var(--font-serif)', fontSize:18, fontWeight:600, color:'var(--ink-1)', marginBottom:28}}>導入のポイント</div>
+              {[
+                {v:'全国', l:'オンラインで対応できるエリア'},
+                {v:'0円', l:'掲載・導入の初期費用'},
+                {v:'複数名', l:'同一法人内の薬剤師を同時掲載可'},
+              ].map((s,i)=>(
+                <div key={i} style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'18px 0', borderBottom: i < 2 ? '1px solid var(--line-soft)' : 'none'}}>
+                  <div style={{fontSize:13, color:'var(--ink-2)', lineHeight:1.7}}>{s.l}</div>
+                  <div style={{fontFamily:'var(--font-serif)', fontSize:30, fontWeight:600, color:'#8B5A2B', marginLeft:16}}>{s.v}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

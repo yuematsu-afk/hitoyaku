@@ -15,6 +15,7 @@ function PageTop() {
       <PickSection/>
       <PharmacistPreview pharmacists={featured}/>
       <FlowSection/>
+      <JourneySection/>
       <DualEntrySection/>
       <TrustSection/>
       <FaqShort/>
@@ -553,6 +554,107 @@ function FlowSection() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Journey (一回の相談→生涯のパートナー) ──────────────────────
+function JourneySection() {
+  const isMobile = useIsMobile();
+  const phases = [
+    {
+      phase: 'PHASE 01',
+      label: '最初の一歩',
+      title: '疑問を、一度相談する。',
+      body: '飲み合わせ、副作用、市販薬の選び方。「こんなこと聞いていいの？」という小さな疑問から始めてください。',
+      bg: 'var(--brand-wash)',
+      accent: 'var(--brand-deep)',
+      textColor: 'var(--ink-1)',
+      bodyColor: 'var(--ink-2)',
+    },
+    {
+      phase: 'PHASE 02',
+      label: '継続的なやりとり',
+      title: 'LINEで、気軽につながり続ける。',
+      body: '相談した薬剤師とはLINEやメールで継続的につながれます。「あの薬剤師にまた聞ける」という安心感が生まれます。',
+      bg: 'var(--brand)',
+      accent: '#fff',
+      textColor: '#fff',
+      bodyColor: 'rgba(255,255,255,.82)',
+    },
+    {
+      phase: 'PHASE 03',
+      label: 'かかりつけ薬剤師',
+      title: '生涯の、健康パートナーへ。',
+      body: 'あなたの薬歴・体質・家族のことを知っている薬剤師が、そばにいる。それがヒトヤクの目指す姿です。',
+      bg: 'var(--brand-deep)',
+      accent: 'var(--accent-warm)',
+      textColor: '#fff',
+      bodyColor: 'rgba(255,255,255,.82)',
+    },
+  ];
+
+  return (
+    <section style={{padding: isMobile ? '64px 0' : '120px 0'}}>
+      <div className="container">
+        <SectionHead
+          eyebrow="ヒトヤクが目指すこと"
+          title={<>一回の相談が、<br/>生涯のパートナーへ。</>}
+        />
+        <p style={{
+          marginTop:16, fontSize:15, lineHeight:2, color:'var(--ink-2)',
+          maxWidth:560, margin:'16px 0 0',
+        }}>
+          薬局で薬を受け取るだけでなく、あなたのことを知っている薬剤師と、長く続く関係をつくる。それがヒトヤクの考えるかかりつけ薬剤師です。
+        </p>
+        <div style={{
+          marginTop: isMobile ? 40 : 64,
+          display:'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+          gap: 0,
+          borderRadius:'var(--r-24)',
+          overflow:'hidden',
+          boxShadow:'var(--shadow-2)',
+        }}>
+          {phases.map((ph, i) => (
+            <div key={i} style={{
+              background: ph.bg,
+              padding: isMobile ? '36px 28px' : '48px 40px',
+              display:'flex', flexDirection:'column', gap:16,
+              borderRight: (!isMobile && i < 2) ? '1px solid rgba(255,255,255,.15)' : 'none',
+              borderBottom: (isMobile && i < 2) ? '1px solid rgba(255,255,255,.15)' : 'none',
+            }}>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                <span style={{
+                  fontSize:10, letterSpacing:'.2em', fontWeight:600,
+                  color: ph.accent, opacity:.9,
+                }}>{ph.phase}</span>
+                <span style={{
+                  fontSize:11, fontWeight:600,
+                  padding:'4px 12px', borderRadius:'var(--r-pill)',
+                  border:`1px solid ${ph.accent}`,
+                  color: ph.accent, opacity:.9,
+                }}>{ph.label}</span>
+              </div>
+              <h3 style={{
+                fontFamily:'var(--font-serif)',
+                fontSize: isMobile ? 22 : 24,
+                fontWeight:600, lineHeight:1.45,
+                margin:0, color: ph.textColor,
+              }}>{ph.title}</h3>
+              <p style={{
+                fontSize:14, lineHeight:1.95,
+                color: ph.bodyColor, margin:0,
+              }}>{ph.body}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{marginTop: isMobile ? 32 : 40, textAlign:'center'}}>
+          <Button size="lg" variant="deep" iconRight={Ico.arrow} onClick={()=>window.HY_NAV?.('list')}>
+            薬剤師を探してみる
+          </Button>
         </div>
       </div>
     </section>

@@ -56,8 +56,8 @@ function PageCorp() {
               従業員の<br/>「ちょっと聞きたい」を、<br/>会社が支える。
             </h1>
             <p style={{marginTop:24, fontSize:16, lineHeight:1.95, color:'var(--ink-2)', maxWidth:520}}>
-              市販薬・サプリ・飲み合わせ・受診の目安。
-              日常的な健康相談を、薬剤師に気軽に聞ける窓口として、福利厚生にご導入いただけます。
+              社員一人ひとりに、質の高い専属の薬剤師を。
+              市販薬・飲み合わせ・受診の目安から、メンタル面の体調管理まで。社員の心身の健康を、気軽に相談できる環境として福利厚生にご導入いただけます。
             </p>
             <div style={{marginTop:32, display:'flex', gap:12, flexWrap:'wrap'}}>
               <Button size="lg" variant="accent" iconRight={Ico.arrow} onClick={scrollToForm}>一般法人向け資料を請求する</Button>
@@ -99,10 +99,10 @@ function PageCorp() {
           </div>
           <div style={{marginTop: isMobile ? 32 : 56, display:'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 20}}>
             {[
-              {t:'日常的に使える健康相談窓口', d:'予約不要・LINEから気軽に。'},
-              {t:'女性・育児・高齢家族にも', d:'特化分野を持つ薬剤師が在籍。'},
-              {t:'管理者の運用負担を抑える', d:'導入後の運用は基本ヒトヤク側で完結。'},
-              {t:'利用レポートで効果を把握', d:'匿名集計で利用傾向をご報告。'},
+              {t:'社員に専属の薬剤師を', d:'担当薬剤師が社員の状況を継続的に把握。産業医とは異なる、日常的なパートナー。'},
+              {t:'心身の健康を気軽に相談', d:'予約不要・LINEから。受診の目安・薬の疑問・体調の不安をすぐに聞ける。'},
+              {t:'女性・育児・ケアラーにも', d:'生理・更年期・子どもの薬・親の介護薬。特化分野を持つ薬剤師が対応。'},
+              {t:'利用状況を匿名レポートで把握', d:'個人情報を守りながら、導入効果を数値で確認できます。'},
             ].map((m,i)=>(
               <div key={i} style={{background:'rgba(255,255,255,.06)', border:'1px solid rgba(255,255,255,.14)', borderRadius:'var(--r-20)', padding: isMobile ? '20px 16px' : '32px 28px'}}>
                 <div style={{width:36,height:36,borderRadius:10,background:'var(--accent-warm)',marginBottom:14,display:'flex',alignItems:'center',justifyContent:'center'}}>{Ico.check}</div>
@@ -234,6 +234,33 @@ function PageCorp() {
                 </div>
               </form>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* 薬局法人向け誘導 */}
+      <section style={{background:'var(--brand-wash)', padding: isMobile ? '48px 0' : '64px 0'}}>
+        <div className="container">
+          <div style={{
+            display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr auto',
+            gap: isMobile ? 24 : 48, alignItems:'center',
+            background:'#fff', borderRadius:'var(--r-24)',
+            border:'1px solid var(--line-soft)', padding: isMobile ? '28px 24px' : '40px 48px',
+          }}>
+            <div>
+              <div style={{fontSize:11, letterSpacing:'.2em', color:'var(--brand-deep)', fontWeight:600, marginBottom:14}}>— FOR PHARMACY CORPORATIONS</div>
+              <div style={{fontFamily:'var(--font-serif)', fontSize: isMobile ? 20 : 24, fontWeight:600, color:'var(--ink-1)', lineHeight:1.5, marginBottom:12}}>
+                薬局法人の方は、こちらをご覧ください。
+              </div>
+              <p style={{fontSize:14, color:'var(--ink-2)', lineHeight:1.9, margin:0}}>
+                自社薬剤師の専門性を全国に発信し、立地に依存しない患者接点を構築できます。薬剤師登録・薬局法人向けのご相談は薬剤師・薬局ページへ。
+              </p>
+            </div>
+            <div style={{flexShrink:0}}>
+              <Button variant="deep" iconRight={Ico.arrow} onClick={()=>window.HY_NAV?.('pharma')}>
+                薬局法人向けページへ
+              </Button>
+            </div>
           </div>
         </div>
       </section>
